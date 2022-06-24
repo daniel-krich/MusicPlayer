@@ -1,0 +1,43 @@
+﻿<Application x:Class="MusicPlayerClient.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MusicPlayerClient"
+             xmlns:views="clr-namespace:MusicPlayerClient.Views"
+             xmlns:components="clr-namespace:MusicPlayerClient.Components"
+             xmlns:viewModels="clr-namespace:MusicPlayerClient.ViewModels">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Themes/Core/CloseButton.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/PrettyButton.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/MinMaxButton.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/PrettyScrollbar.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/TransparentButton.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/PrettySlider.xaml"/>
+                <ResourceDictionary Source="./Themes/FormComponents/ModernTextBox.xaml"/>
+                <ResourceDictionary Source="./Themes/FormComponents/NewPasswordBox.xaml"/>
+                <ResourceDictionary Source="./Themes/FormComponents/NewTextBox.xaml"/>
+                <ResourceDictionary Source="./Themes/FormComponents/ModernButton.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <FontFamily x:Key="Raleway">pack://application:,,,/Fonts/Raleway/#Raleway</FontFamily>
+
+            <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                <views:HomeView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:PlaylistViewModel}">
+                <views:PlaylistView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:PlayerViewModel}">
+                <components:PlayerComponent />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:ToolbarViewModel}">
+                <components:ToolbarComponent />
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

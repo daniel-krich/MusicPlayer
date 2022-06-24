@@ -1,0 +1,51 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using MusicPlayerClient.Services;
+using MusicPlayerClient.ViewModels;
+using MusicPlayerData.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MusicPlayerClient.Extensions
+{
+    public static class ServiceContainerExtensions
+    {
+        public static IServiceCollection AddViewModels(this IServiceCollection collection)
+        {
+            collection.AddTransient<HomeViewModel>();        
+            collection.AddTransient<PlaylistViewModel>();
+            collection.AddSingleton<PlayerViewModel>();
+            collection.AddSingleton<ToolbarViewModel>();
+            collection.AddSingleton<MainViewModel>();
+            return collection;
+        }
+
+        public static IServiceCollection AddNavigation(this IServiceCollection collection)
+        {
+            collection.AddTransient<INavigationService>(s => 
+                new NavigationService(
+                    () => s.GetRequiredService<MainViewModel>(),
+                    () => s.GetRequiredService<HomeViewModel>(),
+                    () => s.GetRequiredService<PlaylistViewModel>()
+            ));
+
+            return collection;
+        }
+
+        public static IServiceCollection AddMusicService(this IServiceCollection collection)
+        {
+            collection.AddSingleton<IMusicPlayerService, MusicPlayerService>();
+            return collection;
+        }
+
+        public static IServiceCollection AddDbContextFactory(this IServiceCollection collection)
+        {
+            collection.AddDbContextFactory<DataContext>();
+            return collection;
+        }
+    }
+}
