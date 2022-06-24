@@ -11,6 +11,7 @@ namespace MusicPlayerData.DataEntities
     {
         [MaxLength(50)]
         public string? Name { get; set; }
-        public virtual ICollection<MediaPlaylistEntity>? Songs { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public virtual ICollection<MediaEntity>? Songs { get; set; }
     }
 }

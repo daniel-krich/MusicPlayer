@@ -6,19 +6,15 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicPlayerClient.ViewModels
+namespace MusicPlayerClient.Core
 {
-    public class ViewModelBase : INotifyPropertyChanged, IDisposable
+    public abstract class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        public virtual void Dispose()
-        {
         }
     }
 }

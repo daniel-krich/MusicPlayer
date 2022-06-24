@@ -69,6 +69,7 @@
                         <Button Style="{StaticResource TransparentButton}"
                                 Padding="10"
                                 Command="{Binding ElementName=PlaylistItems, Path=DataContext.GotoPlaylist}"
+                                CommandParameter="{Binding Id}"
                                 FontFamily="{StaticResource Raleway}"
                                 FontWeight="SemiBold"
                                 Content="{Binding Name}" FontSize="12"/>

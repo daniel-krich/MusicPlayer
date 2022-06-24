@@ -1,4 +1,5 @@
 ﻿using MusicPlayerClient.Services;
+using MusicPlayerClient.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,20 @@ namespace MusicPlayerClient.Commands
     public class SwitchPageToPlaylistCommand : CommandBase
     {
         private readonly INavigationService _navigationService;
-        public SwitchPageToPlaylistCommand(INavigationService navigationService)
+        private readonly PlaylistBrowserNavigationStore _playlistBrowserNavigationStore;
+        public SwitchPageToPlaylistCommand(INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
         {
             _navigationService = navigationService;
+            _playlistBrowserNavigationStore = playlistBrowserNavigationStore;
         }
 
         public override void Execute(object? parameter)
         {
-            _navigationService.NavigatePlaylist();
+            if (parameter is int playlistId)
+            {
+                _playlistBrowserNavigationStore.BrowserPlaylistId = playlistId;
+                _navigationService.NavigatePlaylist();
+            }
         }
     }
 }

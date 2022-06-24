@@ -13,7 +13,6 @@ namespace MusicPlayerData.Data
     {
 #nullable disable
         public DbSet<MediaEntity> Songs { get; set; }
-        public DbSet<MediaPlaylistEntity> SongsPlaylists { get; set; }
         public DbSet<PlaylistEntity> Playlists { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

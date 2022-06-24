@@ -16,11 +16,6 @@ namespace MusicPlayerClient.Commands
             _musicService = musicService;
         }
 
-        public ToggleMusicPlayerStateCommand(IMusicPlayerService musicService, Action onCompletedExecution) : this(musicService)
-        {
-            OnCompletedExecution = onCompletedExecution;
-        }
-
         public override void Execute(object? parameter)
         {
             if (_musicService.PlayerState != PlaybackState.Stopped)
@@ -31,7 +26,6 @@ namespace MusicPlayerClient.Commands
             {
                 _musicService.RePlay();
             }
-            OnCompletedExecution?.Invoke();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace MusicPlayerClient
             _serviceProvider = services.AddViewModels()
                                        .AddNavigation()
                                        .AddDbContextFactory()
+                                       .AddStores()
                                        .AddMusicService()
                                        .BuildServiceProvider();
 
@@ -59,9 +60,6 @@ namespace MusicPlayerClient
                 DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
             };
             MainWindow.Show();
-
-            IMusicPlayerService player = _serviceProvider.GetRequiredService<IMusicPlayerService>();
-            //player.Play(6);
 
             base.OnStartup(e);
         }

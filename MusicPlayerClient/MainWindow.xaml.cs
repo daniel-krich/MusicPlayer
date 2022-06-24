@@ -22,6 +22,8 @@ namespace MusicPlayerClient
     {
         public MainWindow()
         {
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             InitializeComponent();
         }
 

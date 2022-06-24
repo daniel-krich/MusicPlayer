@@ -31,6 +31,7 @@
 
 
         <StackPanel Orientation="Vertical"
+                    Margin="10 0 10 0"
                     VerticalAlignment="Center">
             <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
@@ -38,8 +39,9 @@
                    Grid.Column="0"
                    Foreground="#fff"
                    FontSize="14px"
+                   Margin="0 0 0 10"
                    FontWeight="DemiBold"
-                   TextWrapping="Wrap"
+                   TextTrimming="CharacterEllipsis"
                    FontFamily="{StaticResource Raleway}"
                    Text="{Binding PlayingSongName}"/>
             <TextBlock HorizontalAlignment="Center"
@@ -49,7 +51,7 @@
                    Foreground="LightGray"
                    FontSize="11px"
                    FontWeight="ExtraLight"
-                   TextWrapping="Wrap"
+                   TextTrimming="CharacterEllipsis"
                    FontFamily="{StaticResource Raleway}"
                    Text="{Binding PlayingSongPath}"/>
         </StackPanel>
@@ -122,6 +124,7 @@
                     MaxWidth="200px"
                     Value="{Binding Volume, Mode=TwoWay}"
                     Minimum="0"
+                    Margin="10 0 10 0"
                     Maximum="100"/>
             <TextBlock HorizontalAlignment="Center"
                        Foreground="#bbb"

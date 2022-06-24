@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Commands;
 using MusicPlayerClient.Services;
+using MusicPlayerClient.Stores;
 using MusicPlayerData.Data;
 using MusicPlayerData.DataEntities;
 using System;
@@ -15,8 +16,6 @@ namespace MusicPlayerClient.ViewModels
 {
     public class ToolbarViewModel : ViewModelBase
     {
-        private readonly IDbContextFactory<DataContext> _dbContextFactory;
-
         private string? _name = "toolbar is cool";
         public string? Name
         {
@@ -34,16 +33,12 @@ namespace MusicPlayerClient.ViewModels
         public ICommand GotoHome { get; }
         public ObservableCollection<PlaylistEntity> Playlists { get; set; }
 
-        public ToolbarViewModel(INavigationService navigationService, IDbContextFactory<DataContext> dbContextFactory)
+        public ToolbarViewModel(INavigationService navigationService, PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
         {
-            _dbContextFactory = dbContextFactory;
-            GotoPlaylist = new SwitchPageToPlaylistCommand(navigationService);
+            GotoPlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserNavigationStore);
             GotoHome = new SwitchPageToHomeCommand(navigationService);
 
-            using (var dbContext = _dbContextFactory.CreateDbContext())
-            {
-                Playlists = new ObservableCollection<PlaylistEntity>(dbContext.Playlists.ToList());
-            }
+            Playlists = new ObservableCollection<PlaylistEntity>(playlistStore.Playlists.ToList());
         }
     }
 }

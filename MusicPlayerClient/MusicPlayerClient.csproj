@@ -27,6 +27,7 @@
     <None Remove="Fonts\Raleway\Raleway-Thin.ttf" />
     <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <None Remove="icons\backward.svg" />
+    <None Remove="icons\discard.svg" />
     <None Remove="icons\Forward.svg" />
     <None Remove="icons\Pause.svg" />
     <None Remove="icons\Play.svg" />
@@ -100,6 +101,9 @@
     <Resource Include="icons\backward.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="icons\discard.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="icons\forward.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -112,6 +116,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Themes\Core\GenericButton.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Core\PrettyDataGrid.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\Core\PrettySlider.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

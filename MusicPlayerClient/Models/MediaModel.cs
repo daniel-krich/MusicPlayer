@@ -1,0 +1,101 @@
+﻿using MusicPlayerClient.Core;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MusicPlayerClient.Models
+{
+    public class MediaModel : ObservableObject
+    {
+        
+        private string? _currentPlayerIconPath;
+        private int? _number;
+        private int? _id { get; set; }
+        private string? _title { get; set; }
+        private string? _path { get; set; }
+        private string? _duration { get; set; }
+
+        [Browsable(false)]
+        public string? CurrentPlayerIconPath
+        {
+            get { return _currentPlayerIconPath; }
+            set
+            {
+                if (_currentPlayerIconPath != value)
+                {
+                    _currentPlayerIconPath = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int? Number
+        {
+            get { return _number; }
+            set
+            {
+                if (_number != value)
+                {
+                    _number = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [Browsable(false)]
+        public int? Id
+        {
+            get { return _id; }
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? Title
+        {
+            get { return _title; }
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? Path
+        {
+            get { return _path; }
+            set
+            {
+                if (_path != value)
+                {
+                    _path = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? Duration
+        {
+            get { return _duration; }
+            set
+            {
+                if (_duration != value)
+                {
+                    _duration = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+    }
+}

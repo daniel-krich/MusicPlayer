@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using MusicPlayerClient.Services;
+using MusicPlayerClient.Stores;
 using MusicPlayerClient.ViewModels;
 using MusicPlayerData.Data;
 using System;
@@ -21,6 +22,14 @@ namespace MusicPlayerClient.Extensions
             collection.AddSingleton<PlayerViewModel>();
             collection.AddSingleton<ToolbarViewModel>();
             collection.AddSingleton<MainViewModel>();
+            return collection;
+        }
+
+        public static IServiceCollection AddStores(this IServiceCollection collection)
+        {
+            collection.AddSingleton<MediaStore>();
+            collection.AddSingleton<PlaylistStore>();
+            collection.AddSingleton<PlaylistBrowserNavigationStore>();
             return collection;
         }
 

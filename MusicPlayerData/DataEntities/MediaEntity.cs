@@ -11,5 +11,7 @@ namespace MusicPlayerData.DataEntities
     {
         [MaxLength(256)]
         public string? FilePath { get; set; }
+        public virtual int? PlayerlistId { get; set; }
+        public virtual PlaylistEntity? Playerlist { get; set; }
     }
 }

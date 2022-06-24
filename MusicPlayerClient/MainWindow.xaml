@@ -65,9 +65,6 @@
             <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentView}" />
             <ContentControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding PlayerView}" />
 
-
-            
-
             <ContentControl Grid.Row="1"
                             Grid.Column="0"
                             Content="{Binding ToolbarView}" />

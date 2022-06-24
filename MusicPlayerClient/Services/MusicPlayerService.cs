@@ -11,13 +11,17 @@ using MusicPlayerData.DataEntities;
 using System.IO;
 using System.Diagnostics;
 using NAudio.Wave.SampleProviders;
+using MusicPlayerClient.Events;
+using MusicPlayerClient.Stores;
 
 namespace MusicPlayerClient.Services
 {
     public interface IMusicPlayerService
     {
+        public event EventHandler<MusicPlayerEventArgs>? MusicPlayerEvent;
         public string PlayingSongPath { get; }
         public string PlayingSongName { get; }
+        public MediaEntity? CurrentMedia { get; }
         public PlaybackState PlayerState { get; }
         public float Volume { get; set; }
         public double Position { get; set; }
@@ -32,10 +36,13 @@ namespace MusicPlayerClient.Services
 
     public class MusicPlayerService : IMusicPlayerService
     {
-        private readonly IDbContextFactory<DataContext> _dbContextFactory;
+        private readonly MediaStore _mediaStore;
         private IWavePlayer _waveOutDevice;
         private IWaveProvider? _audioFile;
         private MediaEntity? _currentMedia;
+        public MediaEntity? CurrentMedia => _currentMedia;
+
+        public event EventHandler<MusicPlayerEventArgs>? MusicPlayerEvent;
 
         public float Volume
         {
@@ -75,16 +82,17 @@ namespace MusicPlayerClient.Services
             }
         }
 
-        public string PlayingSongPath => _currentMedia?.FilePath ?? "None";
+        public string PlayingSongPath => _currentMedia?.FilePath ?? "";
 
-        public string PlayingSongName => Path.GetFileName(_currentMedia?.FilePath) ?? "None";
+        public string PlayingSongName => Path.GetFileName(_currentMedia?.FilePath) ?? "";
 
         public PlaybackState PlayerState => _waveOutDevice?.PlaybackState ?? PlaybackState.Stopped;
 
-        public MusicPlayerService(IDbContextFactory<DataContext> dbContextFactory)
+        public MusicPlayerService(MediaStore mediaStore)
         {
-            _dbContextFactory = dbContextFactory;
+            _mediaStore = mediaStore;
             _waveOutDevice = new WaveOut();
+            _waveOutDevice.PlaybackStopped += OnStoppedPlay;
         }
 
         public void ChangeVolume(float volume)
@@ -94,16 +102,19 @@ namespace MusicPlayerClient.Services
 
         public void Play(int mediaId)
         {
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            OnPausePlay();
+            _currentMedia = _mediaStore.Songs.FirstOrDefault(x => x.Id == mediaId);
+            if (_currentMedia != null)
             {
-                _currentMedia = dbContext.Songs.Find(mediaId);
-                if (_currentMedia != null)
-                {
-                    _audioFile = new AudioFileReader(_currentMedia.FilePath);
-                    _waveOutDevice = new WaveOut();
-                    _waveOutDevice.Init(_audioFile);
-                    _waveOutDevice.Play();
-                }
+                _waveOutDevice?.Stop();
+                _waveOutDevice?.Dispose();
+
+                _audioFile = new AudioFileReader(_currentMedia.FilePath);
+                _waveOutDevice = new WaveOut();
+                _waveOutDevice.PlaybackStopped += OnStoppedPlay;
+                _waveOutDevice.Init(_audioFile);
+                _waveOutDevice.Play();
+                OnStartPlay();
             }
         }
 
@@ -113,10 +124,12 @@ namespace MusicPlayerClient.Services
             if (_waveOutDevice.PlaybackState == PlaybackState.Paused)
             {
                 _waveOutDevice.Play();
+                OnStartPlay();
             }
             else
             {
                 _waveOutDevice.Pause();
+                OnPausePlay();
             }
         }
 
@@ -128,9 +141,11 @@ namespace MusicPlayerClient.Services
                 _waveOutDevice?.Dispose();
 
                 _waveOutDevice = new WaveOut();
+                _waveOutDevice.PlaybackStopped += OnStoppedPlay;
                 Position = 0;
                 _waveOutDevice.Init(_audioFile);
                 _waveOutDevice.Play();
+                OnStartPlay();
             }
         }
 
@@ -152,8 +167,25 @@ namespace MusicPlayerClient.Services
             var skip = _audioFile.ToSampleProvider().Skip(time);
 
             _waveOutDevice = new WaveOut();
+            _waveOutDevice.PlaybackStopped += OnStoppedPlay;
             _waveOutDevice.Init(skip);
             _waveOutDevice.Play();
+            OnStartPlay();
+        }
+
+        private void OnStoppedPlay(object? sender, StoppedEventArgs e)
+        {
+            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Stopped, _currentMedia));
+        }
+
+        private void OnStartPlay()
+        {
+            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Playing, _currentMedia));
+        }
+
+        private void OnPausePlay()
+        {
+            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Paused, _currentMedia));
         }
     }
 }

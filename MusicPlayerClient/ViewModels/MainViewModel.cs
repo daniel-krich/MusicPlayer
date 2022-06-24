@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicPlayerClient.Stores;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace MusicPlayerClient.ViewModels
             set
             {
                 if (value == _currentView) return;
+                _currentView?.Dispose();
                 _currentView = value;
                 OnPropertyChanged();
             }
@@ -29,6 +31,7 @@ namespace MusicPlayerClient.ViewModels
             set
             {
                 if (value == _playerView) return;
+                _playerView?.Dispose();
                 _playerView = value;
                 OnPropertyChanged();
             }
@@ -41,16 +44,31 @@ namespace MusicPlayerClient.ViewModels
             set
             {
                 if (value == _toolbarView) return;
+                _toolbarView?.Dispose();
                 _toolbarView = value;
                 OnPropertyChanged();
             }
         }
 
-        public MainViewModel(HomeViewModel homeView, PlayerViewModel playerView, ToolbarViewModel toolbarView)
+        private ViewModelBase? _modalView;
+        public ViewModelBase? ModalView
+        {
+            get => _modalView;
+            set
+            {
+                if (value == _modalView) return;
+                _modalView?.Dispose();
+                _modalView = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public MainViewModel(HomeViewModel homeView, PlayerViewModel playerView, ToolbarViewModel toolbarView/*, MediaStore mediaStore, PlaylistStore playlistStore*/)
         {
             CurrentView = homeView;
             PlayerView = playerView;
             ToolbarView = toolbarView;
+           
         }
     }
 }

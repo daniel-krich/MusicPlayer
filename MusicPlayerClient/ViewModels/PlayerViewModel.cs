@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MusicPlayerClient.Commands;
 using NAudio.Wave;
+using MusicPlayerClient.Events;
 
 namespace MusicPlayerClient.ViewModels
 {
@@ -54,7 +55,8 @@ namespace MusicPlayerClient.ViewModels
         public PlayerViewModel(IMusicPlayerService musicService)
         {
             _musicService = musicService;
-            TogglePlayer = new ToggleMusicPlayerStateCommand(musicService, () => OnPropertyChanged(nameof(CurrentPlayerIconPath)));
+            _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
+            TogglePlayer = new ToggleMusicPlayerStateCommand(musicService);
 
             var dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -68,9 +70,28 @@ namespace MusicPlayerClient.ViewModels
             OnPropertyChanged(nameof(SongDuration));
             OnPropertyChanged(nameof(SongProgressFormatted));
             OnPropertyChanged(nameof(SongDurationFormatted));
+        }
+
+        private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
+        {
+            /*switch(e.Type)
+            {
+                case PlayerEventType.Playing:
+                    break;
+                case PlayerEventType.Paused:
+                    break;
+                case PlayerEventType.Stopped:
+                    break;
+            }*/
+
             OnPropertyChanged(nameof(PlayingSongName));
             OnPropertyChanged(nameof(PlayingSongPath));
             OnPropertyChanged(nameof(CurrentPlayerIconPath));
+        }
+
+        public override void Dispose()
+        {
+            _musicService.MusicPlayerEvent -= OnMusicPlayerEvent;
         }
     }
 }
