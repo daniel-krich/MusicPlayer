@@ -105,7 +105,7 @@
 
             <DataGrid.Columns>
 
-                <DataGridTemplateColumn Width="70">
+                <DataGridTemplateColumn Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Style="{StaticResource TransparentButton}"
@@ -121,7 +121,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Binding="{Binding Path=Number}"
-                                    Width="70"
+                                    Width="100"
                                     Header="#"/>
                 <DataGridTextColumn Binding="{Binding Path=Title}"
                                     Header="Title">
@@ -140,9 +140,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Path=Duration}"
+                                    Width="100"
                                     Header="Duration" />
 
-                <DataGridTemplateColumn Width="30">
+                <DataGridTemplateColumn Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Style="{StaticResource TransparentButton}"
