@@ -16,20 +16,27 @@ using System.Windows.Input;
 using MusicPlayerClient.Events;
 using System.Diagnostics;
 using MusicPlayerClient.Stores;
+using MusicPlayerClient.Interfaces;
+using System.Windows;
+using MusicPlayerClient.Extensions;
 
 namespace MusicPlayerClient.ViewModels
 {
-    public class HomeViewModel : ViewModelBase
+    public class HomeViewModel : ViewModelBase, IFilesDrop
     {
         private readonly IMusicPlayerService _musicService;
+        private readonly MediaStore _mediaStore;
         public string CurrentDateString { get; }
         public ObservableCollection<MediaModel> AllSongs { get; set; }
         public string CurrentPlayerIconPath => _musicService.PlayerState == PlaybackState.Playing ? "../icons/pause.svg" : "../icons/play.svg";
         public ICommand PlaySong { get; }  
+        public ICommand DeleteSong { get; }  
 
         public HomeViewModel(IDbContextFactory<DataContext> dbContextFactory, MediaStore mediaStore, IMusicPlayerService musicService)
         {
             _musicService = musicService;
+
+            _mediaStore = mediaStore;
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
 
@@ -39,20 +46,18 @@ namespace MusicPlayerClient.ViewModels
 
             AllSongs = new ObservableCollection<MediaModel>(mediaStore.Songs.Where(x => x.PlayerlistId == null).Select((x, num) =>
             {
-                using (var audioFile = new AudioFileReader(x.FilePath))
+                return new MediaModel
                 {
-                    var durationParse = $"{Math.Floor(audioFile.TotalTime.TotalSeconds / 60).ToString().PadLeft(2, '0')}:{Math.Floor(audioFile.TotalTime.TotalSeconds % 60).ToString().PadLeft(2, '0')}";
-                    return new MediaModel
-                    {
-                        CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
-                        Number = num + 1,
-                        Id = x.Id,
-                        Title = Path.GetFileName(x.FilePath),
-                        Path = x.FilePath,
-                        Duration = durationParse
-                    };
-                }
+                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
+                    Number = num + 1,
+                    Id = x.Id,
+                    Title = Path.GetFileName(x.FilePath),
+                    Path = x.FilePath,
+                    Duration = AudioFileUtills.DurationParse(x.FilePath)
+                };
             }).ToList());
+
+            DeleteSong = new DeleteSpecificSongCommand(musicService, mediaStore, AllSongs);
         }
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
@@ -73,6 +78,30 @@ namespace MusicPlayerClient.ViewModels
                         songStopped.CurrentPlayerIconPath = "../icons/play.svg";
                     }
                     break;
+            }
+        }
+
+        public void OnFilesDropped(string[] files)
+        {
+            var mediaEntities = files.Where(x => PathExtension.HasOneOfExtensions(x, ".wav", ".mp3")).Select(x => new MediaEntity
+            {
+                FilePath = x
+            }).ToList();
+
+            _mediaStore.AddRange(mediaEntities);
+
+            foreach(MediaEntity mediaEntity in mediaEntities)
+            {
+                var songsIndex = AllSongs.Count;
+                AllSongs.Add(new MediaModel
+                {
+                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
+                    Number = songsIndex + 1,
+                    Id = mediaEntity.Id,
+                    Title = Path.GetFileName(mediaEntity.FilePath),
+                    Path = mediaEntity.FilePath,
+                    Duration = AudioFileUtills.DurationParse(mediaEntity.FilePath)
+                });
             }
         }
 

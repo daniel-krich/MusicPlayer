@@ -51,10 +51,14 @@ namespace MusicPlayerClient.ViewModels
         public string SongDurationFormatted => $"{Math.Floor(SongDuration / 60).ToString().PadLeft(2, '0')}:{Math.Floor(SongDuration % 60).ToString().PadLeft(2, '0')}";
 
         public ICommand TogglePlayer { get; }
+        public ICommand PlayBackward { get; }
+        public ICommand PlayForward { get; }
 
         public PlayerViewModel(IMusicPlayerService musicService)
         {
             _musicService = musicService;
+            PlayBackward = new BackwardSongCommand(musicService);
+            PlayForward = new ForwardSongCommand(musicService);
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
             TogglePlayer = new ToggleMusicPlayerStateCommand(musicService);
 
@@ -74,15 +78,17 @@ namespace MusicPlayerClient.ViewModels
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
         {
-            /*switch(e.Type)
+            switch(e.Type)
             {
-                case PlayerEventType.Playing:
-                    break;
-                case PlayerEventType.Paused:
-                    break;
                 case PlayerEventType.Stopped:
+                    if (e.Audio is AudioFileReader audio && audio.TotalTime.Subtract(audio.CurrentTime).Milliseconds < 50)
+                    {
+                        Trace.WriteLine(audio.TotalTime);
+                        Trace.WriteLine(audio.CurrentTime);
+                        _musicService.PlayNext(false);
+                    }
                     break;
-            }*/
+            }
 
             OnPropertyChanged(nameof(PlayingSongName));
             OnPropertyChanged(nameof(PlayingSongPath));
