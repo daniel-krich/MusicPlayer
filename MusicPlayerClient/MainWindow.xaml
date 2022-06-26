@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicPlayerClient"
         xmlns:views="clr-namespace:MusicPlayerClient.Views"
-        xmlns:components="clr-namespace:MusicPlayerClient.Components"
+        xmlns:components="clr-namespace:MusicPlayerClient.Controls"
         xmlns:viewModels="clr-namespace:MusicPlayerClient.ViewModels"
         mc:Ignorable="d"
         WindowStyle="none"
@@ -21,10 +21,10 @@
     <Border Padding="5">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15*"
+                <ColumnDefinition Width="180px"
                                   MinWidth="150px"
                                   MaxWidth="300px"/>
-                <ColumnDefinition Width="85*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -72,7 +72,7 @@
             <GridSplitter Grid.Column="0" Grid.Row="1"
                   HorizontalAlignment="Right" 
                   VerticalAlignment="Stretch"
-                  Background="#101010"
+                  Background="Transparent"
                   ShowsPreview="true"
                   Width="3"/>
         </Grid>

@@ -17,7 +17,7 @@ namespace MusicPlayerClient.Extensions
     {
         public static IServiceCollection AddViewModels(this IServiceCollection collection)
         {
-            collection.AddTransient<HomeViewModel>();        
+            collection.AddTransient<HomeViewModel>();
             collection.AddTransient<PlaylistViewModel>();
             collection.AddSingleton<PlayerViewModel>();
             collection.AddSingleton<ToolbarViewModel>();

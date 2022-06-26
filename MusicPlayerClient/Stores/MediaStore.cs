@@ -48,5 +48,80 @@ namespace MusicPlayerClient.Stores
                 _songs.AddRange(dbContext.Songs.ToList());
             }
         }
+
+        public bool Add(MediaEntity media)
+        {
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                try
+                {
+                    dbContext.Songs.Add(media);
+                    dbContext.SaveChanges();
+
+                    _songs.Add(media);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool AddRange(IEnumerable<MediaEntity> medias)
+        {
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                try
+                {
+                    dbContext.Songs.AddRange(medias);
+                    dbContext.SaveChanges();
+
+                    _songs.AddRange(medias);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool RemoveAll(Func<MediaEntity, bool> predicate)
+        {
+            _songs.RemoveAll(x => predicate.Invoke(x));
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                try
+                {
+                    var itemsRemove = dbContext.Songs.Where(predicate);
+                    dbContext.Songs.RemoveRange(itemsRemove);
+                    dbContext.SaveChanges();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool Remove(int mediaId)
+        {
+            _songs.RemoveAll(x => x.Id == mediaId);
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                try
+                {
+                    dbContext.Songs.Remove(new MediaEntity { Id = mediaId });
+                    dbContext.SaveChanges();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

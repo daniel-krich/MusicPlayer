@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MusicPlayerClient.Components
+namespace MusicPlayerClient.Controls
 {
     /// <summary>
-    /// Interaction logic for PlayerComponent.xaml
+    /// Interaction logic for ToolbarComponent.xaml
     /// </summary>
-    public partial class PlayerComponent : UserControl
+    public partial class ToolbarControl : UserControl
     {
-        public PlayerComponent()
+        public ToolbarControl()
         {
             InitializeComponent();
         }

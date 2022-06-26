@@ -27,9 +27,10 @@ namespace MusicPlayerClient.Services
         public double Position { get; set; }
         public double TotalTime { get; }
         public void Play(int mediaId);
+        public void Stop();
         public void RePlay();
         public void PlayPause();
-        public void PlayNext();
+        public void PlayNext(bool callStoppedPlay = true);
         public void PlayPrevious();
         public void Skip(TimeSpan time);
     }
@@ -109,12 +110,19 @@ namespace MusicPlayerClient.Services
                 _waveOutDevice?.Stop();
                 _waveOutDevice?.Dispose();
 
-                _audioFile = new AudioFileReader(_currentMedia.FilePath);
-                _waveOutDevice = new WaveOut();
-                _waveOutDevice.PlaybackStopped += OnStoppedPlay;
-                _waveOutDevice.Init(_audioFile);
-                _waveOutDevice.Play();
-                OnStartPlay();
+                try
+                {
+                    _audioFile = new AudioFileReader(_currentMedia.FilePath);
+                    _waveOutDevice = new WaveOut();
+                    _waveOutDevice.PlaybackStopped += OnStoppedPlay;
+                    _waveOutDevice.Init(_audioFile);
+                    _waveOutDevice.Play();
+                    OnStartPlay();
+                }
+                catch
+                {
+                    Stop();
+                }
             }
         }
 
@@ -149,14 +157,78 @@ namespace MusicPlayerClient.Services
             }
         }
 
-        public void PlayNext()
+        public void Stop()
         {
-            throw new NotImplementedException();
+            _currentMedia = null;
+            (_audioFile as AudioFileReader)?.Dispose();
+            _audioFile = null;
+            _waveOutDevice?.Stop();
+            _waveOutDevice?.Dispose();
+
+            OnStoppedPlay(this, new StoppedEventArgs());
+        }
+
+        public void PlayNext(bool callStoppedPlay = true)
+        {
+            if (_currentMedia != null)
+            {
+                var tempmedia = _mediaStore.Songs.FirstOrDefault(x => x.Id > _currentMedia.Id && _currentMedia.PlayerlistId == x.PlayerlistId);
+                if (tempmedia != null)
+                {
+                    _waveOutDevice?.Stop();
+                    _waveOutDevice?.Dispose();
+
+                    if(callStoppedPlay)
+                        OnStoppedPlay(this, new StoppedEventArgs());
+
+                    _currentMedia = tempmedia;
+
+                    try
+                    {
+                        _audioFile = new AudioFileReader(_currentMedia.FilePath);
+                        _waveOutDevice = new WaveOut();
+                        _waveOutDevice.PlaybackStopped += OnStoppedPlay;
+                        _waveOutDevice.Init(_audioFile);
+                        _waveOutDevice.Play();
+                        OnStartPlay();
+                    }
+                    catch
+                    {
+                        Stop();
+                    }
+                }
+            }
         }
 
         public void PlayPrevious()
         {
-            throw new NotImplementedException();
+            if (_currentMedia != null)
+            {
+                var tempmedia = _mediaStore.Songs.Reverse().FirstOrDefault(x => x.Id < _currentMedia.Id && _currentMedia.PlayerlistId == x.PlayerlistId);
+                if (tempmedia != null)
+                {
+                    _waveOutDevice?.Stop();
+                    _waveOutDevice?.Dispose();
+
+                    OnStoppedPlay(this, new StoppedEventArgs());
+
+                    _currentMedia = tempmedia;
+
+                    try
+                    {
+                        _audioFile = new AudioFileReader(_currentMedia.FilePath);
+                        _waveOutDevice = new WaveOut();
+                        _waveOutDevice.PlaybackStopped += OnStoppedPlay;
+                        _waveOutDevice.Init(_audioFile);
+                        _waveOutDevice.Play();
+                        OnStartPlay();
+                    }
+                    catch
+                    {
+                        Stop();
+                    }
+                }
+            }
         }
 
         public void Skip(TimeSpan time)
@@ -175,17 +247,17 @@ namespace MusicPlayerClient.Services
 
         private void OnStoppedPlay(object? sender, StoppedEventArgs e)
         {
-            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Stopped, _currentMedia));
+            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Stopped, _currentMedia, _audioFile));
         }
 
         private void OnStartPlay()
         {
-            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Playing, _currentMedia));
+            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Playing, _currentMedia, _audioFile));
         }
 
         private void OnPausePlay()
         {
-            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Paused, _currentMedia));
+            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Paused, _currentMedia, _audioFile));
         }
     }
 }

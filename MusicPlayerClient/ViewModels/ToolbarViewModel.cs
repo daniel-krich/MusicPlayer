@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Commands;
+using MusicPlayerClient.Models;
 using MusicPlayerClient.Services;
 using MusicPlayerClient.Stores;
 using MusicPlayerData.Data;
@@ -16,29 +17,23 @@ namespace MusicPlayerClient.ViewModels
 {
     public class ToolbarViewModel : ViewModelBase
     {
-        private string? _name = "toolbar is cool";
-        public string? Name
+        public ICommand DeletePlaylist { get; }
+        public ICommand NavigatePlaylist { get; }
+        public ICommand CreatePlaylist { get; }
+        public ObservableCollection<PlaylistModel> Playlists { get; set; }
+
+        public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
         {
-            get { return _name; }
-            set
+            Playlists = new ObservableCollection<PlaylistModel>(playlistStore.Playlists.Select(x => new PlaylistModel
             {
-                if (value == _name)
-                    return;
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
+                Id = x.Id,
+                Name = x.Name,
+                CreationDate = x.CreationDate
+            }).ToList());
 
-        public ICommand GotoPlaylist { get; }
-        public ICommand GotoHome { get; }
-        public ObservableCollection<PlaylistEntity> Playlists { get; set; }
-
-        public ToolbarViewModel(INavigationService navigationService, PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
-        {
-            GotoPlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserNavigationStore);
-            GotoHome = new SwitchPageToHomeCommand(navigationService);
-
-            Playlists = new ObservableCollection<PlaylistEntity>(playlistStore.Playlists.ToList());
+            NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
+            DeletePlaylist = new DeleteSpecificPlaylistCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);
+            CreatePlaylist = new CreatePlaylistCommand(playlistStore, Playlists);
         }
     }
 }

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MusicPlayerClient"
              xmlns:views="clr-namespace:MusicPlayerClient.Views"
-             xmlns:components="clr-namespace:MusicPlayerClient.Components"
+             xmlns:controls="clr-namespace:MusicPlayerClient.Controls"
              xmlns:viewModels="clr-namespace:MusicPlayerClient.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
@@ -33,11 +33,11 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModels:PlayerViewModel}">
-                <components:PlayerComponent />
+                <controls:PlayerControl />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModels:ToolbarViewModel}">
-                <components:ToolbarComponent />
+                <controls:ToolbarControl />
             </DataTemplate>
 
         </ResourceDictionary>

@@ -47,5 +47,42 @@ namespace MusicPlayerClient.Stores
                 _playlists.AddRange(dbContext.Playlists.ToList());
             }
         }
+
+        public bool Add(PlaylistEntity playlistEntity)
+        {
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                try
+                {
+                    dbContext.Playlists.Add(playlistEntity);
+                    dbContext.SaveChanges();
+
+                    _playlists.Add(playlistEntity);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool Remove(int playlistId)
+        {
+            _playlists.RemoveAll(x => x.Id == playlistId);
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                try
+                {
+                    dbContext.Playlists.Remove(new PlaylistEntity { Id = playlistId });
+                    dbContext.SaveChanges();
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
