@@ -71,14 +71,14 @@
                        FontWeight="Regular"/>
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
-                       Text="My main tunes!"
+                       Text="My main playlist"
                        FontFamily="{StaticResource Raleway}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
-                       FontSize="19px"
+                       FontSize="18px"
                        Margin="10 0 0 0"
                        Foreground="#ebebeb"
-                       FontWeight="DemiBold"/>
+                       FontWeight="Bold"/>
         </Grid>
 
         <DataGrid x:Name="SongItems"
