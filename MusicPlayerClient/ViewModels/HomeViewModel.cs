@@ -27,10 +27,10 @@ namespace MusicPlayerClient.ViewModels
         private readonly IMusicPlayerService _musicService;
         private readonly MediaStore _mediaStore;
         public string CurrentDateString { get; }
-        public ObservableCollection<MediaModel> AllSongs { get; set; }
+        public ObservableCollection<MediaModel>? AllSongs { get; set; }
         public string CurrentPlayerIconPath => _musicService.PlayerState == PlaybackState.Playing ? "../icons/pause.svg" : "../icons/play.svg";
-        public ICommand PlaySong { get; }  
-        public ICommand DeleteSong { get; }  
+        public ICommand PlaySong { get; } 
+        public ICommand? DeleteSong { get; set; }
 
         public HomeViewModel(IDbContextFactory<DataContext> dbContextFactory, MediaStore mediaStore, IMusicPlayerService musicService)
         {
@@ -44,7 +44,12 @@ namespace MusicPlayerClient.ViewModels
 
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
 
-            AllSongs = new ObservableCollection<MediaModel>(mediaStore.Songs.Where(x => x.PlayerlistId == null).Select((x, num) =>
+            Task.Run(LoadSongs);
+        }
+
+        private void LoadSongs()
+        {
+            AllSongs = new ObservableCollection<MediaModel>(_mediaStore.Songs.Where(x => x.PlayerlistId == null).Select((x, num) =>
             {
                 return new MediaModel
                 {
@@ -57,7 +62,9 @@ namespace MusicPlayerClient.ViewModels
                 };
             }).ToList());
 
-            DeleteSong = new DeleteSpecificSongCommand(musicService, mediaStore, AllSongs);
+            OnPropertyChanged(nameof(AllSongs));
+
+            DeleteSong = new DeleteSpecificSongCommand(_musicService, _mediaStore, AllSongs);
         }
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
@@ -65,14 +72,14 @@ namespace MusicPlayerClient.ViewModels
             switch (e.Type)
             {
                 case PlayerEventType.Playing:
-                    var songPlay = AllSongs.FirstOrDefault(x => x.Id == e.Media?.Id);
+                    var songPlay = AllSongs?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if(songPlay != null)
                     {
                         songPlay.CurrentPlayerIconPath = "../icons/pause.svg";
                     }
                     break;
                 default:
-                    var songStopped = AllSongs.FirstOrDefault(x => x.Id == e.Media?.Id);
+                    var songStopped = AllSongs?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songStopped != null)
                     {
                         songStopped.CurrentPlayerIconPath = "../icons/play.svg";
@@ -90,10 +97,10 @@ namespace MusicPlayerClient.ViewModels
 
             _mediaStore.AddRange(mediaEntities);
 
-            foreach(MediaEntity mediaEntity in mediaEntities)
+            foreach (MediaEntity mediaEntity in mediaEntities)
             {
-                var songsIndex = AllSongs.Count;
-                AllSongs.Add(new MediaModel
+                var songsIndex = AllSongs?.Count;
+                AllSongs?.Add(new MediaModel
                 {
                     CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
                     Number = songsIndex + 1,

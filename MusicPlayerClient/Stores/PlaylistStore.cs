@@ -7,14 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using MusicPlayerClient.Events;
 
 namespace MusicPlayerClient.Stores
 {
     public class PlaylistStore
     {
+        public event EventHandler<PlaylistNameChangedEventArgs>? PlaylistNameChanged;
+
         private readonly List<PlaylistEntity> _playlists;
         private readonly IDbContextFactory<DataContext> _dbContextFactory;
-        //private readonly Lazy<Task> _lazyInitialize;
 
         public IEnumerable<PlaylistEntity> Playlists => _playlists;
 
@@ -22,29 +24,35 @@ namespace MusicPlayerClient.Stores
         {
             _playlists = new List<PlaylistEntity>();
             _dbContextFactory = dbContextFactory;
-            /*_lazyInitialize = new Lazy<Task>(Initialize);
-            Load().Wait();*/
             Load();
         }
-
-        /*public async Task Load()
-        {
-            await _lazyInitialize.Value;
-        }*/
-
-        /*public async Task Initialize()
-        {
-            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
-            {
-                _playlists.AddRange(await dbContext.Playlists.ToListAsync());
-            }
-        }*/
 
         public void Load()
         {
             using (var dbContext = _dbContextFactory.CreateDbContext())
             {
                 _playlists.AddRange(dbContext.Playlists.ToList());
+            }
+        }
+
+        public void Rename(int playlistId, string name)
+        {
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                var dbPlaylist = dbContext.Playlists.Find(playlistId);
+                if (dbPlaylist != null)
+                {
+                    dbPlaylist.Name = name;
+                    dbContext.SaveChanges();
+
+                    var playlist = _playlists.FirstOrDefault(x => x.Id == playlistId);
+                    if (playlist != null)
+                    {
+                        playlist.Name = name;
+                    }
+
+                    PlaylistNameChanged?.Invoke(this, new PlaylistNameChangedEventArgs(playlistId, name));
+                }
             }
         }
 

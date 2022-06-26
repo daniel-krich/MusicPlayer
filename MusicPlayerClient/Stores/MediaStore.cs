@@ -15,7 +15,6 @@ namespace MusicPlayerClient.Stores
     {
         private readonly List<MediaEntity> _songs;
         private readonly IDbContextFactory<DataContext> _dbContextFactory;
-        //private readonly Lazy<Task> _lazyInitialize;
 
         public IEnumerable<MediaEntity> Songs => _songs;
 
@@ -23,23 +22,8 @@ namespace MusicPlayerClient.Stores
         {
             _songs = new List<MediaEntity>();
             _dbContextFactory = dbContextFactory;
-            //_lazyInitialize = new Lazy<Task>(Initialize);
-            //Load().Wait();
             Load();
         }
-
-        /*public async Task Load()
-        {
-            await _lazyInitialize.Value;
-        }*/
-
-        /*public async Task Initialize()
-        {
-            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
-            {
-                _songs.AddRange(await dbContext.Songs.ToListAsync());
-            }
-        }*/
 
         public void Load()
         {

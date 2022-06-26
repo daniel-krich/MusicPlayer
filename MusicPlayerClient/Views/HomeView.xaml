@@ -16,6 +16,29 @@
             <RowDefinition Height="150px" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
+        <Grid.Resources>
+            <DataTemplate x:Key="LoadingTemplate">
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Text="Loading..."
+                           FontFamily="{StaticResource Raleway}"
+                           FontSize="30px"
+                           Foreground="#888"
+                           FontWeight="Light"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="NoSongsTemplate" >
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Text="No songs found, use drag and drop to add some..."
+                           FontFamily="{StaticResource Raleway}"
+                           FontSize="24px"
+                           Foreground="#888"
+                           FontWeight="Light"/>  
+            </DataTemplate>
+        </Grid.Resources>
+        
         <Border Grid.Row="0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
@@ -51,7 +74,8 @@
                        FontWeight="Regular"
                        Text="{Binding CurrentDateString}" />
             <TextBlock Grid.Row="1"
-                       Grid.Column="1"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="3"
                        Text="Music Player"
                        FontFamily="{StaticResource Raleway}"
                        FontSize="50px"
@@ -166,6 +190,33 @@
             </DataGrid.Columns>
             
         </DataGrid>
+
+        <StackPanel x:Name="gridStatus"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <ContentControl Grid.Row="1"
+                        Grid.Column="0"
+                        ext:DropFilesBehaviorExtension.IsEnabled="True">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.AllSongs}" Value="{x:Null}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LoadingTemplate}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.AllSongs.Count}" Value="0">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoSongsTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+
+
 
     </Grid>
 </UserControl>

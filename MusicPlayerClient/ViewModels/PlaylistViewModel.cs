@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -23,14 +24,30 @@ namespace MusicPlayerClient.ViewModels
         private readonly IMusicPlayerService _musicService;
         private readonly PlaylistBrowserNavigationStore _playlistBrowserNavigationStore;
         private readonly MediaStore _mediaStore;
+        private readonly PlaylistStore _playlistStore;
         public string CurrentDateString { get; }
-        public string CurrentPlaylistName { get; }
+
+        public string? _currentPlaylistName;
+        public string? CurrentPlaylistName
+        {
+            get => _currentPlaylistName;
+            set
+            {
+                if (value is not null)
+                {
+                    _currentPlaylistName = value;
+                    _playlistStore.Rename(_playlistBrowserNavigationStore.BrowserPlaylistId, _currentPlaylistName);
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string PlaylistCreationDate { get; }
-        public ObservableCollection<MediaModel> AllSongsOfPlaylist { get; set; }
+        public ObservableCollection<MediaModel>? AllSongsOfPlaylist { get; set; }
         public ICommand NavigateHome { get; }
         public ICommand PlaySong { get; }
 
-        public ICommand DeleteSong { get; }
+        public ICommand? DeleteSong { get; set; }
 
         public PlaylistViewModel(IMusicPlayerService musicService, INavigationService navigationService, MediaStore mediaStore, PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
         {
@@ -39,12 +56,13 @@ namespace MusicPlayerClient.ViewModels
             _playlistBrowserNavigationStore = playlistBrowserNavigationStore;
 
             _mediaStore = mediaStore;
+            _playlistStore = playlistStore;
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
 
             PlaySong = new PlaySpecificSongCommand(musicService);
 
-            CurrentPlaylistName = playlistStore.Playlists.FirstOrDefault(x => x.Id == playlistBrowserNavigationStore.BrowserPlaylistId)?.Name ?? "Undefined";
+            _currentPlaylistName = playlistStore.Playlists.FirstOrDefault(x => x.Id == playlistBrowserNavigationStore.BrowserPlaylistId)?.Name ?? "Undefined";
 
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
 
@@ -52,7 +70,12 @@ namespace MusicPlayerClient.ViewModels
 
             NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserNavigationStore);
 
-            AllSongsOfPlaylist = new ObservableCollection<MediaModel>(mediaStore.Songs.Where(x => x.PlayerlistId == playlistBrowserNavigationStore.BrowserPlaylistId).Select((x, num) =>
+            Task.Run(LoadSongs);
+        }
+
+        private void LoadSongs()
+        {
+            AllSongsOfPlaylist = new ObservableCollection<MediaModel>(_mediaStore.Songs.Where(x => x.PlayerlistId == _playlistBrowserNavigationStore.BrowserPlaylistId).Select((x, num) =>
             {
                 using (var audioFile = new AudioFileReader(x.FilePath))
                 {
@@ -69,7 +92,9 @@ namespace MusicPlayerClient.ViewModels
                 }
             }).ToList());
 
-            DeleteSong = new DeleteSpecificSongCommand(musicService, mediaStore, AllSongsOfPlaylist);
+            OnPropertyChanged(nameof(AllSongsOfPlaylist));
+
+            DeleteSong = new DeleteSpecificSongCommand(_musicService, _mediaStore, AllSongsOfPlaylist);
         }
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
@@ -77,14 +102,14 @@ namespace MusicPlayerClient.ViewModels
             switch (e.Type)
             {
                 case PlayerEventType.Playing:
-                    var songPlay = AllSongsOfPlaylist.FirstOrDefault(x => x.Id == e.Media?.Id);
+                    var songPlay = AllSongsOfPlaylist?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songPlay != null)
                     {
                         songPlay.CurrentPlayerIconPath = "../icons/pause.svg";
                     }
                     break;
                 default:
-                    var songStopped = AllSongsOfPlaylist.FirstOrDefault(x => x.Id == e.Media?.Id);
+                    var songStopped = AllSongsOfPlaylist?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songStopped != null)
                     {
                         songStopped.CurrentPlayerIconPath = "../icons/play.svg";
@@ -105,8 +130,8 @@ namespace MusicPlayerClient.ViewModels
 
             foreach (MediaEntity mediaEntity in mediaEntities)
             {
-                var songsIndex = AllSongsOfPlaylist.Count;
-                AllSongsOfPlaylist.Add(new MediaModel
+                var songsIndex = AllSongsOfPlaylist?.Count;
+                AllSongsOfPlaylist?.Add(new MediaModel
                 {
                     CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
                     Number = songsIndex + 1,

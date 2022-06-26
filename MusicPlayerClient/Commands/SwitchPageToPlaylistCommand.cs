@@ -22,8 +22,11 @@ namespace MusicPlayerClient.Commands
         {
             if (parameter is int playlistId)
             {
-                _playlistBrowserNavigationStore.BrowserPlaylistId = playlistId;
-                _navigationService.NavigatePlaylist();
+                if (_playlistBrowserNavigationStore.BrowserPlaylistId != playlistId)
+                {
+                    _playlistBrowserNavigationStore.BrowserPlaylistId = playlistId;
+                    _navigationService.NavigatePlaylist();
+                }
             }
         }
     }

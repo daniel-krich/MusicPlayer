@@ -16,6 +16,30 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Grid.Resources>
+            <DataTemplate x:Key="LoadingTemplate">
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Margin="0 30 0 0"
+                           Text="Loading..."
+                           FontFamily="{StaticResource Raleway}"
+                           FontSize="25px"
+                           Foreground="#888"
+                           FontWeight="Light"/>
+            </DataTemplate>
+
+            <DataTemplate x:Key="NoPlaylistsTemplate" >
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           Margin="0 30 0 0"
+                           Text="No playlists."
+                           FontFamily="{StaticResource Raleway}"
+                           FontSize="25px"
+                           Foreground="#888"
+                           FontWeight="Light"/>
+            </DataTemplate>
+        </Grid.Resources>
+
         <Border Background="#111" Grid.Row="0" Grid.RowSpan="2">
             <Border.Effect>
                 <DropShadowEffect
@@ -84,14 +108,38 @@
                                 Command="{Binding ElementName=PlaylistItems, Path=DataContext.NavigatePlaylist}"
                                 CommandParameter="{Binding Id}"
                                 FontFamily="{StaticResource Raleway}"
-                                FontWeight="SemiBold"
+                                FontWeight="Regular"
                                 Content="{Binding Name}"
-                                FontSize="12"/>
+                                FontSize="14"/>
                         </DockPanel>
                         
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+
+        <StackPanel x:Name="playlistsStatus"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <ContentControl Grid.Row="1"
+                        Grid.Column="0">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=playlistsStatus, Path=DataContext.Playlists}" Value="{x:Null}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource LoadingTemplate}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=playlistsStatus, Path=DataContext.Playlists.Count}" Value="0">
+                            <Setter Property="ContentTemplate" Value="{StaticResource NoPlaylistsTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        
     </Grid>
 </UserControl>
