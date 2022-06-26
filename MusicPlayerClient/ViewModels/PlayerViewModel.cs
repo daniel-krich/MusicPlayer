@@ -79,15 +79,11 @@ namespace MusicPlayerClient.ViewModels
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
         {
+            Trace.WriteLine(e.Type);
             switch(e.Type)
             {
-                case PlayerEventType.Stopped:
-                    if (e.Audio is AudioFileReader audio && audio.TotalTime.Subtract(audio.CurrentTime).Milliseconds < 50)
-                    {
-                        Trace.WriteLine(audio.TotalTime);
-                        Trace.WriteLine(audio.CurrentTime);
-                        _musicService.PlayNext(false);
-                    }
+                case PlayerEventType.Finished:
+                    _musicService.PlayNext(false);
                     break;
             }
 

@@ -165,7 +165,7 @@ namespace MusicPlayerClient.Services
             _waveOutDevice?.Stop();
             _waveOutDevice?.Dispose();
 
-            OnStoppedPlay(this, new StoppedEventArgs());
+            OnStoppedPlay(this, null);
 
             _waveOutDevice = new WaveOut();
             _waveOutDevice.PlaybackStopped += OnStoppedPlay;
@@ -182,7 +182,7 @@ namespace MusicPlayerClient.Services
                     _waveOutDevice?.Dispose();
 
                     if(callStoppedPlay)
-                        OnStoppedPlay(this, new StoppedEventArgs());
+                        OnStoppedPlay(this, null);
 
                     _currentMedia = tempmedia;
 
@@ -213,7 +213,7 @@ namespace MusicPlayerClient.Services
                     _waveOutDevice?.Stop();
                     _waveOutDevice?.Dispose();
 
-                    OnStoppedPlay(this, new StoppedEventArgs());
+                    OnStoppedPlay(this, null);
 
                     _currentMedia = tempmedia;
 
@@ -248,9 +248,16 @@ namespace MusicPlayerClient.Services
             OnStartPlay();
         }
 
-        private void OnStoppedPlay(object? sender, StoppedEventArgs e)
+        private void OnStoppedPlay(object? sender, StoppedEventArgs? e)
         {
-            MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Stopped, _currentMedia, _audioFile));
+            if (e == null)
+            {
+                MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Stopped, _currentMedia, _audioFile));
+            }
+            else
+            {
+                MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Finished, _currentMedia, _audioFile));
+            }
         }
 
         private void OnStartPlay()

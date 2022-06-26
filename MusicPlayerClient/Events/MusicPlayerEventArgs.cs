@@ -12,7 +12,8 @@ namespace MusicPlayerClient.Events
     {
         Paused,
         Playing,
-        Stopped
+        Stopped,
+        Finished
     }
 
     public class MusicPlayerEventArgs
