@@ -10,6 +10,7 @@ using System.Windows.Input;
 using MusicPlayerClient.Commands;
 using NAudio.Wave;
 using MusicPlayerClient.Events;
+using MusicPlayerClient.Core;
 
 namespace MusicPlayerClient.ViewModels
 {
@@ -42,7 +43,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public string CurrentPlayerIconPath => _musicService.PlayerState == PlaybackState.Playing ? "../icons/pause.svg" : "../icons/play.svg";
+        public string CurrentPlayerIconPath => _musicService.PlayerState == PlaybackState.Playing ? IconAssets.PauseIcon : IconAssets.PlayIcon;
 
         public string SongProgressFormatted => $"{Math.Floor(SongProgress / 60).ToString().PadLeft(2, '0')}:{Math.Floor(SongProgress % 60).ToString().PadLeft(2, '0')}";
 

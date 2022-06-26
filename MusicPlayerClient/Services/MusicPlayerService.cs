@@ -166,6 +166,9 @@ namespace MusicPlayerClient.Services
             _waveOutDevice?.Dispose();
 
             OnStoppedPlay(this, new StoppedEventArgs());
+
+            _waveOutDevice = new WaveOut();
+            _waveOutDevice.PlaybackStopped += OnStoppedPlay;
         }
 
         public void PlayNext(bool callStoppedPlay = true)

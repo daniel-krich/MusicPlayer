@@ -28,7 +28,9 @@
     <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <None Remove="icons\backward.svg" />
     <None Remove="icons\discard.svg" />
+    <None Remove="icons\empty-folder.svg" />
     <None Remove="icons\Forward.svg" />
+    <None Remove="icons\page-document-empty.svg" />
     <None Remove="icons\Pause.svg" />
     <None Remove="icons\Play.svg" />
   </ItemGroup>
@@ -104,7 +106,13 @@
     <Resource Include="icons\discard.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="icons\empty-folder.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="icons\forward.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="icons\page-document-empty.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="icons\pause.svg">

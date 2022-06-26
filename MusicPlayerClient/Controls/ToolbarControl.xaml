@@ -28,15 +28,21 @@
                            FontWeight="Light"/>
             </DataTemplate>
 
-            <DataTemplate x:Key="NoPlaylistsTemplate" >
-                <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Top"
-                           Margin="0 30 0 0"
-                           Text="No playlists."
-                           FontFamily="{StaticResource Raleway}"
-                           FontSize="25px"
-                           Foreground="#888"
-                           FontWeight="Light"/>
+            <DataTemplate x:Key="NoPlaylistsTemplate">
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center">
+                    <svgc:SvgViewbox Width="80px"
+                                     Height="80px"
+                                     Margin="0 20 0 20"
+                                     Source="../icons/page-document-empty.svg"/>
+                    <TextBlock Text="No playlists."
+                               HorizontalAlignment="Center"
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="20px"
+                               Foreground="#888"
+                               FontWeight="Light"/>
+                </StackPanel>
+
             </DataTemplate>
         </Grid.Resources>
 

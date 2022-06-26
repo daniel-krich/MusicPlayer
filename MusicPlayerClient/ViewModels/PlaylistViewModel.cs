@@ -1,4 +1,5 @@
 ﻿using MusicPlayerClient.Commands;
+using MusicPlayerClient.Core;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Interfaces;
@@ -77,19 +78,15 @@ namespace MusicPlayerClient.ViewModels
         {
             AllSongsOfPlaylist = new ObservableCollection<MediaModel>(_mediaStore.Songs.Where(x => x.PlayerlistId == _playlistBrowserNavigationStore.BrowserPlaylistId).Select((x, num) =>
             {
-                using (var audioFile = new AudioFileReader(x.FilePath))
+                return new MediaModel
                 {
-                    var durationParse = $"{Math.Floor(audioFile.TotalTime.TotalSeconds / 60).ToString().PadLeft(2, '0')}:{Math.Floor(audioFile.TotalTime.TotalSeconds % 60).ToString().PadLeft(2, '0')}";
-                    return new MediaModel
-                    {
-                        CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
-                        Number = num + 1,
-                        Id = x.Id,
-                        Title = Path.GetFileName(x.FilePath),
-                        Path = x.FilePath,
-                        Duration = durationParse
-                    };
-                }
+                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id ? IconAssets.PauseIcon : IconAssets.PlayIcon,
+                    Number = num + 1,
+                    Id = x.Id,
+                    Title = Path.GetFileName(x.FilePath),
+                    Path = x.FilePath,
+                    Duration = AudioFileUtills.DurationParse(x.FilePath)
+                };
             }).ToList());
 
             OnPropertyChanged(nameof(AllSongsOfPlaylist));
@@ -105,14 +102,14 @@ namespace MusicPlayerClient.ViewModels
                     var songPlay = AllSongsOfPlaylist?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songPlay != null)
                     {
-                        songPlay.CurrentPlayerIconPath = "../icons/pause.svg";
+                        songPlay.CurrentPlayerIconPath = IconAssets.PauseIcon;
                     }
                     break;
                 default:
                     var songStopped = AllSongsOfPlaylist?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songStopped != null)
                     {
-                        songStopped.CurrentPlayerIconPath = "../icons/play.svg";
+                        songStopped.CurrentPlayerIconPath = IconAssets.PlayIcon;
                     }
                     break;
             }
@@ -133,7 +130,7 @@ namespace MusicPlayerClient.ViewModels
                 var songsIndex = AllSongsOfPlaylist?.Count;
                 AllSongsOfPlaylist?.Add(new MediaModel
                 {
-                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id ? "../icons/pause.svg" : "../icons/play.svg",
+                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id ? IconAssets.PauseIcon : IconAssets.PlayIcon,
                     Number = songsIndex + 1,
                     Id = mediaEntity.Id,
                     Title = Path.GetFileName(mediaEntity.FilePath),

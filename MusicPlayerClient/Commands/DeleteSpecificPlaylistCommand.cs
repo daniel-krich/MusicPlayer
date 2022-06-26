@@ -44,16 +44,16 @@ namespace MusicPlayerClient.Commands
                     _musicService.Stop();
                 }
 
-                if(_playlistBrowserStore.BrowserPlaylistId == playlistId)
-                {
-                    _navigationService.NavigateHome();
-                }
-
                 _observablePlaylists?.RemoveAll(x => x.Id == playlistId);
 
                 _mediaStore.RemoveAll(x => x.PlayerlistId == playlistId);
 
                 _playlistStore.Remove(playlistId);
+
+                if (_playlistBrowserStore.BrowserPlaylistId == playlistId)
+                {
+                    _navigationService.NavigateHome();
+                }
             }
         }
     }

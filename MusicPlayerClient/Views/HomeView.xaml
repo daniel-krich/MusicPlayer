@@ -26,16 +26,34 @@
                            FontSize="30px"
                            Foreground="#888"
                            FontWeight="Light"/>
+
             </DataTemplate>
 
             <DataTemplate x:Key="NoSongsTemplate" >
-                <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Text="No songs found, use drag and drop to add some..."
-                           FontFamily="{StaticResource Raleway}"
-                           FontSize="24px"
-                           Foreground="#888"
-                           FontWeight="Light"/>  
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <svgc:SvgViewbox Width="200px"
+                                     Height="100px"
+                                     Margin="0 0 0 20"
+                                     Source="../icons/empty-folder.svg"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="0 0 0 5"
+                               Text="No songs found."
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="24px"
+                               Foreground="#888"
+                               FontWeight="Light"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Use drag and drop to add some..."
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="16px"
+                               Foreground="#666"
+                               FontWeight="Light"/>
+                </StackPanel>
+                
             </DataTemplate>
         </Grid.Resources>
         
@@ -95,14 +113,14 @@
                        FontWeight="Regular"/>
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
-                       Text="My main playlist"
+                       Text="Main library"
                        FontFamily="{StaticResource Raleway}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
-                       FontSize="18px"
+                       FontSize="20px"
                        Margin="10 0 0 0"
-                       Foreground="#ebebeb"
-                       FontWeight="Bold"/>
+                       Foreground="#fff"
+                       FontWeight="SemiBold"/>
         </Grid>
 
         <DataGrid x:Name="SongItems"

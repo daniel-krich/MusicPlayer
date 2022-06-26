@@ -28,16 +28,34 @@
                            FontSize="30px"
                            Foreground="#888"
                            FontWeight="Light"/>
+
             </DataTemplate>
 
             <DataTemplate x:Key="NoSongsTemplate" >
-                <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Text="No songs found, use drag and drop to add some..."
-                           FontFamily="{StaticResource Raleway}"
-                           FontSize="24px"
-                           Foreground="#888"
-                           FontWeight="Light"/>
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <svgc:SvgViewbox Width="200px"
+                                     Height="100px"
+                                     Margin="0 0 0 20"
+                                     Source="../icons/empty-folder.svg"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="0 0 0 5"
+                               Text="No songs found."
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="24px"
+                               Foreground="#888"
+                               FontWeight="Light"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Use drag and drop to add some..."
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="16px"
+                               Foreground="#666"
+                               FontWeight="Light"/>
+                </StackPanel>
+
             </DataTemplate>
         </Grid.Resources>
         
