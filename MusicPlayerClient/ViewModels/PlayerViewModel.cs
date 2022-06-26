@@ -79,7 +79,6 @@ namespace MusicPlayerClient.ViewModels
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
         {
-            Trace.WriteLine(e.Type);
             switch(e.Type)
             {
                 case PlayerEventType.Finished:
