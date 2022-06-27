@@ -34,17 +34,14 @@ namespace MusicPlayerClient.ViewModels
             get => _currentPlaylistName;
             set
             {
-                if (value is not null)
-                {
-                    _currentPlaylistName = value;
-                    _playlistStore.Rename(_playlistBrowserNavigationStore.BrowserPlaylistId, _currentPlaylistName);
-                    OnPropertyChanged();
-                }
+                _currentPlaylistName = value;
+                OnPropertyChanged();
             }
         }
 
         public string PlaylistCreationDate { get; }
         public ObservableCollection<MediaModel>? AllSongsOfPlaylist { get; set; }
+        public ICommand RenamePlaylist { get; }
         public ICommand NavigateHome { get; }
         public ICommand PlaySong { get; }
 
@@ -58,6 +55,8 @@ namespace MusicPlayerClient.ViewModels
 
             _mediaStore = mediaStore;
             _playlistStore = playlistStore;
+
+            RenamePlaylist = new RenamePlaylistCommand(_playlistStore, _playlistBrowserNavigationStore);
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
 
@@ -117,7 +116,7 @@ namespace MusicPlayerClient.ViewModels
 
         public void OnFilesDropped(string[] files)
         {
-            var mediaEntities = files.Where(x => PathExtension.HasOneOfExtensions(x, ".wav", ".mp3")).Select(x => new MediaEntity
+            var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
             {
                 PlayerlistId = _playlistBrowserNavigationStore.BrowserPlaylistId,
                 FilePath = x

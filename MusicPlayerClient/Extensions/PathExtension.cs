@@ -20,5 +20,11 @@ namespace MusicPlayerClient.Extensions
             }
             return false;
         }
+
+        public static bool HasAudioVideoExtensions(string path)
+        {
+            if (HasOneOfExtensions(path, ".wav", ".mp3", ".mp4", ".mov", ".m4a", ".m4v", ".mpg", ".mpeg", ".wmv", ".avi")) return true;
+            return false;
+        }
     }
 }

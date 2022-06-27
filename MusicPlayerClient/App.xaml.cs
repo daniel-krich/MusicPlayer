@@ -27,12 +27,13 @@ namespace MusicPlayerClient
             IServiceCollection services = new ServiceCollection();
 
             Directory.CreateDirectory("data"); // Create data directory for db files or temp files.
+            Directory.CreateDirectory("downloads"); // Create downloads directory.
 
             _serviceProvider = services.AddViewModels()
                                        .AddNavigation()
                                        .AddDbContextFactory()
                                        .AddStores()
-                                       .AddMusicService()
+                                       .AddServices()
                                        .BuildServiceProvider();
 
             IDbContextFactory<DataContext> dbFactory = _serviceProvider.GetRequiredService<IDbContextFactory<DataContext>>();

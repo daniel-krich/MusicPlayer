@@ -11,6 +11,7 @@ namespace MusicPlayerClient.Services
     {
         public void NavigateHome();
         public void NavigatePlaylist();
+        public void NavigateDownloads();
     }
 
     public class NavigationService: INavigationService
@@ -18,12 +19,15 @@ namespace MusicPlayerClient.Services
         private readonly Func<MainViewModel>? _mainViewModelFunc;
         private readonly Func<HomeViewModel>? _homeViewModelFunc;
         private readonly Func<PlaylistViewModel>? _playlistViewModelFunc;
+        private readonly Func<DownloadsViewModel>? _downloadViewModelFunc;
 
-        public NavigationService(Func<MainViewModel> mainViewModelFunc, Func<HomeViewModel> homeViewModelFunc, Func<PlaylistViewModel> playlistViewModelFunc)
+        public NavigationService(Func<MainViewModel> mainViewModelFunc, Func<HomeViewModel> homeViewModelFunc,
+                                 Func<PlaylistViewModel> playlistViewModelFunc, Func<DownloadsViewModel> downloadViewModelFunc)
         {
             _mainViewModelFunc = mainViewModelFunc;
             _homeViewModelFunc = homeViewModelFunc;
             _playlistViewModelFunc = playlistViewModelFunc;
+            _downloadViewModelFunc = downloadViewModelFunc;
         }
 
         public void NavigateHome()
@@ -45,6 +49,17 @@ namespace MusicPlayerClient.Services
             if (mainVm != null)
             {
                 mainVm.CurrentView = playlistVm;
+            }
+        }
+
+        public void NavigateDownloads()
+        {
+            var mainVm = _mainViewModelFunc?.Invoke();
+            var downloadsVm = _downloadViewModelFunc?.Invoke();
+
+            if (mainVm != null)
+            {
+                mainVm.CurrentView = downloadsVm;
             }
         }
     }

@@ -28,6 +28,7 @@
     <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <None Remove="icons\backward.svg" />
     <None Remove="icons\discard.svg" />
+    <None Remove="icons\download.svg" />
     <None Remove="icons\empty-folder.svg" />
     <None Remove="icons\Forward.svg" />
     <None Remove="icons\page-document-empty.svg" />
@@ -39,6 +40,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="SharpVectors" Version="1.7.7" />
+    <PackageReference Include="VideoLibrary" Version="3.1.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -106,6 +108,9 @@
     <Resource Include="icons\discard.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="icons\download.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="icons\empty-folder.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -124,6 +129,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\DownloadsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Themes\Core\FlatButton.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Themes\Core\GenericButton.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
@@ -145,6 +160,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Themes\Core\PrettyScrollbar.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DownloadsView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

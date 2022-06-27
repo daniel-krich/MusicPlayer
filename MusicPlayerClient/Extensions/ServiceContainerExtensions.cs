@@ -19,6 +19,7 @@ namespace MusicPlayerClient.Extensions
         {
             collection.AddTransient<HomeViewModel>();
             collection.AddTransient<PlaylistViewModel>();
+            collection.AddTransient<DownloadsViewModel>();
             collection.AddSingleton<PlayerViewModel>();
             collection.AddSingleton<ToolbarViewModel>();
             collection.AddSingleton<MainViewModel>();
@@ -39,15 +40,17 @@ namespace MusicPlayerClient.Extensions
                 new NavigationService(
                     () => s.GetRequiredService<MainViewModel>(),
                     () => s.GetRequiredService<HomeViewModel>(),
-                    () => s.GetRequiredService<PlaylistViewModel>()
+                    () => s.GetRequiredService<PlaylistViewModel>(),
+                    () => s.GetRequiredService<DownloadsViewModel>()
             ));
 
             return collection;
         }
 
-        public static IServiceCollection AddMusicService(this IServiceCollection collection)
+        public static IServiceCollection AddServices(this IServiceCollection collection)
         {
             collection.AddSingleton<IMusicPlayerService, MusicPlayerService>();
+            collection.AddSingleton<IYouTubeClientService, YouTubeClientService>();
             return collection;
         }
 

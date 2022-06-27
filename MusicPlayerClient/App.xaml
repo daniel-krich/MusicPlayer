@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Themes/Core/CloseButton.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/PrettyButton.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/FlatButton.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/MinMaxButton.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/PrettyScrollbar.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/TransparentButton.xaml"/>
@@ -30,6 +31,10 @@
 
             <DataTemplate DataType="{x:Type viewModels:PlaylistViewModel}">
                 <views:PlaylistView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:DownloadsViewModel}">
+                <views:DownloadsView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModels:PlayerViewModel}">

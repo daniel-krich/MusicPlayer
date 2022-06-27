@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="130px" />
+            <RowDefinition Height="150px" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -61,27 +61,30 @@
                 BorderBrush="#888"
                 BorderThickness="0 0.1 0 0"/>
 
-        <Grid Grid.Row="0" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Button Height="34px"
+                VerticalAlignment="Center"
+                FontSize="12px"
+                Width="130px"
+                Margin="0 0 0 20"
+                Background="#181818"
+                Foreground="#ccc"
+                Style="{StaticResource ModernButton}" 
+                FontFamily="{StaticResource Raleway}"
+                FontWeight="SemiBold"
+                Command="{Binding NavigateDownloads}"
+                Content="Download music"/>
 
-            <Button Grid.Row="1"
-                    Grid.Column="1"
-                    Style="{StaticResource PrettyButton}" 
-                    FontFamily="{StaticResource Raleway}"
-                    FontWeight="UltraBold"
-                    Command="{Binding CreatePlaylist}"
-                    Content="Create playlist"/>
-        </Grid>
+        <Button Height="34px"
+                VerticalAlignment="Bottom"
+                FontSize="12px"
+                Background="#333"
+                Foreground="#fff"
+                Style="{StaticResource FlatButton}" 
+                FontFamily="{StaticResource Raleway}"
+                FontWeight="SemiBold"
+                Command="{Binding CreatePlaylist}"
+                Content="Create playlist"/>
 
         <ScrollViewer Grid.Row="1"
                       Grid.Column="0"

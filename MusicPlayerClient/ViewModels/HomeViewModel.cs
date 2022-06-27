@@ -91,7 +91,7 @@ namespace MusicPlayerClient.ViewModels
 
         public void OnFilesDropped(string[] files)
         {
-            var mediaEntities = files.Where(x => PathExtension.HasOneOfExtensions(x, ".wav", ".mp3")).Select(x => new MediaEntity
+            var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
             {
                 FilePath = x
             }).ToList();

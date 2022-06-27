@@ -21,6 +21,7 @@ namespace MusicPlayerClient.ViewModels
         private readonly PlaylistStore _playlistStore;
         public ICommand DeletePlaylist { get; }
         public ICommand NavigatePlaylist { get; }
+        public ICommand NavigateDownloads { get; }
         public ICommand CreatePlaylist { get; }
         public ObservableCollection<PlaylistModel> Playlists { get; set; }
 
@@ -38,6 +39,7 @@ namespace MusicPlayerClient.ViewModels
             }).ToList());
 
             NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
+            NavigateDownloads = new SwitchPageToDownloadsCommand(navigationService, playlistBrowserStore);
             DeletePlaylist = new DeleteSpecificPlaylistCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);
             CreatePlaylist = new CreatePlaylistCommand(playlistStore, Playlists);
         }
