@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusicPlayerClient.Controls"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             xmlns:ext="clr-namespace:MusicPlayerClient.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="530" d:DesignWidth="200">
     <Grid>
@@ -90,6 +91,9 @@
                 Command="{Binding CreatePlaylist}"
                 Content="Create playlist"/>
 
+
+        <FrameworkElement x:Name="ProxyElement" Visibility="Collapsed"/>
+        
         <ScrollViewer Grid.Row="1"
                       Grid.Column="0"
                       Padding="10"
@@ -116,14 +120,30 @@
                                                      Height="15px"
                                                      Source="../icons/discard.svg"/>
                             </Button>
-                            <Button Style="{StaticResource TransparentButton}"
-                                Padding="10"
-                                Command="{Binding ElementName=PlaylistItems, Path=DataContext.NavigatePlaylist}"
-                                CommandParameter="{Binding Id}"
-                                FontFamily="{StaticResource Raleway}"
-                                FontWeight="Regular"
-                                Content="{Binding Name}"
-                                FontSize="14"/>
+                            <Button Padding="10"
+                                    Command="{Binding ElementName=PlaylistItems, Path=DataContext.NavigatePlaylist}"
+                                    CommandParameter="{Binding Id}"
+                                    FontFamily="{StaticResource Raleway}"
+                                    FontWeight="Regular"
+                                    Content="{Binding Name}"
+                                    FontSize="14">
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TransparentButton}" TargetType="{x:Type Button}">
+                                        <Setter Property="Foreground" Value="#aaa" />
+                                        <Style.Triggers>
+                                            
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                                <Setter Property="Foreground" Value="#fff" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding IsPlaying}" Value="true">
+                                                <Setter Property="Foreground" Value="#00cc90" />
+                                            </DataTrigger>
+
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </DockPanel>
                         
                     </DataTemplate>

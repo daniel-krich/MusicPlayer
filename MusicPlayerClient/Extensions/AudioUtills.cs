@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Extensions
 {
-    public static class AudioFileUtills
+    public static class AudioUtills
     {
         public static string DurationParse(string? music_file_path)
         {
@@ -23,6 +23,11 @@ namespace MusicPlayerClient.Extensions
             {
                 return "Unknown";
             }
-        } 
+        }
+
+        public static string DurationParse(double sec)
+        {
+            return $"{Math.Floor(sec / 60).ToString().PadLeft(2, '0')}:{Math.Floor(sec % 60).ToString().PadLeft(2, '0')}";
+        }
     }
 }

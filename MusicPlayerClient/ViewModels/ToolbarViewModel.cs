@@ -19,6 +19,9 @@ namespace MusicPlayerClient.ViewModels
     public class ToolbarViewModel : ViewModelBase
     {
         private readonly PlaylistStore _playlistStore;
+        private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
+        private readonly IMusicPlayerService _musicPlayerService;
+
         public ICommand DeletePlaylist { get; }
         public ICommand NavigatePlaylist { get; }
         public ICommand NavigateDownloads { get; }
@@ -31,12 +34,19 @@ namespace MusicPlayerClient.ViewModels
 
             playlistStore.PlaylistNameChanged += OnPlaylistNameChanged;
 
+            _musicPlayerService = musicPlayerService;
+
+            musicPlayerService.MusicPlayerEvent += OnMusicPlayerEvent;
+
             Playlists = new ObservableCollection<PlaylistModel>(playlistStore.Playlists.Select(x => new PlaylistModel
             {
                 Id = x.Id,
                 Name = x.Name,
                 CreationDate = x.CreationDate
             }).ToList());
+
+            _playlistBrowserStore = playlistBrowserStore;
+            playlistBrowserStore.PlaylistBrowserChanged += OnPlaylistBrowserChanged;
 
             NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
             NavigateDownloads = new SwitchPageToDownloadsCommand(navigationService, playlistBrowserStore);
@@ -53,9 +63,46 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
+        private void OnPlaylistBrowserChanged(object? sender, PlaylistBrowserChangedEventArgs args)
+        {
+            Playlists.ToList().ForEach(x =>
+            {
+                if (x.Id == args.PlaylistId)
+                {
+                    x.IsSelected = true;
+                }
+                else
+                {
+                    x.IsSelected = false;
+                }
+            });
+        }
+
+        private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
+        {
+            switch (e.Type)
+            {
+                case PlayerEventType.Playing:
+                    Playlists.ToList().ForEach(x =>
+                    {
+                        if (x.Id == e.Media?.PlayerlistId)
+                        {
+                            x.IsPlaying = true;
+                        }
+                        else
+                        {
+                            x.IsPlaying = false;
+                        }
+                    });
+                    break;
+            }
+        }
+
         public override void Dispose()
         {
             _playlistStore.PlaylistNameChanged -= OnPlaylistNameChanged;
+            _playlistBrowserStore.PlaylistBrowserChanged -= OnPlaylistBrowserChanged;
+            _musicPlayerService.MusicPlayerEvent -= OnMusicPlayerEvent;
         }
     }
 }

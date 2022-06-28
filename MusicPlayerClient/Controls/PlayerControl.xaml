@@ -43,7 +43,7 @@
                    FontWeight="DemiBold"
                    TextTrimming="CharacterEllipsis"
                    FontFamily="{StaticResource Raleway}"
-                   Text="{Binding PlayingSongName}"/>
+                   Text="{Binding SongName}"/>
             <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Grid.Row="0"
@@ -53,7 +53,7 @@
                    FontWeight="ExtraLight"
                    TextTrimming="CharacterEllipsis"
                    FontFamily="{StaticResource Raleway}"
-                   Text="{Binding PlayingSongPath}"/>
+                   Text="{Binding SongPath}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="0"
@@ -71,7 +71,21 @@
                 <Button Style="{StaticResource TransparentButton}"
                         Margin="0 0 50 0"
                         Command="{Binding TogglePlayer}">
-                    <svgc:SvgViewbox Width="40px" Height="40px" Source="{Binding CurrentPlayerIconPath}"/>
+                    <svgc:SvgViewbox Width="40px"
+                                     Height="40px">
+                        <svgc:SvgViewbox.Style>
+                            <Style TargetType="{x:Type svgc:SvgViewbox}">
+                                <Setter Property="Source" Value="../icons/play.svg" />
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding IsPlaying}" Value="true">
+                                        <Setter Property="Source" Value="../icons/pause.svg" />
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </svgc:SvgViewbox.Style>
+                    </svgc:SvgViewbox>
                 </Button>
                 <Button Style="{StaticResource TransparentButton}"
                         Command="{Binding PlayForward}">

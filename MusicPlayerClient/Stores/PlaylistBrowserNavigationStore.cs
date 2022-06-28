@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicPlayerClient.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,16 @@ namespace MusicPlayerClient.Stores
 {
     public class PlaylistBrowserNavigationStore
     {
-        public int BrowserPlaylistId { get; set; }
+        public event EventHandler<PlaylistBrowserChangedEventArgs>? PlaylistBrowserChanged;
+        private int _browserPlaylistId;
+        public int BrowserPlaylistId
+        {
+            get => _browserPlaylistId;
+            set
+            {
+                _browserPlaylistId = value;
+                PlaylistBrowserChanged?.Invoke(this, new PlaylistBrowserChangedEventArgs(_browserPlaylistId));
+            }
+        }
     }
 }

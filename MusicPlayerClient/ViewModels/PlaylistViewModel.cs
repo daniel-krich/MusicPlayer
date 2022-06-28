@@ -79,12 +79,12 @@ namespace MusicPlayerClient.ViewModels
             {
                 return new MediaModel
                 {
-                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id ? IconAssets.PauseIcon : IconAssets.PlayIcon,
+                    Playing = x.Id == _musicService.CurrentMedia?.Id,
                     Number = num + 1,
                     Id = x.Id,
                     Title = Path.GetFileName(x.FilePath),
                     Path = x.FilePath,
-                    Duration = AudioFileUtills.DurationParse(x.FilePath)
+                    Duration = AudioUtills.DurationParse(x.FilePath)
                 };
             }).ToList());
 
@@ -101,14 +101,14 @@ namespace MusicPlayerClient.ViewModels
                     var songPlay = AllSongsOfPlaylist?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songPlay != null)
                     {
-                        songPlay.CurrentPlayerIconPath = IconAssets.PauseIcon;
+                        songPlay.Playing = true;
                     }
                     break;
                 default:
                     var songStopped = AllSongsOfPlaylist?.FirstOrDefault(x => x.Id == e.Media?.Id);
                     if (songStopped != null)
                     {
-                        songStopped.CurrentPlayerIconPath = IconAssets.PlayIcon;
+                        songStopped.Playing = false;
                     }
                     break;
             }
@@ -129,12 +129,12 @@ namespace MusicPlayerClient.ViewModels
                 var songsIndex = AllSongsOfPlaylist?.Count;
                 AllSongsOfPlaylist?.Add(new MediaModel
                 {
-                    CurrentPlayerIconPath = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id ? IconAssets.PauseIcon : IconAssets.PlayIcon,
+                    Playing = mediaEntity.Id == _musicService.CurrentMedia?.Id,
                     Number = songsIndex + 1,
                     Id = mediaEntity.Id,
                     Title = Path.GetFileName(mediaEntity.FilePath),
                     Path = mediaEntity.FilePath,
-                    Duration = AudioFileUtills.DurationParse(mediaEntity.FilePath)
+                    Duration = AudioUtills.DurationParse(mediaEntity.FilePath)
                 });
             }
         }

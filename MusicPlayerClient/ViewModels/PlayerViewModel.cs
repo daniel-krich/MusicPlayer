@@ -11,6 +11,7 @@ using MusicPlayerClient.Commands;
 using NAudio.Wave;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Core;
+using MusicPlayerClient.Extensions;
 
 namespace MusicPlayerClient.ViewModels
 {
@@ -28,9 +29,27 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public string PlayingSongPath => _musicService.PlayingSongPath;
+        private string? _songName;
+        public string? SongName
+        {
+            get => _songName;
+            set
+            {
+                _songName = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string PlayingSongName => _musicService.PlayingSongName;
+        private string? _songPath;
+        public string? SongPath
+        {
+            get => _songPath;
+            set
+            {
+                _songPath = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double SongProgress
         {
@@ -43,13 +62,22 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public string CurrentPlayerIconPath => _musicService.PlayerState == PlaybackState.Playing ? IconAssets.PauseIcon : IconAssets.PlayIcon;
+        private bool _isPlaying;
+        public bool IsPlaying
+        {
+            get => _isPlaying;
+            set
+            {
+                _isPlaying = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string SongProgressFormatted => $"{Math.Floor(SongProgress / 60).ToString().PadLeft(2, '0')}:{Math.Floor(SongProgress % 60).ToString().PadLeft(2, '0')}";
+        public string SongProgressFormatted => AudioUtills.DurationParse(SongProgress);
 
         public double SongDuration => _musicService.TotalTime;
 
-        public string SongDurationFormatted => $"{Math.Floor(SongDuration / 60).ToString().PadLeft(2, '0')}:{Math.Floor(SongDuration % 60).ToString().PadLeft(2, '0')}";
+        public string SongDurationFormatted => AudioUtills.DurationParse(SongDuration);
 
         public ICommand TogglePlayer { get; }
         public ICommand PlayBackward { get; }
@@ -81,14 +109,19 @@ namespace MusicPlayerClient.ViewModels
         {
             switch(e.Type)
             {
+                case PlayerEventType.Playing:
+                    SongName = _musicService.PlayingSongName;
+                    SongPath = _musicService.PlayingSongPath;
+                    IsPlaying = true;
+                    break;
                 case PlayerEventType.Finished:
+                    IsPlaying = false;
                     _musicService.PlayNext(false);
                     break;
+                default:
+                    IsPlaying = false;
+                    break;
             }
-
-            OnPropertyChanged(nameof(PlayingSongName));
-            OnPropertyChanged(nameof(PlayingSongPath));
-            OnPropertyChanged(nameof(CurrentPlayerIconPath));
         }
 
         public override void Dispose()

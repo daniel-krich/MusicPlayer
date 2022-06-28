@@ -11,22 +11,21 @@ namespace MusicPlayerClient.Models
     public class MediaModel : ObservableObject
     {
         
-        private string? _currentPlayerIconPath;
+        private bool _playing;
         private int? _number;
         private int? _id { get; set; }
         private string? _title { get; set; }
         private string? _path { get; set; }
         private string? _duration { get; set; }
 
-        [Browsable(false)]
-        public string? CurrentPlayerIconPath
+        public bool Playing
         {
-            get { return _currentPlayerIconPath; }
+            get { return _playing; }
             set
             {
-                if (_currentPlayerIconPath != value)
+                if (_playing != value)
                 {
-                    _currentPlayerIconPath = value;
+                    _playing = value;
                     OnPropertyChanged();
                 }
             }

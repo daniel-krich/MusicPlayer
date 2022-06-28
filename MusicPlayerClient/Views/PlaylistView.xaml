@@ -168,8 +168,20 @@
                                     CommandParameter="{Binding Id}">
 
                                 <svgc:SvgViewbox Width="30px"
-                                                     Height="30px"
-                                                     Source="{Binding CurrentPlayerIconPath}"/>
+                                                     Height="30px">
+                                    <svgc:SvgViewbox.Style>
+                                        <Style TargetType="{x:Type svgc:SvgViewbox}">
+                                            <Setter Property="Source" Value="../icons/play.svg" />
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding Playing}" Value="true">
+                                                    <Setter Property="Source" Value="../icons/pause.svg" />
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+                                        </Style>
+                                    </svgc:SvgViewbox.Style>
+                                </svgc:SvgViewbox>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

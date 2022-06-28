@@ -59,8 +59,6 @@ namespace MusicPlayerClient.ViewModels
 
             SearchMedia = new SearchSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia, LoadingWrapper, FailedWrapper);
 
-            
-
             NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserNavigationStore);
 
             DownloadMedia = new DownloadSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia);
@@ -68,13 +66,6 @@ namespace MusicPlayerClient.ViewModels
             _mediaStore = mediaStore;
 
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
-
-            Task.Run(LoadSongs);
-        }
-
-        private void LoadSongs()
-        {
-
         }
 
         public override void Dispose()
