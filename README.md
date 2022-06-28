@@ -8,7 +8,6 @@ Created with C# .NET WPF (MVVM)
 - Play music.
 - Create custom playlists.
 - Search and download music from youtube.
-</br>
 
 ### Screenshots ###
 ***
