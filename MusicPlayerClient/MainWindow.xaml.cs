@@ -55,7 +55,7 @@ namespace MusicPlayerClient
         {
             if (this.WindowState == WindowState.Maximized)
             {
-                this.BorderThickness = new Thickness(7);
+                this.BorderThickness = new Thickness(6);
             }
             else
             {
