@@ -9,6 +9,7 @@ namespace MusicPlayerClient.Commands
 {
     public abstract class AsyncCommandBase : ICommand
     {
+        protected bool PreventClicksWhileExecuting { get; set; } = true;
 
         private bool _isExecuting;
         public bool IsExecuting
@@ -19,8 +20,11 @@ namespace MusicPlayerClient.Commands
             }
             set
             {
-                _isExecuting = value;
-                CanExecuteChanged?.Invoke(this, new EventArgs());
+                if (PreventClicksWhileExecuting)
+                {
+                    _isExecuting = value;
+                    CanExecuteChanged?.Invoke(this, new EventArgs());
+                }
             }
         }
 

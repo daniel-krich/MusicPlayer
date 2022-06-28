@@ -62,7 +62,7 @@ namespace MusicPlayerClient.Stores
             {
                 try
                 {
-                    await dbContext.Playlists.AddAsync(playlistEntity);
+                    dbContext.Playlists.Add(playlistEntity);
                     await dbContext.SaveChangesAsync();
 
                     _playlists.Add(playlistEntity);

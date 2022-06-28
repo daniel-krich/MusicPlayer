@@ -175,6 +175,7 @@ namespace MusicPlayerClient.Services
         {
             if (_currentMedia != null)
             {
+                Skip:
                 var tempmedia = _mediaStore.Songs.FirstOrDefault(x => x.Id > _currentMedia.Id && _currentMedia.PlayerlistId == x.PlayerlistId);
                 if (tempmedia != null)
                 {
@@ -197,7 +198,14 @@ namespace MusicPlayerClient.Services
                     }
                     catch
                     {
-                        Stop();
+                        if (_mediaStore.Songs.FirstOrDefault(x => x.Id > _currentMedia.Id && _currentMedia.PlayerlistId == x.PlayerlistId) == null)
+                        {
+                            Stop();
+                        }
+                        else
+                        {
+                            goto Skip;
+                        }
                     }
                 }
             }
@@ -207,6 +215,7 @@ namespace MusicPlayerClient.Services
         {
             if (_currentMedia != null)
             {
+                Prev:
                 var tempmedia = _mediaStore.Songs.Reverse().FirstOrDefault(x => x.Id < _currentMedia.Id && _currentMedia.PlayerlistId == x.PlayerlistId);
                 if (tempmedia != null)
                 {
@@ -228,7 +237,14 @@ namespace MusicPlayerClient.Services
                     }
                     catch
                     {
-                        Stop();
+                        if (_mediaStore.Songs.FirstOrDefault(x => x.Id < _currentMedia.Id && _currentMedia.PlayerlistId == x.PlayerlistId) == null)
+                        {
+                            Stop();
+                        }
+                        else
+                        {
+                            goto Prev;
+                        }
                     }
                 }
             }

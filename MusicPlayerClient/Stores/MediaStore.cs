@@ -39,7 +39,7 @@ namespace MusicPlayerClient.Stores
             {
                 try
                 {
-                    await dbContext.Songs.AddAsync(media);
+                    dbContext.Songs.Add(media);
                     await dbContext.SaveChangesAsync();
 
                     _songs.Add(media);
@@ -58,7 +58,7 @@ namespace MusicPlayerClient.Stores
             {
                 try
                 {
-                    await dbContext.Songs.AddRangeAsync(medias);
+                    dbContext.Songs.AddRange(medias);
                     await dbContext.SaveChangesAsync();
 
                     _songs.AddRange(medias);

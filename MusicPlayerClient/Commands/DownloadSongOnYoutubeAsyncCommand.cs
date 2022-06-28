@@ -23,6 +23,8 @@ namespace MusicPlayerClient.Commands
         {
             _youtubeClient = youtubeClient;
             _observableMedia = observableMedia;
+
+            PreventClicksWhileExecuting = false;
         }
 
         protected override async Task ExecuteAsync(object? parameter)
