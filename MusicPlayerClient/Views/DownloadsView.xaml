@@ -155,7 +155,7 @@
                        IsHitTestVisible="False"
                        Foreground="#963027"
                        Opacity="0.5"
-                       Text="Enter video, track or song name..."
+                       Text="Search url, artist or song name..."
                        FontFamily="{StaticResource Raleway}"
                        FontWeight="SemiBold">
                 <TextBlock.Style>
