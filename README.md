@@ -17,4 +17,5 @@ Created with C# .NET WPF (MVVM)
 ***
 ![p4](https://user-images.githubusercontent.com/87533517/176158084-2010394b-b266-4e92-b058-558e81426f4b.png)
 ***
-![p3](https://user-images.githubusercontent.com/87533517/176158093-800c4a50-7756-4a38-9191-23cfbe819385.png)
+![p3](https://user-images.githubusercontent.com/87533517/176220573-4afbdf52-541d-47f6-b3e5-33e906776e6c.png)
+
