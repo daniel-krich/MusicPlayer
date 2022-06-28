@@ -44,7 +44,6 @@ namespace MusicPlayerClient.Services
 
                         if (results != null)
                         {
-                            Clipboard.SetText(results.ToString());
                             foreach (var item in results)
                             {
                                 var video_info = item["videoRenderer"];
