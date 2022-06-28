@@ -5,13 +5,17 @@
 Created with C# .NET WPF (MVVM)
 
 ### Features ###
-- Play audio.
+- Play music.
 - Create custom playlists.
-- Search and download audio from youtube.
+- Search and download music from youtube.
+</br>
 
 ### Screenshots ###
-
-![p3](https://user-images.githubusercontent.com/87533517/176059434-4a477764-5926-4a27-aa75-fa4df316352e.png)
-![p1](https://user-images.githubusercontent.com/87533517/176059449-e50a6f6e-cb7a-40d4-9c6e-bccb057f6fb8.png)
-![p2](https://user-images.githubusercontent.com/87533517/176059455-f4685d11-7ef9-41c1-8535-022cb0a0b05c.png)
-![p5](https://user-images.githubusercontent.com/87533517/176059484-76ce29a6-c2bd-488f-bce6-1f6814593901.png)
+***
+![p1](https://user-images.githubusercontent.com/87533517/176158072-151f7f47-e5bb-4cc6-a6bc-ef5bf1681780.png)
+***
+![p2](https://user-images.githubusercontent.com/87533517/176158076-de13c0bb-11b6-4351-902a-856de104a14b.png)
+***
+![p4](https://user-images.githubusercontent.com/87533517/176158084-2010394b-b266-4e92-b058-558e81426f4b.png)
+***
+![p3](https://user-images.githubusercontent.com/87533517/176158093-800c4a50-7756-4a38-9191-23cfbe819385.png)
