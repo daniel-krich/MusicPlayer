@@ -1,8 +1,13 @@
-# Music/Audio player
+# Music player
 
-#### A simple music player with a nice UI that lets you download music from youtube. ####
+### A simple music player with a nice UI. ###
 
-Created with C# .NET WPF (Sqlite EF) (MVVM).
+Created with C# .NET WPF (MVVM)
+
+### Features ###
+- Play audio.
+- Create custom playlists.
+- Search and download audio from youtube.
 
 ### Screenshots ###
 
