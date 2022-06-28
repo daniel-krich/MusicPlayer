@@ -13,25 +13,25 @@ using System.Windows;
 
 namespace MusicPlayerClient.Commands
 {
-    public class SearchSongOnYoutubeCommand : CommandBase
+    public class SearchSongOnYoutubeAsyncCommand : AsyncCommandBase
     {
         private readonly IYouTubeClientService _youtubeClient;
         private readonly ObservableCollection<YoutubeVideoInfoModel> _observableMedia;
         private readonly ObjectWrapper<bool>? _loadingWrapper;
         private readonly ObjectWrapper<bool>? _failedWrapper;
-        public SearchSongOnYoutubeCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia)
+        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia)
         {
             _youtubeClient = youtubeClient;
             _observableMedia = observableMedia;
         }
 
-        public SearchSongOnYoutubeCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia, ObjectWrapper<bool> loadingWrapper, ObjectWrapper<bool> failedWrapper) : this(youtubeClient, observableMedia)
+        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia, ObjectWrapper<bool> loadingWrapper, ObjectWrapper<bool> failedWrapper) : this(youtubeClient, observableMedia)
         {
             _loadingWrapper = loadingWrapper;
             _failedWrapper = failedWrapper;
         }
 
-        public override async void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
             if(parameter is string searchText)
             {

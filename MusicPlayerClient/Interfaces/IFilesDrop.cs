@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Interfaces
 {
-    public interface IFilesDrop
+    public interface IFilesDropAsync
     {
-        void OnFilesDropped(string[] files);
+        Task OnFilesDroppedAsync(string[] files);
     }
 }

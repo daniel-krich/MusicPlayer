@@ -13,23 +13,23 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Commands
 {
-    public class RenamePlaylistCommand : CommandBase
+    public class RenamePlaylistAsyncCommand : AsyncCommandBase
     {
         private readonly PlaylistStore _playlistStore;
         private readonly PlaylistBrowserNavigationStore _playlistBrowserNavigationStore;
 
-        public RenamePlaylistCommand(PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
+        public RenamePlaylistAsyncCommand(PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
         {
             _playlistStore = playlistStore;
             _playlistBrowserNavigationStore = playlistBrowserNavigationStore;
         }
 
-        public override void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
 
             if(parameter is string playlistName)
             {
-                _playlistStore.Rename(_playlistBrowserNavigationStore.BrowserPlaylistId, playlistName);
+                await _playlistStore.Rename(_playlistBrowserNavigationStore.BrowserPlaylistId, playlistName);
             }
         }
     }

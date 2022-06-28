@@ -23,7 +23,7 @@ using MusicPlayerClient.Core;
 
 namespace MusicPlayerClient.ViewModels
 {
-    public class HomeViewModel : ViewModelBase, IFilesDrop
+    public class HomeViewModel : ViewModelBase, IFilesDropAsync
     {
         private readonly IMusicPlayerService _musicService;
         private readonly MediaStore _mediaStore;
@@ -65,7 +65,7 @@ namespace MusicPlayerClient.ViewModels
 
             OnPropertyChanged(nameof(AllSongs));
 
-            DeleteSong = new DeleteSpecificSongCommand(_musicService, _mediaStore, AllSongs);
+            DeleteSong = new DeleteSpecificSongAsyncCommand(_musicService, _mediaStore, AllSongs);
         }
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
@@ -89,14 +89,14 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public void OnFilesDropped(string[] files)
+        public async Task OnFilesDroppedAsync(string[] files)
         {
             var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
             {
                 FilePath = x
             }).ToList();
 
-            _mediaStore.AddRange(mediaEntities);
+            await _mediaStore.AddRange(mediaEntities);
 
             foreach (MediaEntity mediaEntity in mediaEntities)
             {

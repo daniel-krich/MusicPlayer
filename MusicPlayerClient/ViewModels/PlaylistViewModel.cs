@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace MusicPlayerClient.ViewModels
 {
-    public class PlaylistViewModel : ViewModelBase, IFilesDrop
+    public class PlaylistViewModel : ViewModelBase, IFilesDropAsync
     {
         private readonly IMusicPlayerService _musicService;
         private readonly PlaylistBrowserNavigationStore _playlistBrowserNavigationStore;
@@ -56,7 +56,7 @@ namespace MusicPlayerClient.ViewModels
             _mediaStore = mediaStore;
             _playlistStore = playlistStore;
 
-            RenamePlaylist = new RenamePlaylistCommand(_playlistStore, _playlistBrowserNavigationStore);
+            RenamePlaylist = new RenamePlaylistAsyncCommand(_playlistStore, _playlistBrowserNavigationStore);
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
 
@@ -90,7 +90,7 @@ namespace MusicPlayerClient.ViewModels
 
             OnPropertyChanged(nameof(AllSongsOfPlaylist));
 
-            DeleteSong = new DeleteSpecificSongCommand(_musicService, _mediaStore, AllSongsOfPlaylist);
+            DeleteSong = new DeleteSpecificSongAsyncCommand(_musicService, _mediaStore, AllSongsOfPlaylist);
         }
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
@@ -114,7 +114,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public void OnFilesDropped(string[] files)
+        public async Task OnFilesDroppedAsync(string[] files)
         {
             var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
             {
@@ -122,7 +122,7 @@ namespace MusicPlayerClient.ViewModels
                 FilePath = x
             }).ToList();
 
-            _mediaStore.AddRange(mediaEntities);
+            await _mediaStore.AddRange(mediaEntities);
 
             foreach (MediaEntity mediaEntity in mediaEntities)
             {

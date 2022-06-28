@@ -13,23 +13,22 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Commands
 {
-    public class CreatePlaylistCommand : CommandBase
+    public class CreatePlaylistAsyncCommand : AsyncCommandBase
     {
         private readonly PlaylistStore _playlistStore;
         private readonly ObservableCollection<PlaylistModel>? _observablePlaylists;
-        public CreatePlaylistCommand(PlaylistStore playlistStore)
+        public CreatePlaylistAsyncCommand(PlaylistStore playlistStore)
         {
             _playlistStore = playlistStore;
         }
 
-        public CreatePlaylistCommand(PlaylistStore playlistStore, ObservableCollection<PlaylistModel> observablePlaylists) : this(playlistStore)
+        public CreatePlaylistAsyncCommand(PlaylistStore playlistStore, ObservableCollection<PlaylistModel> observablePlaylists) : this(playlistStore)
         {
             _observablePlaylists = observablePlaylists;
         }
 
-        public override void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
-
             var playlistId = _playlistStore.Playlists.Count() + 1;
 
             var playlist = new PlaylistEntity
@@ -38,7 +37,7 @@ namespace MusicPlayerClient.Commands
                 CreationDate = DateTime.Now
             };
 
-            _playlistStore.Add(playlist);
+            await _playlistStore.Add(playlist);
 
             _observablePlaylists?.Add(new PlaylistModel
             {

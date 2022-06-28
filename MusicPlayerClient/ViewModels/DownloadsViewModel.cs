@@ -57,13 +57,13 @@ namespace MusicPlayerClient.ViewModels
 
             FailedWrapper = new ObjectWrapper<bool>();
 
-            SearchMedia = new SearchSongOnYoutubeCommand(youtubeClient, ResultMedia, LoadingWrapper, FailedWrapper);
+            SearchMedia = new SearchSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia, LoadingWrapper, FailedWrapper);
 
             
 
             NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserNavigationStore);
 
-            DownloadMedia = new DownloadSongOnYoutubeCommand(youtubeClient, ResultMedia);
+            DownloadMedia = new DownloadSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia);
 
             _mediaStore = mediaStore;
 

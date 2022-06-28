@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Commands
 {
-    public class DeleteSpecificPlaylistCommand : CommandBase
+    public class DeleteSpecificPlaylistAsyncCommand : AsyncCommandBase
     {
         private readonly IMusicPlayerService _musicService;
         private readonly PlaylistStore _playlistStore;
@@ -20,7 +20,7 @@ namespace MusicPlayerClient.Commands
         private readonly INavigationService _navigationService;
         private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
         private readonly ObservableCollection<PlaylistModel>? _observablePlaylists;
-        public DeleteSpecificPlaylistCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
+        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
         {
             _musicService = musicService;
             _playlistStore = playlistStore;
@@ -29,13 +29,13 @@ namespace MusicPlayerClient.Commands
             _mediaStore = mediaStore;
         }
 
-        public DeleteSpecificPlaylistCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore,
+        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore,
                                              PlaylistStore playlistStore, MediaStore mediaStore, ObservableCollection<PlaylistModel> observablePlaylists) : this(musicService, navigationService, playlistBrowserStore, playlistStore, mediaStore)
         {
             _observablePlaylists = observablePlaylists;
         }
 
-        public override void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
             if (parameter is int playlistId)
             {
@@ -46,9 +46,9 @@ namespace MusicPlayerClient.Commands
 
                 _observablePlaylists?.RemoveAll(x => x.Id == playlistId);
 
-                _mediaStore.RemoveAll(x => x.PlayerlistId == playlistId);
+                await _mediaStore.RemoveAll(x => x.PlayerlistId == playlistId);
 
-                _playlistStore.Remove(playlistId);
+                await _playlistStore.Remove(playlistId);
 
                 if (_playlistBrowserStore.BrowserPlaylistId == playlistId)
                 {

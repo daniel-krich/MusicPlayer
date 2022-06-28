@@ -35,15 +35,15 @@ namespace MusicPlayerClient.Stores
             }
         }
 
-        public void Rename(int playlistId, string name)
+        public async Task Rename(int playlistId, string name)
         {
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
-                var dbPlaylist = dbContext.Playlists.Find(playlistId);
+                var dbPlaylist = await dbContext.Playlists.FindAsync(playlistId);
                 if (dbPlaylist != null)
                 {
                     dbPlaylist.Name = name;
-                    dbContext.SaveChanges();
+                    await dbContext.SaveChangesAsync();
 
                     var playlist = _playlists.FirstOrDefault(x => x.Id == playlistId);
                     if (playlist != null)
@@ -56,14 +56,14 @@ namespace MusicPlayerClient.Stores
             }
         }
 
-        public bool Add(PlaylistEntity playlistEntity)
+        public async Task<bool> Add(PlaylistEntity playlistEntity)
         {
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
                 try
                 {
-                    dbContext.Playlists.Add(playlistEntity);
-                    dbContext.SaveChanges();
+                    await dbContext.Playlists.AddAsync(playlistEntity);
+                    await dbContext.SaveChangesAsync();
 
                     _playlists.Add(playlistEntity);
                 }
@@ -75,15 +75,15 @@ namespace MusicPlayerClient.Stores
             return true;
         }
 
-        public bool Remove(int playlistId)
+        public async Task<bool> Remove(int playlistId)
         {
             _playlists.RemoveAll(x => x.Id == playlistId);
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
                 try
                 {
                     dbContext.Playlists.Remove(new PlaylistEntity { Id = playlistId });
-                    dbContext.SaveChanges();
+                    await dbContext.SaveChangesAsync();
                 }
                 catch
                 {

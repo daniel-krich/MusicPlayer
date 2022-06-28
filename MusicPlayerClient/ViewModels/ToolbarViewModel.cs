@@ -40,8 +40,8 @@ namespace MusicPlayerClient.ViewModels
 
             NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
             NavigateDownloads = new SwitchPageToDownloadsCommand(navigationService, playlistBrowserStore);
-            DeletePlaylist = new DeleteSpecificPlaylistCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);
-            CreatePlaylist = new CreatePlaylistCommand(playlistStore, Playlists);
+            DeletePlaylist = new DeleteSpecificPlaylistAsyncCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);
+            CreatePlaylist = new CreatePlaylistAsyncCommand(playlistStore, Playlists);
         }
 
         private void OnPlaylistNameChanged(object? sender, PlaylistNameChangedEventArgs args)

@@ -33,14 +33,14 @@ namespace MusicPlayerClient.Stores
             }
         }
 
-        public bool Add(MediaEntity media)
+        public async Task<bool> Add(MediaEntity media)
         {
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
                 try
                 {
-                    dbContext.Songs.Add(media);
-                    dbContext.SaveChanges();
+                    await dbContext.Songs.AddAsync(media);
+                    await dbContext.SaveChangesAsync();
 
                     _songs.Add(media);
                 }
@@ -52,14 +52,14 @@ namespace MusicPlayerClient.Stores
             return true;
         }
 
-        public bool AddRange(IEnumerable<MediaEntity> medias)
+        public async Task<bool> AddRange(IEnumerable<MediaEntity> medias)
         {
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
                 try
                 {
-                    dbContext.Songs.AddRange(medias);
-                    dbContext.SaveChanges();
+                    await dbContext.Songs.AddRangeAsync(medias);
+                    await dbContext.SaveChangesAsync();
 
                     _songs.AddRange(medias);
                 }
@@ -71,16 +71,16 @@ namespace MusicPlayerClient.Stores
             return true;
         }
 
-        public bool RemoveAll(Func<MediaEntity, bool> predicate)
+        public async Task<bool> RemoveAll(Func<MediaEntity, bool> predicate)
         {
             _songs.RemoveAll(x => predicate.Invoke(x));
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
                 try
                 {
                     var itemsRemove = dbContext.Songs.Where(predicate);
                     dbContext.Songs.RemoveRange(itemsRemove);
-                    dbContext.SaveChanges();
+                    await dbContext.SaveChangesAsync();
                 }
                 catch
                 {
@@ -90,15 +90,15 @@ namespace MusicPlayerClient.Stores
             return true;
         }
 
-        public bool Remove(int mediaId)
+        public async Task<bool> Remove(int mediaId)
         {
             _songs.RemoveAll(x => x.Id == mediaId);
-            using (var dbContext = _dbContextFactory.CreateDbContext())
+            using (var dbContext = await _dbContextFactory.CreateDbContextAsync())
             {
                 try
                 {
                     dbContext.Songs.Remove(new MediaEntity { Id = mediaId });
-                    dbContext.SaveChanges();
+                    await dbContext.SaveChangesAsync();
                 }
                 catch
                 {

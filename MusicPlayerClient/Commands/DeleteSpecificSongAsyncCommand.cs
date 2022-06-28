@@ -12,23 +12,23 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Commands
 {
-    public class DeleteSpecificSongCommand : CommandBase
+    public class DeleteSpecificSongAsyncCommand : AsyncCommandBase
     {
         private readonly IMusicPlayerService _musicService;
         private readonly MediaStore _mediaStore;
         private readonly ObservableCollection<MediaModel>? _observableSongs;
-        public DeleteSpecificSongCommand(IMusicPlayerService musicService, MediaStore mediaStore)
+        public DeleteSpecificSongAsyncCommand(IMusicPlayerService musicService, MediaStore mediaStore)
         {
             _musicService = musicService;
             _mediaStore = mediaStore;
         }
 
-        public DeleteSpecificSongCommand(IMusicPlayerService musicService, MediaStore mediaStore, ObservableCollection<MediaModel> observableSongs) : this(musicService, mediaStore)
+        public DeleteSpecificSongAsyncCommand(IMusicPlayerService musicService, MediaStore mediaStore, ObservableCollection<MediaModel> observableSongs) : this(musicService, mediaStore)
         {
             _observableSongs = observableSongs;
         }
 
-        public override void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
             if (parameter is int SongId)
             {
@@ -39,7 +39,7 @@ namespace MusicPlayerClient.Commands
 
                 _observableSongs?.RemoveAll(x => x.Id == SongId);
 
-                _mediaStore.Remove(SongId);
+                await _mediaStore.Remove(SongId);
             }
         }
     }

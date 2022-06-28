@@ -14,18 +14,18 @@ using System.Windows;
 
 namespace MusicPlayerClient.Commands
 {
-    public class DownloadSongOnYoutubeCommand : CommandBase
+    public class DownloadSongOnYoutubeAsyncCommand : AsyncCommandBase
     {
         private readonly IYouTubeClientService _youtubeClient;
         private readonly ObservableCollection<YoutubeVideoInfoModel> _observableMedia;
 
-        public DownloadSongOnYoutubeCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia)
+        public DownloadSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia)
         {
             _youtubeClient = youtubeClient;
             _observableMedia = observableMedia;
         }
 
-        public override async void Execute(object? parameter)
+        protected override async Task ExecuteAsync(object? parameter)
         {
             if(parameter is string url)
             {

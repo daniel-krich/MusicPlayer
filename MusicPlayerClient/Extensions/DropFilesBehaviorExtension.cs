@@ -41,13 +41,13 @@ namespace MusicPlayerClient.Extensions
             e.Handled = true;
         }
 
-        private static void OnDrop(object sender, DragEventArgs e)
+        private static async void OnDrop(object sender, DragEventArgs e)
         {
             var dataContext = ((FrameworkElement)sender).DataContext;
-            if (!(dataContext is IFilesDrop filesDropped))
+            if (!(dataContext is IFilesDropAsync filesDropped))
             {
                 if (dataContext != null)
-                    Trace.TraceError($"Binding error, '{dataContext.GetType().Name}' doesn't implement '{nameof(IFilesDrop)}'.");
+                    Trace.TraceError($"Binding error, '{dataContext.GetType().Name}' doesn't implement '{nameof(IFilesDropAsync)}'.");
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace MusicPlayerClient.Extensions
                 return;
 
             if (e.Data.GetData(DataFormats.FileDrop) is string[] files)
-                filesDropped.OnFilesDropped(files);
+                await filesDropped.OnFilesDroppedAsync(files);
         }
 
         public static void SetIsEnabled(DependencyObject element, bool value)
