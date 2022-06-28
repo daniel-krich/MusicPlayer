@@ -10,6 +10,8 @@ namespace MusicDownloader.Models
     public class YoutubeVideoInfo
     {
         public string? Title { get; set; }
+        public string? Channel { get; set; }
+        public string? Views { get; set; }
         public string? Url { get; set; }
         public string? Duration { get; set; }
     }
@@ -19,6 +21,8 @@ namespace MusicDownloader.Models
         private int _num;
         private bool _downloading;
         private int _downloadProgress;
+        private string? _channel;
+        private string? _views;
         private string? _title;
         private string? _url;
         private string? _duration;
@@ -57,6 +61,32 @@ namespace MusicDownloader.Models
                 if (_downloadProgress != value)
                 {
                     _downloadProgress = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? Channel
+        {
+            get { return _channel; }
+            set
+            {
+                if (_channel != value)
+                {
+                    _channel = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? Views
+        {
+            get { return _views; }
+            set
+            {
+                if (_views != value)
+                {
+                    _views = value;
                     OnPropertyChanged();
                 }
             }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,15 +29,24 @@ namespace MusicPlayerClient.Commands
         {
             if(parameter is string url)
             {
+                var dir = Directory.CreateDirectory("downloads\\");
+
                 YoutubeVideoInfoModel? video = _observableMedia.FirstOrDefault(x => x.Url == url);
                 if (video != null && !video.Downloading)
                 {
                     video.Downloading = true;
-                    var download = _youtubeClient.DownloadYoutubeAudioAsync(video.Url!, @"downloads/" + video.Title + ".mp3");
+
+                    var download = _youtubeClient.DownloadYoutubeAudioAsync(video.Url!, dir.FullName + video.Title + ".mp3");
                     await foreach(var progress in download)
                     {
                         video.DownloadProgress = progress;
                     }
+                }
+                else if(video != null && video.Downloading && video.DownloadProgress == 100)
+                {
+                    string argument = "/select, \"" + dir.FullName + video.Title + ".mp3" + "\"";
+
+                    Process.Start("explorer.exe", argument);
                 }
             }
         }

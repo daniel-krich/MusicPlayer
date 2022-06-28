@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
 using System.Diagnostics;
+using System.Windows;
 
 namespace MusicPlayerClient.Services
 {
@@ -33,29 +34,36 @@ namespace MusicPlayerClient.Services
                     if (response != null)
                     {
                         string start = "var ytInitialData = ";
-                        string end = ";";
+                        string end = "};";
                         var startIndex = response.IndexOf(start) + start.Length;
                         var endIndex = response.IndexOf(end, startIndex);
 
-                        var InitialData = JObject.Parse(response.Substring(startIndex, endIndex - startIndex));
+                        var InitialData = JObject.Parse(response.Substring(startIndex, endIndex + 1 - startIndex));
+
                         var results = InitialData?["contents"]?["twoColumnSearchResultsRenderer"]?["primaryContents"]?["sectionListRenderer"]?["contents"]?[0]?["itemSectionRenderer"]?["contents"];
 
                         if (results != null)
                         {
+                            Clipboard.SetText(results.ToString());
                             foreach (var item in results)
                             {
                                 var video_info = item["videoRenderer"];
                                 var title = video_info?["title"]?["runs"]?[0]?["text"];
                                 var url = video_info?["navigationEndpoint"]?["commandMetadata"]?["webCommandMetadata"]?["url"];
                                 var length = video_info?["lengthText"]?["simpleText"];
+                                var views = video_info?["shortViewCountText"]?["simpleText"];
+                                var channel = video_info?["ownerText"]?["runs"]?[0]?["text"];
 
-                                if (title != null && url != null && length != null)
+                                if (title != null && url != null && length != null
+                                    && channel != null && views != null)
                                 {
                                     videos.Add(new YoutubeVideoInfo
                                     {
                                         Title = GetSafeFileName(title.ToString()),
-                                        Url = YouTubeBase + url?.ToString(),
-                                        Duration = length.ToString()
+                                        Url = YouTubeBase + url.ToString(),
+                                        Duration = length.ToString(),
+                                        Channel = channel.ToString(),
+                                        Views = views.ToString()
                                     });
                                 }
                             }
@@ -87,7 +95,7 @@ namespace MusicPlayerClient.Services
             using var videoStream = await video.StreamAsync();
             using var file = File.Create(FileName);
 
-            byte[] buffer = new byte[4096*50];
+            byte[] buffer = new byte[8192];
 
             long numBytesRead = 0;
             int currentBytes = 0;

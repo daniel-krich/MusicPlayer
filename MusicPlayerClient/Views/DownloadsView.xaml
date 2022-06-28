@@ -133,9 +133,10 @@
                        FontWeight="Bold"/>
 
             <TextBox Grid.Row="2"
-                     Grid.Column="1"
-                     MaxWidth="600px"
-                     Margin="0 5 0 5"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Width="350px"
+                     Margin="5 5 0 5"
                      Height="30px"
                      Background="#fff"
                      Foreground="#963027"
@@ -144,11 +145,12 @@
                      Style="{StaticResource NewTextBox}"
                      ext:TextBoxPressEnterBehaviorExtension.EnterCommand="{Binding SearchMedia}"
                      Text="{Binding SearchText, Mode=TwoWay}"
+                     HorizontalAlignment="Left"
                      x:Name="SearchYoutubeTextBox"/>
             <TextBlock Grid.Row="2"
-                       Grid.Column="1"
-                       MaxWidth="600px"
-                       Margin="15 15 0 0"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Margin="16 15 0 0"
                        Height="30px"
                        IsHitTestVisible="False"
                        Foreground="#963027"
@@ -196,47 +198,79 @@
 
             <DataGrid.Columns>
 
-                <DataGridTemplateColumn Width="60">
+                <DataGridTemplateColumn Width="85">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource TransparentButton}"
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource TransparentButton}"
                                     Command="{Binding ElementName=YoutubeItems, Path=DataContext.DownloadMedia}"
                                     CommandParameter="{Binding Url}">
-                                
-                                <svgc:SvgViewbox Width="30px"
-                                                     Height="30px"
-                                                     Source="../icons/download.svg"/>
-                            </Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="45">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock x:Name="DownloadProgressTextBox"
-                                       FontWeight="SemiBold"
-                                       Text="{Binding Path=DownloadProgress, StringFormat=' {0}%'}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Downloading}" Value="false">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                    <svgc:SvgViewbox Width="30px"
+                                                     Height="30px">
+                                        <svgc:SvgViewbox.Style>
+                                            <Style TargetType="{x:Type svgc:SvgViewbox}">
+                                                <Setter Property="Source" Value="../icons/download.svg" />
+                                                <Style.Triggers>
+
+                                                    <DataTrigger Binding="{Binding DownloadProgress}" Value="100">
+                                                        <Setter Property="Source" Value="../icons/open.svg" />
+                                                    </DataTrigger>
+
+                                                </Style.Triggers>
+                                            </Style>
+                                        </svgc:SvgViewbox.Style>
+                                    </svgc:SvgViewbox>
+
+                                </Button>
+                                <TextBlock x:Name="DownloadProgressTextBox"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"
+                                           Margin="5 0 0 0"
+                                           FontSize="12px"
+                                           Text="{Binding Path=DownloadProgress, StringFormat=' {0}%'}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Downloading}" Value="false">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Binding="{Binding Path=Num}"
-                                    Width="100"
+                                    MaxWidth="100"
                                     Header="#"/>
                 <DataGridTextColumn Binding="{Binding Path=Title}"
                                     Header="Title">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=Channel}"
+                                    MaxWidth="150"
+                                    Header="Channel">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=Views}"
+                                    MaxWidth="100"
+                                    Header="Views">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>

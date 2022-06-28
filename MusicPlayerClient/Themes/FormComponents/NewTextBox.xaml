@@ -3,6 +3,7 @@
     <Style TargetType="TextBox" x:Key="NewTextBox">
         <Setter Property="Background" Value="#cfcfcf"/>
         <Setter Property="Foreground" Value="#212121"/>
+        <Setter Property="Cursor" Value="IBeam"/>
         
         <Setter Property="Template">
             <Setter.Value>

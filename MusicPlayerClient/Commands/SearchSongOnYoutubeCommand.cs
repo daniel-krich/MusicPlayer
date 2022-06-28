@@ -61,6 +61,8 @@ namespace MusicPlayerClient.Commands
                     Title = x.Title,
                     Url = x.Url,
                     Duration = x.Duration,
+                    Channel = x.Channel,
+                    Views = x.Views
                 });
 
                 foreach(var videomodel in videomodels)

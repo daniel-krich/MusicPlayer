@@ -31,6 +31,7 @@
     <None Remove="icons\download.svg" />
     <None Remove="icons\empty-folder.svg" />
     <None Remove="icons\Forward.svg" />
+    <None Remove="icons\open.svg" />
     <None Remove="icons\page-document-empty.svg" />
     <None Remove="icons\Pause.svg" />
     <None Remove="icons\Play.svg" />
@@ -115,6 +116,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="icons\forward.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="icons\open.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="icons\page-document-empty.svg">

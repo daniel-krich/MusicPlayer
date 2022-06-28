@@ -26,9 +26,6 @@ namespace MusicPlayerClient
         {
             IServiceCollection services = new ServiceCollection();
 
-            Directory.CreateDirectory("data"); // Create data directory for db files or temp files.
-            Directory.CreateDirectory("downloads"); // Create downloads directory.
-
             _serviceProvider = services.AddViewModels()
                                        .AddNavigation()
                                        .AddDbContextFactory()
@@ -38,22 +35,11 @@ namespace MusicPlayerClient
 
             IDbContextFactory<DataContext> dbFactory = _serviceProvider.GetRequiredService<IDbContextFactory<DataContext>>();
 
+            Directory.CreateDirectory("data"); // Create data directory for db files or temp files.
+
             using (var dbContext = dbFactory.CreateDbContext())
             {
                 dbContext.Database.Migrate();
-
-                /*var playlist = new PlaylistEntity { Name = "My first playlist" };
-                var song = new MediaEntity { FilePath = @"D:\Disclosure_Latch.mp3" };
-                dbContext.Playlists.Add(playlist);
-                dbContext.Songs.Add(song);
-                dbContext.SaveChanges();
-
-                dbContext.SongsPlaylists.Add(new MediaPlaylistEntity
-                {
-                    MediaId = song.Id,
-                    PlayerlistId = playlist.Id
-                });
-                dbContext.SaveChanges();*/
             }
 
             MainWindow = new MainWindow()
