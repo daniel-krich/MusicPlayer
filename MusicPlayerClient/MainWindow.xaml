@@ -7,8 +7,9 @@
         xmlns:views="clr-namespace:MusicPlayerClient.Views"
         xmlns:components="clr-namespace:MusicPlayerClient.Controls"
         xmlns:viewModels="clr-namespace:MusicPlayerClient.ViewModels"
+        SizeChanged="Window_SizeChanged"
         mc:Ignorable="d"
-        WindowStyle="none"
+        WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
         ResizeMode="CanResizeWithGrip"
@@ -16,9 +17,8 @@
         MinHeight="600"
         MinWidth="800"
         Height="720"
-        Width="1100"
-        Padding="10, 10, 10, 10">
-    <Border Padding="5">
+        Width="1100">
+    <Border>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="180px"
@@ -37,7 +37,6 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Background="#212121"
-                    CornerRadius="5,5,0,0"
                     x:Name="AppTopBorder" MouseDown="AppTopBorder_MouseDown">
                 <Grid Grid.Row="0"
                       Grid.Column="0"
@@ -66,16 +65,17 @@
             <ContentControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding PlayerView}" />
 
             <ContentControl Grid.Row="1"
-                            HorizontalAlignment="Stretch"
                             Grid.Column="0"
                             Content="{Binding ToolbarView}" />
 
-            <GridSplitter Grid.Column="0" Grid.Row="1"
-                  HorizontalAlignment="Right" 
-                  VerticalAlignment="Stretch"
-                  Background="Transparent"
-                  ShowsPreview="true"
-                  Width="3"/>
+            <GridSplitter Grid.Column="0"
+                          Grid.Row="1"
+                          HorizontalAlignment="Right" 
+                          VerticalAlignment="Stretch"
+                          Background="Transparent"
+                          Cursor="ScrollWE"
+                          ShowsPreview="true"
+                          Width="3"/>
         </Grid>
     </Border>
 </Window>

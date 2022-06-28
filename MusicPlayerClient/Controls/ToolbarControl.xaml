@@ -46,7 +46,10 @@
             </DataTemplate>
         </Grid.Resources>
 
-        <Border Background="#111" Grid.Row="0" Grid.RowSpan="2">
+        <Border Background="#111"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.RowSpan="2">
             <Border.Effect>
                 <DropShadowEffect
                       ShadowDepth="10"
@@ -58,6 +61,7 @@
         </Border>
 
         <Border Grid.Row="1"
+                Grid.Column="0"
                 BorderBrush="#888"
                 BorderThickness="0 0.1 0 0"/>
 

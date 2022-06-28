@@ -50,5 +50,17 @@ namespace MusicPlayerClient
             if (e.LeftButton == MouseButtonState.Pressed)
                 DragMove();
         }
+
+        public void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.BorderThickness = new Thickness(7);
+            }
+            else
+            {
+                this.BorderThickness = new Thickness(0);
+            }
+        }
     }
 }
