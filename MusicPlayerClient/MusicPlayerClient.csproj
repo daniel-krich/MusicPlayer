@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<AssemblyName>MusicPlayer</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
