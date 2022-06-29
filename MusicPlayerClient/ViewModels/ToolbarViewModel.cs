@@ -95,6 +95,9 @@ namespace MusicPlayerClient.ViewModels
                         }
                     });
                     break;
+                default:
+                    Playlists.ToList().ForEach(x => x.IsPlaying = false);
+                    break;
             }
         }
 

@@ -88,8 +88,9 @@ namespace MusicPlayerClient.ViewModels
             _musicService = musicService;
             PlayBackward = new BackwardSongCommand(musicService);
             PlayForward = new ForwardSongCommand(musicService);
-            _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
             TogglePlayer = new ToggleMusicPlayerStateCommand(musicService);
+
+            _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
 
             var dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -107,11 +108,9 @@ namespace MusicPlayerClient.ViewModels
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
         {
-            switch(e.Type)
+            switch (e.Type)
             {
                 case PlayerEventType.Playing:
-                    SongName = _musicService.PlayingSongName;
-                    SongPath = _musicService.PlayingSongPath;
                     IsPlaying = true;
                     break;
                 case PlayerEventType.Finished:
@@ -122,6 +121,9 @@ namespace MusicPlayerClient.ViewModels
                     IsPlaying = false;
                     break;
             }
+
+            SongName = _musicService.PlayingSongName;
+            SongPath = _musicService.PlayingSongPath;
         }
 
         public override void Dispose()

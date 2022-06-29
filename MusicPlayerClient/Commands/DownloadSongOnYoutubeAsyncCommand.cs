@@ -36,6 +36,7 @@ namespace MusicPlayerClient.Commands
                 YoutubeVideoInfoModel? video = _observableMedia.FirstOrDefault(x => x.Url == url);
                 if (video != null && !video.Downloading)
                 {
+                    video.FinishedDownload = false;
                     video.Downloading = true;
 
                     var download = _youtubeClient.DownloadYoutubeAudioAsync(video.Url!, dir.FullName + video.Title + ".mp3");
@@ -43,8 +44,10 @@ namespace MusicPlayerClient.Commands
                     {
                         video.DownloadProgress = progress;
                     }
+
+                    video.FinishedDownload = true;
                 }
-                else if(video != null && video.Downloading && video.DownloadProgress == 100)
+                else if(video != null && video.FinishedDownload == true)
                 {
                     string argument = "/select, \"" + dir.FullName + video.Title + ".mp3" + "\"";
 

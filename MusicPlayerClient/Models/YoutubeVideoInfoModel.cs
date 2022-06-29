@@ -20,6 +20,7 @@ namespace MusicDownloader.Models
     {
         private int _num;
         private bool _downloading;
+        private bool? _finishedDownload;
         private int _downloadProgress;
         private string? _channel;
         private string? _views;
@@ -48,6 +49,19 @@ namespace MusicDownloader.Models
                 if (_downloading != value)
                 {
                     _downloading = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool? FinishedDownload
+        {
+            get { return _finishedDownload; }
+            set
+            {
+                if (_finishedDownload != value)
+                {
+                    _finishedDownload = value;
                     OnPropertyChanged();
                 }
             }

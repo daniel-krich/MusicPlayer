@@ -201,10 +201,10 @@
                 <DataGridTemplateColumn Width="85">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <Grid>
                                 <Button Style="{StaticResource TransparentButton}"
-                                    Command="{Binding ElementName=YoutubeItems, Path=DataContext.DownloadMedia}"
-                                    CommandParameter="{Binding Url}">
+                                        Command="{Binding ElementName=YoutubeItems, Path=DataContext.DownloadMedia}"
+                                        CommandParameter="{Binding Url}">
 
                                     <svgc:SvgViewbox Width="30px"
                                                      Height="30px">
@@ -217,17 +217,24 @@
                                                         <Setter Property="Source" Value="../icons/open.svg" />
                                                     </DataTrigger>
 
+                                                    <DataTrigger Binding="{Binding FinishedDownload}" Value="false">
+                                                        <Setter Property="Source" Value="../icons/blank.svg" />
+                                                    </DataTrigger>
+
                                                 </Style.Triggers>
                                             </Style>
                                         </svgc:SvgViewbox.Style>
+                                        
                                     </svgc:SvgViewbox>
 
                                 </Button>
                                 <TextBlock x:Name="DownloadProgressTextBox"
-                                           FontWeight="SemiBold"
                                            VerticalAlignment="Center"
-                                           Margin="5 0 0 0"
+                                           HorizontalAlignment="Center"
+                                           IsHitTestVisible="False"
+                                           Foreground="#151515"
                                            FontSize="12px"
+                                           FontWeight="Bold"
                                            Text="{Binding Path=DownloadProgress, StringFormat=' {0}%'}">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
@@ -236,11 +243,14 @@
                                                 <DataTrigger Binding="{Binding Downloading}" Value="false">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding FinishedDownload}" Value="true">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                            </StackPanel>
+                            </Grid>
 
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
