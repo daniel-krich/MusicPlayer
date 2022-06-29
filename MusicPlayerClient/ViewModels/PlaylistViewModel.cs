@@ -79,7 +79,7 @@ namespace MusicPlayerClient.ViewModels
             {
                 return new MediaModel
                 {
-                    Playing = x.Id == _musicService.CurrentMedia?.Id,
+                    Playing = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id,
                     Number = num + 1,
                     Id = x.Id,
                     Title = Path.GetFileName(x.FilePath),
@@ -129,7 +129,7 @@ namespace MusicPlayerClient.ViewModels
                 var songsIndex = AllSongsOfPlaylist?.Count;
                 AllSongsOfPlaylist?.Add(new MediaModel
                 {
-                    Playing = mediaEntity.Id == _musicService.CurrentMedia?.Id,
+                    Playing = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id,
                     Number = songsIndex + 1,
                     Id = mediaEntity.Id,
                     Title = Path.GetFileName(mediaEntity.FilePath),
