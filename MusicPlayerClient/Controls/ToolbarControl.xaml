@@ -95,29 +95,61 @@
 
         </Button>
 
-        <Button Height="34px"
-                VerticalAlignment="Bottom"
+        <Grid VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="85*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Column="0" Height="34px"
+                FontSize="12px"
+                Foreground="#ddd"
+                FontFamily="{StaticResource Raleway}"
+                FontWeight="UltraBlack"
+                Command="{Binding ToggleRemoveActive}"
+                Content="-">
+                <Button.Style>
+
+                    <Style BasedOn="{StaticResource FlatButton}"
+                       TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#222"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#444"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </Button.Style>
+
+            </Button>
+            <Button Grid.Column="1" Height="34px"
                 FontSize="12px"
                 Foreground="#ddd"
                 FontFamily="{StaticResource Raleway}"
                 FontWeight="SemiBold"
                 Command="{Binding CreatePlaylist}"
                 Content="Create playlist">
-            <Button.Style>
+                <Button.Style>
 
-                <Style BasedOn="{StaticResource FlatButton}"
+                    <Style BasedOn="{StaticResource FlatButton}"
                        TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="#333"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#444"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
+                        <Setter Property="Background" Value="#333"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#444"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
 
-            </Button.Style>
-            
-        </Button>
+                </Button.Style>
+
+            </Button>
+        </Grid>
+        
 
         <ScrollViewer Grid.Row="1"
                       Grid.Column="0"
@@ -133,17 +165,27 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DockPanel HorizontalAlignment="Stretch"
-                                   Margin="10 0 0 0"
                                    ext:DropFilesBehaviorExtension.IsEnabled="True"
                                    ext:DropFilesBehaviorExtension.InterfaceDataContext="{Binding ElementName=PlaylistItems, Path=DataContext}"
                                    ext:DropFilesBehaviorExtension.DropParam="{Binding Id}">
-                            <Button Style="{StaticResource TransparentButton}"
-                                    Command="{Binding ElementName=PlaylistItems, Path=DataContext.DeletePlaylist}"
-                                    CommandParameter="{Binding Id}">
+                            <Button Command="{Binding ElementName=PlaylistItems, Path=DataContext.DeletePlaylist}"
+                                    CommandParameter="{Binding Id}"
+                                    Width="30px">
 
                                 <svgc:SvgViewbox Width="15px"
                                                      Height="15px"
                                                      Source="../icons/discard.svg"/>
+
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TransparentButton}" TargetType="{x:Type Button}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=PlaylistItems, Path=DataContext.IsRemoveActive.Object}" Value="true">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
                             </Button>
                             <Button Padding="10"
                                     Command="{Binding ElementName=PlaylistItems, Path=DataContext.NavigatePlaylist}"

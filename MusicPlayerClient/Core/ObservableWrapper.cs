@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Core
 {
-    public class ObjectWrapper<T> : ObservableObject
+    public class ObservableWrapper<T> : ObservableObject
     {
         private T? _object;
         public T? Object

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Commands;
+using MusicPlayerClient.Core;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Interfaces;
@@ -27,6 +28,8 @@ namespace MusicPlayerClient.ViewModels
         private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
         private readonly IMusicPlayerService _musicPlayerService;
 
+        public ObservableWrapper<bool> IsRemoveActive { get; }
+        public ICommand ToggleRemoveActive { get; }
         public ICommand DeletePlaylist { get; }
         public ICommand NavigatePlaylist { get; }
         public ICommand NavigateDownloads { get; }
@@ -54,6 +57,9 @@ namespace MusicPlayerClient.ViewModels
             _playlistBrowserStore = playlistBrowserStore;
             playlistBrowserStore.PlaylistBrowserChanged += OnPlaylistBrowserChanged;
 
+            IsRemoveActive = new ObservableWrapper<bool>();
+
+            ToggleRemoveActive = new TogglePlaylistRemoveCommand(IsRemoveActive);
             NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
             NavigateDownloads = new SwitchPageToDownloadsCommand(navigationService, playlistBrowserStore);
             DeletePlaylist = new DeleteSpecificPlaylistAsyncCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);

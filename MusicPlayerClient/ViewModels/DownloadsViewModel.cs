@@ -30,8 +30,8 @@ namespace MusicPlayerClient.ViewModels
         private readonly MediaStore _mediaStore;
         public string CurrentDateString { get; }
         public ObservableCollection<YoutubeVideoInfoModel> ResultMedia { get; }
-        public ObjectWrapper<bool> LoadingWrapper { get; }
-        public ObjectWrapper<bool> FailedWrapper { get; }
+        public ObservableWrapper<bool> LoadingWrapper { get; }
+        public ObservableWrapper<bool> FailedWrapper { get; }
         public ICommand? SearchMedia { get; set; }
         public ICommand NavigateHome { get; }
         public ICommand DownloadMedia { get; }
@@ -53,9 +53,9 @@ namespace MusicPlayerClient.ViewModels
 
             ResultMedia = new ObservableCollection<YoutubeVideoInfoModel>();
 
-            LoadingWrapper = new ObjectWrapper<bool>();
+            LoadingWrapper = new ObservableWrapper<bool>();
 
-            FailedWrapper = new ObjectWrapper<bool>();
+            FailedWrapper = new ObservableWrapper<bool>();
 
             SearchMedia = new SearchSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia, LoadingWrapper, FailedWrapper);
 

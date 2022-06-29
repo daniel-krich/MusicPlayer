@@ -17,15 +17,15 @@ namespace MusicPlayerClient.Commands
     {
         private readonly IYouTubeClientService _youtubeClient;
         private readonly ObservableCollection<YoutubeVideoInfoModel> _observableMedia;
-        private readonly ObjectWrapper<bool>? _loadingWrapper;
-        private readonly ObjectWrapper<bool>? _failedWrapper;
+        private readonly ObservableWrapper<bool>? _loadingWrapper;
+        private readonly ObservableWrapper<bool>? _failedWrapper;
         public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia)
         {
             _youtubeClient = youtubeClient;
             _observableMedia = observableMedia;
         }
 
-        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia, ObjectWrapper<bool> loadingWrapper, ObjectWrapper<bool> failedWrapper) : this(youtubeClient, observableMedia)
+        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia, ObservableWrapper<bool> loadingWrapper, ObservableWrapper<bool> failedWrapper) : this(youtubeClient, observableMedia)
         {
             _loadingWrapper = loadingWrapper;
             _failedWrapper = failedWrapper;
