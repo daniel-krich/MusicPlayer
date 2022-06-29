@@ -45,6 +45,13 @@
                 </StackPanel>
 
             </DataTemplate>
+
+            <DropShadowEffect x:Key="CustomShadowEffect"
+                              ShadowDepth="0"
+                              Direction="0"
+                              Color="#fff"
+                              Opacity="1"
+                              BlurRadius="5.0" />  
         </Grid.Resources>
 
         <Border Background="#111"
@@ -61,46 +68,63 @@
             </Border.Effect>
         </Border>
 
-        <Border Grid.Row="1"
-                Grid.Column="0"
-                BorderBrush="#888"
-                BorderThickness="0 0.1 0 0"/>
-
-
         <Button Height="34px"
                 VerticalAlignment="Center"
                 FontSize="12px"
                 Width="130px"
                 Margin="0 0 0 20"
-                Background="#181818"
-                Foreground="#ccc"
-                Style="{StaticResource ModernButton}" 
+                Foreground="#ddd"
                 FontFamily="{StaticResource Raleway}"
                 FontWeight="SemiBold"
                 Command="{Binding NavigateDownloads}"
-                Content="Download music"/>
+                Content="Download music">
+            <Button.Style>
+
+                <Style BasedOn="{StaticResource ModernButton}"
+                       TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#333"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#444"/>
+                            <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+            </Button.Style>
+
+        </Button>
 
         <Button Height="34px"
                 VerticalAlignment="Bottom"
                 FontSize="12px"
-                Background="#333"
-                Foreground="#fff"
-                Style="{StaticResource FlatButton}" 
+                Foreground="#ddd"
                 FontFamily="{StaticResource Raleway}"
                 FontWeight="SemiBold"
                 Command="{Binding CreatePlaylist}"
-                Content="Create playlist"/>
+                Content="Create playlist">
+            <Button.Style>
 
+                <Style BasedOn="{StaticResource FlatButton}"
+                       TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#333"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#444"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
 
-        <FrameworkElement x:Name="ProxyElement" Visibility="Collapsed"/>
-        
+            </Button.Style>
+            
+        </Button>
+
         <ScrollViewer Grid.Row="1"
                       Grid.Column="0"
-                      Padding="10"
                       HorizontalContentAlignment="Stretch"
                       VerticalAlignment="Top"
                       VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="PlaylistItems" ItemsSource="{Binding Playlists}">
+            <ItemsControl Padding="0 10 0 10" x:Name="PlaylistItems" ItemsSource="{Binding Playlists}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>
@@ -112,9 +136,7 @@
                                    Margin="10 0 0 0">
                             <Button Style="{StaticResource TransparentButton}"
                                     Command="{Binding ElementName=PlaylistItems, Path=DataContext.DeletePlaylist}"
-                                    CommandParameter="{Binding Id}"
-                                    ToolTipService.InitialShowDelay="500"
-                                    ToolTip="Discard">
+                                    CommandParameter="{Binding Id}">
 
                                 <svgc:SvgViewbox Width="15px"
                                                      Height="15px"
@@ -124,20 +146,21 @@
                                     Command="{Binding ElementName=PlaylistItems, Path=DataContext.NavigatePlaylist}"
                                     CommandParameter="{Binding Id}"
                                     FontFamily="{StaticResource Raleway}"
-                                    FontWeight="Regular"
                                     Content="{Binding Name}"
                                     FontSize="14">
                                 <Button.Style>
                                     <Style BasedOn="{StaticResource TransparentButton}" TargetType="{x:Type Button}">
                                         <Setter Property="Foreground" Value="#aaa" />
+                                        <Setter Property="FontWeight" Value="Regular" />
                                         <Style.Triggers>
-                                            
+
                                             <DataTrigger Binding="{Binding IsSelected}" Value="true">
                                                 <Setter Property="Foreground" Value="#fff" />
                                             </DataTrigger>
 
                                             <DataTrigger Binding="{Binding IsPlaying}" Value="true">
                                                 <Setter Property="Foreground" Value="#00cc90" />
+                                                <Setter Property="FontWeight" Value="Bold" />
                                             </DataTrigger>
 
                                         </Style.Triggers>
@@ -145,12 +168,11 @@
                                 </Button.Style>
                             </Button>
                         </DockPanel>
-                        
+
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-
         <StackPanel x:Name="playlistsStatus"
                    Grid.Row="1"
                    Grid.Column="0"
@@ -173,6 +195,5 @@
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        
     </Grid>
 </UserControl>

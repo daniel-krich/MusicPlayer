@@ -19,6 +19,8 @@ namespace MusicPlayerClient.ViewModels
     {
         private readonly IMusicPlayerService _musicService;
 
+        private bool _playNext;
+
         public int Volume
         {
             get => (int)Math.Ceiling(_musicService.Volume * 100);
@@ -91,6 +93,7 @@ namespace MusicPlayerClient.ViewModels
             TogglePlayer = new ToggleMusicPlayerStateCommand(musicService);
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
+            _musicService.AfterMusicPlayerEvent += OnAfterMusicPlayerEvent;
 
             var dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -108,6 +111,7 @@ namespace MusicPlayerClient.ViewModels
 
         private void OnMusicPlayerEvent(object? sender, MusicPlayerEventArgs e)
         {
+            _playNext = false;
             switch (e.Type)
             {
                 case PlayerEventType.Playing:
@@ -115,7 +119,7 @@ namespace MusicPlayerClient.ViewModels
                     break;
                 case PlayerEventType.Finished:
                     IsPlaying = false;
-                    _musicService.PlayNext(false);
+                    _playNext = true;
                     break;
                 default:
                     IsPlaying = false;
@@ -126,9 +130,19 @@ namespace MusicPlayerClient.ViewModels
             SongPath = _musicService.PlayingSongPath;
         }
 
+        private void OnAfterMusicPlayerEvent(object? sender, EventArgs args)
+        {
+            if (_playNext)
+            {
+                _musicService.PlayNext(false);
+                _playNext = false;
+            }
+        }
+
         public override void Dispose()
         {
             _musicService.MusicPlayerEvent -= OnMusicPlayerEvent;
+            _musicService.AfterMusicPlayerEvent -= OnAfterMusicPlayerEvent;
         }
     }
 }

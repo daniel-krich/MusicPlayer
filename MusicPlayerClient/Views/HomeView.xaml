@@ -149,7 +149,6 @@
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
             <DataGrid.Columns>
-
                 <DataGridTemplateColumn Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -205,9 +204,7 @@
                         <DataTemplate>
                             <Button Style="{StaticResource TransparentButton}"
                                     Command="{Binding ElementName=SongItems, Path=DataContext.DeleteSong}"
-                                    CommandParameter="{Binding Id}"
-                                    ToolTipService.InitialShowDelay="500"
-                                    ToolTip="Discard">
+                                    CommandParameter="{Binding Id}">
 
                                 <svgc:SvgViewbox Width="15px"
                                                      Height="15px"
@@ -218,6 +215,18 @@
                 </DataGridTemplateColumn>
 
             </DataGrid.Columns>
+
+            <DataGrid.RowStyle>
+                <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+
+                        <DataTrigger Binding="{Binding Playing}" Value="true">
+                            <Setter Property="Background" Value="#252525" />
+                        </DataTrigger>
+
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             
         </DataGrid>
 

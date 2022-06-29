@@ -19,6 +19,7 @@ namespace MusicPlayerClient.Services
     public interface IMusicPlayerService
     {
         public event EventHandler<MusicPlayerEventArgs>? MusicPlayerEvent;
+        public event EventHandler? AfterMusicPlayerEvent;
         public string PlayingSongPath { get; }
         public string PlayingSongName { get; }
         public MediaEntity? CurrentMedia { get; }
@@ -44,6 +45,7 @@ namespace MusicPlayerClient.Services
         public MediaEntity? CurrentMedia => _currentMedia;
 
         public event EventHandler<MusicPlayerEventArgs>? MusicPlayerEvent;
+        public event EventHandler? AfterMusicPlayerEvent;
 
         public float Volume
         {
@@ -274,16 +276,24 @@ namespace MusicPlayerClient.Services
             {
                 MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Finished, _currentMedia, _audioFile));
             }
+            OnAfterPlay();
         }
 
         private void OnStartPlay()
         {
             MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Playing, _currentMedia, _audioFile));
+            OnAfterPlay();
         }
 
         private void OnPausePlay()
         {
             MusicPlayerEvent?.Invoke(this, new MusicPlayerEventArgs(PlayerEventType.Paused, _currentMedia, _audioFile));
+            OnAfterPlay();
+        }
+
+        private void OnAfterPlay()
+        {
+            AfterMusicPlayerEvent?.Invoke(this, new EventArgs());
         }
     }
 }
