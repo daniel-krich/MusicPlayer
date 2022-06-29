@@ -232,7 +232,7 @@
                                                     </DataTrigger>
 
                                                     <DataTrigger Binding="{Binding FinishedDownload}" Value="false">
-                                                        <Setter Property="Source" Value="../icons/blank.svg" />
+                                                        <Setter Property="Source" Value="../icons/blank-dark.svg" />
                                                     </DataTrigger>
 
                                                 </Style.Triggers>
@@ -246,10 +246,10 @@
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            IsHitTestVisible="False"
-                                           Foreground="#151515"
+                                           Foreground="#ccc"
                                            FontSize="12px"
                                            FontWeight="Bold"
-                                           Text="{Binding Path=DownloadProgress, StringFormat=' {0}%'}">
+                                           Text="{Binding Path=DownloadProgress, StringFormat='{}{0}%'}">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Visibility" Value="Visible" />

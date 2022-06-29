@@ -29,14 +29,15 @@
 <?xpacket end="w"?></metadata>
 <defs>
     <style>
-      .cls-1 {
-        fill: #fff;
-      }
+		.cls-1 {
+		fill: #333;
+		}
 
-      .cls-2 {
-        fill-rule: evenodd;
-      }
-    </style>
+		.cls-2 {
+		fill-rule: evenodd;
+		fill: #ccc;
+		}
+	</style>
   </defs>
   <circle class="cls-1" cx="50" cy="50" r="50"/>
   <path class="cls-2" d="M966.644,454V480.22H955l22.5,23.785L1000,480.22H988.355V454H966.644Z" transform="translate(-927 -429)"/>
