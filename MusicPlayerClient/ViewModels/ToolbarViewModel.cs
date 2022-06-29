@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Commands;
 using MusicPlayerClient.Events;
+using MusicPlayerClient.Extensions;
+using MusicPlayerClient.Interfaces;
 using MusicPlayerClient.Models;
 using MusicPlayerClient.Services;
 using MusicPlayerClient.Stores;
@@ -13,13 +15,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MusicPlayerClient.ViewModels
 {
-    public class ToolbarViewModel : ViewModelBase
+    public class ToolbarViewModel : ViewModelBase, IFilesDropAsync
     {
         private readonly PlaylistStore _playlistStore;
+        private readonly MediaStore _mediaStore;
         private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
         private readonly IMusicPlayerService _musicPlayerService;
 
@@ -32,6 +36,7 @@ namespace MusicPlayerClient.ViewModels
         public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
         {
             _playlistStore = playlistStore;
+            _mediaStore = mediaStore;
 
             playlistStore.PlaylistNameChanged += OnPlaylistNameChanged;
 
@@ -99,6 +104,20 @@ namespace MusicPlayerClient.ViewModels
                 default:
                     Playlists.ToList().ForEach(x => x.IsPlaying = false);
                     break;
+            }
+        }
+
+        public async Task OnFilesDroppedAsync(string[] files, object? parameter)
+        {
+            if (parameter is int playlistId)
+            {
+                var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
+                {
+                    FilePath = x,
+                    PlayerlistId = playlistId
+                }).ToList();
+
+                await _mediaStore.AddRange(mediaEntities, true);
             }
         }
 

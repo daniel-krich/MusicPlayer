@@ -249,7 +249,7 @@
 
         <ContentControl Grid.Row="1"
                         Grid.Column="0"
-                        ext:DropFilesBehaviorExtension.IsEnabled="True">
+                        IsHitTestVisible="False">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{x:Null}" />

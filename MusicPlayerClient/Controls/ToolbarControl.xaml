@@ -133,7 +133,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DockPanel HorizontalAlignment="Stretch"
-                                   Margin="10 0 0 0">
+                                   Margin="10 0 0 0"
+                                   ext:DropFilesBehaviorExtension.IsEnabled="True"
+                                   ext:DropFilesBehaviorExtension.InterfaceDataContext="{Binding ElementName=PlaylistItems, Path=DataContext}"
+                                   ext:DropFilesBehaviorExtension.DropParam="{Binding Id}">
                             <Button Style="{StaticResource TransparentButton}"
                                     Command="{Binding ElementName=PlaylistItems, Path=DataContext.DeletePlaylist}"
                                     CommandParameter="{Binding Id}">

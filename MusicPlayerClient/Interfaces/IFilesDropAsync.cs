@@ -8,6 +8,6 @@ namespace MusicPlayerClient.Interfaces
 {
     public interface IFilesDropAsync
     {
-        Task OnFilesDroppedAsync(string[] files);
+        Task OnFilesDroppedAsync(string[] files, object? parameter);
     }
 }

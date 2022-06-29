@@ -17,6 +17,18 @@ namespace MusicPlayerClient.Extensions
                 BindsTwoWayByDefault = false,
             });
 
+        public static readonly DependencyProperty InterfaceDataContextProperty = DependencyProperty.RegisterAttached(
+            "InterfaceDataContext", typeof(object), typeof(DropFilesBehaviorExtension), new FrameworkPropertyMetadata(default(object?), null)
+            {
+                BindsTwoWayByDefault = false,
+            });
+
+        public static readonly DependencyProperty DropParamProperty = DependencyProperty.RegisterAttached(
+            "DropParam", typeof(object), typeof(DropFilesBehaviorExtension), new FrameworkPropertyMetadata(default(object?), null)
+            {
+                BindsTwoWayByDefault = false,
+            });
+
         private static void OnPropChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is FrameworkElement fe))
@@ -43,7 +55,14 @@ namespace MusicPlayerClient.Extensions
 
         private static async void OnDrop(object sender, DragEventArgs e)
         {
-            var dataContext = ((FrameworkElement)sender).DataContext;
+            var element = sender as FrameworkElement;
+            object? dataContext = null;
+
+            if ((dataContext = GetInterfaceDataContext(element!)) == null)
+            {
+                dataContext = ((FrameworkElement)sender).DataContext;
+            }
+            
             if (!(dataContext is IFilesDropAsync filesDropped))
             {
                 if (dataContext != null)
@@ -55,7 +74,9 @@ namespace MusicPlayerClient.Extensions
                 return;
 
             if (e.Data.GetData(DataFormats.FileDrop) is string[] files)
-                await filesDropped.OnFilesDroppedAsync(files);
+            {
+                await filesDropped.OnFilesDroppedAsync(files, GetDropParam(element!));
+            }
         }
 
         public static void SetIsEnabled(DependencyObject element, bool value)
@@ -66,6 +87,26 @@ namespace MusicPlayerClient.Extensions
         public static bool GetIsEnabled(DependencyObject element)
         {
             return (bool)element.GetValue(IsEnabledProperty);
+        }
+
+        public static void SetDropParam(DependencyObject element, object? value)
+        {
+            element.SetValue(DropParamProperty, value);
+        }
+
+        public static object? GetDropParam(DependencyObject element)
+        {
+            return (object?)element.GetValue(DropParamProperty);
+        }
+
+        public static void SetInterfaceDataContext(DependencyObject element, object? value)
+        {
+            element.SetValue(InterfaceDataContextProperty, value);
+        }
+
+        public static object? GetInterfaceDataContext(DependencyObject element)
+        {
+            return (object?)element.GetValue(InterfaceDataContextProperty);
         }
     }
 }

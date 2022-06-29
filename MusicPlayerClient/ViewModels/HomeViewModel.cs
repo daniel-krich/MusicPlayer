@@ -88,7 +88,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public async Task OnFilesDroppedAsync(string[] files)
+        public async Task OnFilesDroppedAsync(string[] files, object? parameter)
         {
             var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
             {
