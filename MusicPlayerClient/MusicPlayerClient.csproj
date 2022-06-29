@@ -32,6 +32,7 @@
 		<None Remove="icons\discard.svg" />
 		<None Remove="icons\download.svg" />
 		<None Remove="icons\empty-folder.svg" />
+		<None Remove="icons\error-screen.svg" />
 		<None Remove="icons\Forward.svg" />
 		<None Remove="icons\open.svg" />
 		<None Remove="icons\page-document-empty.svg" />
@@ -119,6 +120,9 @@
 		</Resource>
 		<Resource Include="icons\empty-folder.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="icons\error-screen.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="icons\forward.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>

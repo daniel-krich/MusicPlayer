@@ -41,10 +41,17 @@
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Margin="0 0 0 5"
-                               Text="No results."
+                               Text="Nothing was found."
                                FontFamily="{StaticResource Raleway}"
                                FontSize="24px"
                                Foreground="#888"
+                               FontWeight="Light"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Try to rephrase your search..."
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="16px"
+                               Foreground="#666"
                                FontWeight="Light"/>
                 </StackPanel>
                 
@@ -57,14 +64,21 @@
                     <svgc:SvgViewbox Width="200px"
                                      Height="100px"
                                      Margin="0 0 0 20"
-                                     Source="../icons/empty-folder.svg"/>
+                                     Source="../icons/error-screen.svg"/>
                     <TextBlock HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Margin="0 0 0 5"
-                               Text="Error occured, try again."
+                               Text="An error occurred."
                                FontFamily="{StaticResource Raleway}"
                                FontSize="24px"
                                Foreground="#888"
+                               FontWeight="Light"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Try again in a few moments..."
+                               FontFamily="{StaticResource Raleway}"
+                               FontSize="16px"
+                               Foreground="#666"
                                FontWeight="Light"/>
                 </StackPanel>
 
