@@ -32,7 +32,12 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="90px"/>
             </Grid.RowDefinitions>
-
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="2"
+                    Background="#111"/>
+            
             <Border Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
