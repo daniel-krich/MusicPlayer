@@ -10,16 +10,12 @@ Created with C# .NET WPF (MVVM)
 - Search and download music from youtube.
 
 ### Screenshots ###
-![p6](https://user-images.githubusercontent.com/87533517/176471561-60f79df1-d9e0-4bca-9d66-180f36ae0d4b.PNG)
+![s1](https://user-images.githubusercontent.com/87533517/176643548-c724d637-ef56-4b52-9467-48fc0a1164e8.PNG)
 ***
-![p5](https://user-images.githubusercontent.com/87533517/176471558-4287ff8e-884a-41de-9131-44a926f889b2.PNG)
+![s2](https://user-images.githubusercontent.com/87533517/176643554-11b0f153-f61b-44c1-94da-3f4d8ef1841a.PNG)
 ***
-![p7](https://user-images.githubusercontent.com/87533517/176471564-10981dc8-6d48-45f4-b717-a6012521abbb.PNG)
+![s3](https://user-images.githubusercontent.com/87533517/176643562-25d5f182-6b5d-4309-b04f-9d815a5fc44c.PNG)
 ***
-![p8](https://user-images.githubusercontent.com/87533517/176471567-b39127ad-972c-4eb8-ae9a-dbf6a486c62c.PNG)
+![s4](https://user-images.githubusercontent.com/87533517/176643569-b2ccea38-0f56-4fe4-ac42-5b88ef7a1bff.PNG)
 ***
-![p9](https://user-images.githubusercontent.com/87533517/176472942-4be15967-de3c-41e4-8487-92792ca0a270.PNG)
-***
-![p3](https://user-images.githubusercontent.com/87533517/176471551-38112592-5c3d-4582-ab60-00ea2c7ad8c7.PNG)
-***
-![p4](https://user-images.githubusercontent.com/87533517/176471554-eab387c6-c169-47c2-8256-36e6729bdd07.PNG)
+![s5](https://user-images.githubusercontent.com/87533517/176643577-f472d48a-fed3-49f8-ae7a-1b123a173bc9.PNG)
