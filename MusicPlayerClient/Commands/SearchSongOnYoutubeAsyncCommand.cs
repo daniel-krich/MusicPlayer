@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,17 +53,27 @@ namespace MusicPlayerClient.Commands
 
                     return;
                 }
-
-                
-
-                var videomodels = videos.Select((x, num) => new YoutubeVideoInfoModel
+                string[] downloadedFiles = Array.Empty<string>();
+                try
                 {
-                    Num = num + 1,
-                    Title = x.Title,
-                    Url = x.Url,
-                    Duration = x.Duration,
-                    Channel = x.Channel,
-                    Views = x.Views
+                    downloadedFiles = Directory.GetFiles("downloads\\").Select(x => _youtubeClient.GetSafeFileName(Path.GetFileName(x))).ToArray();
+                }
+                catch { }
+
+                var videomodels = videos.Select((x, num) => {
+                    bool isDownloaded = downloadedFiles.FirstOrDefault(y => y == _youtubeClient.GetSafeFileName(x.Title + ".mp3")) != null;
+                    return new YoutubeVideoInfoModel
+                    {
+                        Downloading = isDownloaded,
+                        DownloadProgress = isDownloaded ? 100 : 0,
+                        FinishedDownload = isDownloaded ? true : null,
+                        Num = num + 1,
+                        Title = x.Title,
+                        Url = x.Url,
+                        Duration = x.Duration,
+                        Channel = x.Channel,
+                        Views = x.Views
+                    };
                 });
 
                 foreach(var videomodel in videomodels)

@@ -17,6 +17,7 @@ namespace MusicPlayerClient.Services
     {
         IAsyncEnumerable<int> DownloadYoutubeAudioAsync(string url, string FileName);
         Task<List<YoutubeVideoInfo>?> SearchVideoByName(string query);
+        string GetSafeFileName(string name, char replace = ' ');
     }
 
     public class YouTubeClientService : IYouTubeClientService
@@ -110,7 +111,7 @@ namespace MusicPlayerClient.Services
             }
         }
 
-        private string GetSafeFileName(string name, char replace = ' ')
+        public string GetSafeFileName(string name, char replace = ' ')
         {
             char[] invalids = Path.GetInvalidFileNameChars();
             return new string(name.Select(c => invalids.Contains(c) ? replace : c).ToArray());
