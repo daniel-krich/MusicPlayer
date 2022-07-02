@@ -30,6 +30,7 @@ namespace MusicPlayerClient.ViewModels
         public string CurrentDateString { get; }
         public ObservableCollection<MediaModel>? AllSongs { get; set; }
         public ICommand PlaySong { get; } 
+        public ICommand OpenExplorer { get; } 
         public ICommand? DeleteSong { get; set; }
 
         public HomeViewModel(IDbContextFactory<DataContext> dbContextFactory, MediaStore mediaStore, IMusicPlayerService musicService)
@@ -41,6 +42,8 @@ namespace MusicPlayerClient.ViewModels
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
 
             PlaySong = new PlaySpecificSongCommand(musicService);
+
+            OpenExplorer = new OpenExplorerAtPathCommand();
 
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
 
@@ -56,7 +59,7 @@ namespace MusicPlayerClient.ViewModels
                     Playing = _musicService.PlayerState == PlaybackState.Playing && x.Id == _musicService.CurrentMedia?.Id,
                     Number = num + 1,
                     Id = x.Id,
-                    Title = Path.GetFileName(x.FilePath),
+                    Title = Path.GetFileNameWithoutExtension(x.FilePath),
                     Path = x.FilePath,
                     Duration = AudioUtills.DurationParse(x.FilePath)
                 };
@@ -105,7 +108,7 @@ namespace MusicPlayerClient.ViewModels
                     Playing = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id,
                     Number = songsIndex + 1,
                     Id = mediaEntity.Id,
-                    Title = Path.GetFileName(mediaEntity.FilePath),
+                    Title = Path.GetFileNameWithoutExtension(mediaEntity.FilePath),
                     Path = mediaEntity.FilePath,
                     Duration = AudioUtills.DurationParse(mediaEntity.FilePath)
                 });

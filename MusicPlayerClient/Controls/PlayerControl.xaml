@@ -53,7 +53,13 @@
                    FontWeight="ExtraLight"
                    TextTrimming="CharacterEllipsis"
                    FontFamily="{StaticResource Raleway}"
-                   Text="{Binding SongPath}"/>
+                   Text="{Binding SongPath}">
+                <TextBlock.InputBindings>
+                    <MouseBinding Command="{Binding OpenExplorer}"
+                                  CommandParameter="{Binding SongPath}"
+                                  MouseAction="LeftClick" />
+                </TextBlock.InputBindings>
+            </TextBlock>
         </StackPanel>
 
         <StackPanel Grid.Row="0"

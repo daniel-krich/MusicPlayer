@@ -87,7 +87,7 @@ namespace MusicPlayerClient.Services
 
         public string PlayingSongPath => _currentMedia?.FilePath ?? "";
 
-        public string PlayingSongName => Path.GetFileName(_currentMedia?.FilePath) ?? "";
+        public string PlayingSongName => Path.GetFileNameWithoutExtension(_currentMedia?.FilePath) ?? "";
 
         public PlaybackState PlayerState => _waveOutDevice?.PlaybackState ?? PlaybackState.Stopped;
 
