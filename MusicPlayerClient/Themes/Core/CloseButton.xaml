@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="Button" x:Key="CloseButton">
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontSize" Value="13px"/>
         <Setter Property="Width" Value="40"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -20,7 +21,7 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#800000"/>
+                <Setter Property="Background" Value="#ba1e1e"/>
             </Trigger>
         </Style.Triggers>
     </Style>

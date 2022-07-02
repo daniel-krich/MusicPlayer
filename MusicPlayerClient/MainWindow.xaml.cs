@@ -35,9 +35,17 @@ namespace MusicPlayerClient
         private void MaximizeButton_Click(object sender, RoutedEventArgs e)
         {
             if (Application.Current.MainWindow.WindowState != WindowState.Maximized)
+            {
                 Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                if (sender is Button button)
+                    button.Content = "❐";
+            }
             else
+            {
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
+                if (sender is Button button)
+                    button.Content = "▢";
+            }
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)

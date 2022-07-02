@@ -56,11 +56,11 @@
                     <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
                                 Orientation="Horizontal">
-                        <Button Content="🗕" Style="{StaticResource MinMaxButton}"
+                        <Button Content="⎯" Style="{StaticResource MinMaxButton}"
                                     x:Name="MinimizeButton" Click="MinimizeButton_Click"/>
-                        <Button Content="☐" Style="{StaticResource MinMaxButton}"
+                        <Button Content="▢" Style="{StaticResource MinMaxButton}"
                                     x:Name="MaximizeButton" Click="MaximizeButton_Click"/>
-                        <Button Content="✖" Style="{StaticResource CloseButton}"
+                        <Button Content="✕" Style="{StaticResource CloseButton}"
                                     x:Name="ExitButton" Click="ExitButton_Click"/>
                     </StackPanel>
                 </Grid>
