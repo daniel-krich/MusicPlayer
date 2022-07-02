@@ -67,18 +67,20 @@
                     VerticalAlignment="Center"
                     Orientation="Vertical"
                     Name="ParentPanel">
-            
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+
+            <StackPanel HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Margin="0 0 0 5">
                 <Button Style="{StaticResource TransparentButton}"
                         Command="{Binding PlayBackward}"
-                        Margin="0 0 50 0">
-                    <svgc:SvgViewbox Width="25px" Height="25px" Source="../icons/backward.svg"/>
+                        Margin="0 0 30 0">
+                    <svgc:SvgViewbox Width="18px" Height="20px" Source="../icons/backward.svg"/>
                 </Button>
                 <Button Style="{StaticResource TransparentButton}"
-                        Margin="0 0 50 0"
+                        Margin="0 0 30 0"
                         Command="{Binding TogglePlayer}">
-                    <svgc:SvgViewbox Width="40px"
-                                     Height="40px">
+                    <svgc:SvgViewbox Width="35px"
+                                     Height="35px">
                         <svgc:SvgViewbox.Style>
                             <Style TargetType="{x:Type svgc:SvgViewbox}">
                                 <Setter Property="Source" Value="../icons/play.svg" />
@@ -95,67 +97,97 @@
                 </Button>
                 <Button Style="{StaticResource TransparentButton}"
                         Command="{Binding PlayForward}">
-                    <svgc:SvgViewbox Width="25px" Height="25px" Source="../icons/forward.svg"/>
+                    <svgc:SvgViewbox Width="18px" Height="20px" Source="../icons/forward.svg"/>
                 </Button>
-                
-                
-                
+
+
+
             </StackPanel>
 
-            <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100px"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100px"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Margin="0 0 10 0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Foreground="#bbb"
+                           FontSize="11px"
+                           FontWeight="SemiBold"
+                           Text="{Binding SongProgressFormatted}" />
+
                 <Slider Style="{StaticResource PrettySlider}"
                         Minimum="0"
-                        Width="{Binding Path=ActualWidth, ElementName=ParentPanel}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        VerticalAlignment="Stretch"
+                        IsMoveToPointEnabled="True"
                         Maximum="{Binding SongDuration}"
                         Value="{Binding SongProgress, Mode=TwoWay}"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="2"
+                           Margin="10 0 0 0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Foreground="#bbb"
+                           FontSize="11px"
+                           FontWeight="SemiBold"
+                           Text="{Binding SongDurationFormatted}" />
+            </Grid>
 
-                    <TextBlock Grid.Row="0"
-                               Grid.Column="0"
-                               HorizontalAlignment="Left"
-                               Foreground="#bbb"
-                               FontSize="11px"
-                               FontWeight="SemiBold"
-                               Text="{Binding SongProgressFormatted}" />
-                    <TextBlock Grid.Row="0"
-                               Grid.Column="1"
-                               HorizontalAlignment="Right"
-                               Foreground="#bbb"
-                               FontSize="11px"
-                               FontWeight="SemiBold"
-                               Text="{Binding SongDurationFormatted}" />
-                </Grid>
-                
-            </StackPanel>
-            
-            
+
+
         </StackPanel>
 
         <StackPanel Grid.Row="0"
                     Grid.Column="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button Style="{StaticResource TransparentButton}"
+                    Width="30"
+                    Height="25"
+                    Margin="0 0 5 0"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Orientation="Vertical">
+                    Command="{Binding ToggleVolume}"
+                    CommandParameter="{Binding Volume}">
+                <svgc:SvgViewbox>
+                    <svgc:SvgViewbox.Style>
+                        <Style TargetType="{x:Type svgc:SvgViewbox}">
+                            <Setter Property="Source" Value="../icons/volume.svg" />
+                            <Setter Property="Width" Value="20px" />
+                            <Setter Property="Height" Value="20px" />
+                            <Style.Triggers>
+
+                                <DataTrigger Binding="{Binding Volume}" Value="0">
+                                    <Setter Property="Source" Value="../icons/no-volume.svg" />
+                                    <Setter Property="Width" Value="14px" />
+                                    <Setter Property="Height" Value="14px" />
+                                </DataTrigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </svgc:SvgViewbox.Style>
+                </svgc:SvgViewbox>
+            </Button>
             <Slider Style="{StaticResource PrettySlider}"
-                    MaxWidth="200px"
                     Value="{Binding Volume, Mode=TwoWay}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    IsMoveToPointEnabled="True"
                     Minimum="0"
-                    Margin="10 0 10 0"
                     Maximum="100"/>
-            <TextBlock HorizontalAlignment="Center"
-                       Foreground="#bbb"
-                       FontSize="11px"
-                       FontWeight="SemiBold"
-                       FontFamily="{StaticResource Raleway}"
-                       Text="{Binding Volume, Mode=OneWay, StringFormat='Vol. {0}%'}"/>
         </StackPanel>
-        
+
     </Grid>
 </UserControl>

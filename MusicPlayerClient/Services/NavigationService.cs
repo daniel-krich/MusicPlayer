@@ -35,7 +35,7 @@ namespace MusicPlayerClient.Services
             var mainVm = _mainViewModelFunc?.Invoke();
             var homeVm = _homeViewModelFunc?.Invoke();
 
-            if (mainVm != null)
+            if (mainVm != null && mainVm.CurrentView is not HomeViewModel)
             {
                 mainVm.CurrentView = homeVm;
             }
@@ -57,7 +57,7 @@ namespace MusicPlayerClient.Services
             var mainVm = _mainViewModelFunc?.Invoke();
             var downloadsVm = _downloadViewModelFunc?.Invoke();
 
-            if (mainVm != null)
+            if (mainVm != null && mainVm.CurrentView is not DownloadsViewModel)
             {
                 mainVm.CurrentView = downloadsVm;
             }

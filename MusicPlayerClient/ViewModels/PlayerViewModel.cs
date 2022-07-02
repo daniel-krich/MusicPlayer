@@ -85,6 +85,7 @@ namespace MusicPlayerClient.ViewModels
         public ICommand PlayBackward { get; }
         public ICommand PlayForward { get; }
         public ICommand OpenExplorer { get; }
+        public ICommand ToggleVolume { get; }
 
         public PlayerViewModel(IMusicPlayerService musicService)
         {
@@ -93,6 +94,7 @@ namespace MusicPlayerClient.ViewModels
             PlayForward = new ForwardSongCommand(musicService);
             TogglePlayer = new ToggleMusicPlayerStateCommand(musicService);
             OpenExplorer = new OpenExplorerAtPathCommand();
+            ToggleVolume = new ToggleVolumeCommand(this);
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
             _musicService.AfterMusicPlayerEvent += OnAfterMusicPlayerEvent;

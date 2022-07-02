@@ -28,11 +28,21 @@ namespace MusicPlayerClient.ViewModels
         private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
         private readonly IMusicPlayerService _musicPlayerService;
 
-        public ObservableWrapper<bool> IsRemoveActive { get; }
+        private bool _isRemoveActive;
+        public bool IsRemoveActive
+        {
+            get => _isRemoveActive;
+            set
+            {
+                _isRemoveActive = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand ToggleRemoveActive { get; }
         public ICommand DeletePlaylist { get; }
         public ICommand NavigatePlaylist { get; }
         public ICommand NavigateDownloads { get; }
+        public ICommand NavigateHome { get; }
         public ICommand CreatePlaylist { get; }
         public ObservableCollection<PlaylistModel> Playlists { get; set; }
 
@@ -57,9 +67,8 @@ namespace MusicPlayerClient.ViewModels
             _playlistBrowserStore = playlistBrowserStore;
             playlistBrowserStore.PlaylistBrowserChanged += OnPlaylistBrowserChanged;
 
-            IsRemoveActive = new ObservableWrapper<bool>();
-
-            ToggleRemoveActive = new TogglePlaylistRemoveCommand(IsRemoveActive);
+            ToggleRemoveActive = new TogglePlaylistRemoveCommand(this);
+            NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserStore);
             NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
             NavigateDownloads = new SwitchPageToDownloadsCommand(navigationService, playlistBrowserStore);
             DeletePlaylist = new DeleteSpecificPlaylistAsyncCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);

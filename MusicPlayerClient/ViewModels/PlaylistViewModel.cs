@@ -42,7 +42,6 @@ namespace MusicPlayerClient.ViewModels
         public string PlaylistCreationDate { get; }
         public ObservableCollection<MediaModel>? AllSongsOfPlaylist { get; set; }
         public ICommand RenamePlaylist { get; }
-        public ICommand NavigateHome { get; }
         public ICommand PlaySong { get; }
         public ICommand OpenExplorer { get; }
 
@@ -71,8 +70,6 @@ namespace MusicPlayerClient.ViewModels
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
 
             PlaylistCreationDate = playlistStore.Playlists.FirstOrDefault(x => x.Id == playlistBrowserNavigationStore.BrowserPlaylistId)?.CreationDate?.ToString("dd MMM, yyyy") ?? DateTime.Now.ToString("dd MMM, yyyy");
-
-            NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserNavigationStore);
 
             Task.Run(LoadSongs);
         }

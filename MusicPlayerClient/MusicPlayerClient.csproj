@@ -35,10 +35,14 @@
 		<None Remove="icons\empty-folder.svg" />
 		<None Remove="icons\error-screen.svg" />
 		<None Remove="icons\Forward.svg" />
+		<None Remove="icons\home-icon.svg" />
+		<None Remove="icons\no-volume.svg" />
 		<None Remove="icons\open.svg" />
 		<None Remove="icons\page-document-empty.svg" />
 		<None Remove="icons\Pause.svg" />
 		<None Remove="icons\Play.svg" />
+		<None Remove="icons\search-icon.svg" />
+		<None Remove="icons\volume.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -128,6 +132,9 @@
 		<Resource Include="icons\forward.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
+		<Resource Include="icons\home-icon.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
 		<Resource Include="icons\open.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
@@ -139,6 +146,15 @@
 		</Resource>
 		<Resource Include="icons\play.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="icons\no-volume.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="icons\search-icon.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="icons\volume.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 	</ItemGroup>
 

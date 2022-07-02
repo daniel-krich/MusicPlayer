@@ -1,6 +1,7 @@
 ﻿using MusicDownloader.Models;
 using MusicPlayerClient.Core;
 using MusicPlayerClient.Services;
+using MusicPlayerClient.ViewModels;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -18,18 +19,12 @@ namespace MusicPlayerClient.Commands
     {
         private readonly IYouTubeClientService _youtubeClient;
         private readonly ObservableCollection<YoutubeVideoInfoModel> _observableMedia;
-        private readonly ObservableWrapper<bool>? _loadingWrapper;
-        private readonly ObservableWrapper<bool>? _failedWrapper;
-        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia)
+        private readonly DownloadsViewModel _downloads;
+        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia, DownloadsViewModel downloads)
         {
             _youtubeClient = youtubeClient;
             _observableMedia = observableMedia;
-        }
-
-        public SearchSongOnYoutubeAsyncCommand(IYouTubeClientService youtubeClient, ObservableCollection<YoutubeVideoInfoModel> observableMedia, ObservableWrapper<bool> loadingWrapper, ObservableWrapper<bool> failedWrapper) : this(youtubeClient, observableMedia)
-        {
-            _loadingWrapper = loadingWrapper;
-            _failedWrapper = failedWrapper;
+            _downloads = downloads;
         }
 
         protected override async Task ExecuteAsync(object? parameter)
@@ -38,19 +33,14 @@ namespace MusicPlayerClient.Commands
             {
                 _observableMedia.Clear();
 
-                if (_loadingWrapper != null)
-                    _loadingWrapper.Object = true;
+                    _downloads.IsLoadingSearch = true;
 
                 List<YoutubeVideoInfo>? videos = await _youtubeClient.SearchVideoByName(searchText);
 
                 if(videos == null)
                 {
-                    if (_loadingWrapper != null)
-                        _loadingWrapper.Object = false;
-
-                    if (_failedWrapper != null)
-                        _failedWrapper.Object = true;
-
+                    _downloads.IsLoadingSearch = false;
+                    _downloads.IsFailedSearch = true;
                     return;
                 }
                 string[] downloadedFiles = Array.Empty<string>();
@@ -81,11 +71,8 @@ namespace MusicPlayerClient.Commands
                     _observableMedia.Add(videomodel);
                 }
 
-                if (_failedWrapper != null)
-                    _failedWrapper.Object = false;
-
-                if (_loadingWrapper != null)
-                    _loadingWrapper.Object = false;
+                _downloads.IsFailedSearch = false;
+                _downloads.IsLoadingSearch = false;
             }
         }
     }

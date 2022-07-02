@@ -109,21 +109,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0"
-                    Grid.Column="0"
-                    Style="{StaticResource GenericButton}"
-                    Width="80px"
-                    Height="30px"
-                    Background="#181818"
-                    Foreground="#fff"
-                    FontFamily="{StaticResource Raleway}"
-                    FontSize="15px"
-                    FontWeight="Light"
-                    Content="Back"
-                    HorizontalAlignment="Left"
-                    Margin="10 10 0 0"
-                    Command="{Binding NavigateHome}" />
-
             <TextBlock Grid.Row="0"
                        Grid.Column="2"
                        FontFamily="{StaticResource Raleway}"
@@ -325,10 +310,10 @@
                         <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.ResultMedia.Count}" Value="0">
                             <Setter Property="ContentTemplate" Value="{StaticResource NoMediaTemplate}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.FailedWrapper.Object}" Value="true">
+                        <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.IsFailedSearch}" Value="true">
                             <Setter Property="ContentTemplate" Value="{StaticResource ErrorTemplate}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.LoadingWrapper.Object}" Value="true">
+                        <DataTrigger Binding="{Binding ElementName=gridStatus, Path=DataContext.IsLoadingSearch}" Value="true">
                             <Setter Property="ContentTemplate" Value="{StaticResource LoadingTemplate}" />
                         </DataTrigger>
                         

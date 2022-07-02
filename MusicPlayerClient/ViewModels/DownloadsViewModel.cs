@@ -30,10 +30,30 @@ namespace MusicPlayerClient.ViewModels
         private readonly MediaStore _mediaStore;
         public string CurrentDateString { get; }
         public ObservableCollection<YoutubeVideoInfoModel> ResultMedia { get; }
-        public ObservableWrapper<bool> LoadingWrapper { get; }
-        public ObservableWrapper<bool> FailedWrapper { get; }
+
+        private bool _isLoadingSearch;
+        public bool IsLoadingSearch
+        {
+            get => _isLoadingSearch;
+            set
+            {
+                _isLoadingSearch = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isFailedSearch;
+        public bool IsFailedSearch
+        {
+            get => _isFailedSearch;
+            set
+            {
+                _isFailedSearch = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand? SearchMedia { get; set; }
-        public ICommand NavigateHome { get; }
         public ICommand DownloadMedia { get; }
 
         private string? _searchText;
@@ -53,13 +73,7 @@ namespace MusicPlayerClient.ViewModels
 
             ResultMedia = new ObservableCollection<YoutubeVideoInfoModel>();
 
-            LoadingWrapper = new ObservableWrapper<bool>();
-
-            FailedWrapper = new ObservableWrapper<bool>();
-
-            SearchMedia = new SearchSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia, LoadingWrapper, FailedWrapper);
-
-            NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserNavigationStore);
+            SearchMedia = new SearchSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia, this);
 
             DownloadMedia = new DownloadSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia);
 

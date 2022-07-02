@@ -1,5 +1,6 @@
 ﻿using MusicPlayerClient.Core;
 using MusicPlayerClient.Services;
+using MusicPlayerClient.ViewModels;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,15 @@ namespace MusicPlayerClient.Commands
 {
     public class TogglePlaylistRemoveCommand : CommandBase
     {
-        private readonly ObservableWrapper<bool> _isRemoveActive;
-        public TogglePlaylistRemoveCommand(ObservableWrapper<bool> isRemoveActive)
+        private readonly ToolbarViewModel _toolbar;
+        public TogglePlaylistRemoveCommand(ToolbarViewModel toolbar)
         {
-            _isRemoveActive = isRemoveActive;
+            _toolbar = toolbar;
         }
 
         public override void Execute(object? parameter)
         {
-            _isRemoveActive.Object = !_isRemoveActive.Object;
+            _toolbar.IsRemoveActive = !_toolbar.IsRemoveActive;
         }
     }
 }
