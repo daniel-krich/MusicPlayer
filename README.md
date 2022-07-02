@@ -10,10 +10,8 @@ Created with C# .NET WPF (MVVM)
 - Search and download music from youtube.
 
 ### Screenshots ###
-![p3](https://user-images.githubusercontent.com/87533517/177017607-ac58d004-e9d3-41ef-aabf-7db09bc07cb8.PNG)
+![p2](https://user-images.githubusercontent.com/87533517/177018710-399549b2-d254-47f0-a5eb-5ef004f104d5.PNG)
 ***
-![p2](https://user-images.githubusercontent.com/87533517/177017611-747d915f-7b82-43cb-9cad-7798a6bf3277.PNG)
+![p1](https://user-images.githubusercontent.com/87533517/177018711-db9befae-f59e-44e7-824a-192d510dc4f5.PNG)
 ***
-![p1](https://user-images.githubusercontent.com/87533517/177017612-fa62ff76-7b29-479b-81df-ebd32355ed68.PNG)
-***
-![p4](https://user-images.githubusercontent.com/87533517/177017614-48484b45-910a-430f-b5ae-da3d0677aaea.PNG)
+![p3](https://user-images.githubusercontent.com/87533517/177018712-953880a5-8914-4115-8b5b-250d3eef7272.PNG)
