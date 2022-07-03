@@ -67,17 +67,19 @@
         <StackPanel Orientation="Vertical"
                     Grid.Row="0"
                     Grid.Column="0"
-                    HorizontalAlignment="Stretch">
+                    Name="NavigationPanel">
             <Button VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    Margin="20 20 0 0"
                     FontSize="12px"
+                    Margin="0 20 0 0"
                     FontFamily="{StaticResource Raleway}"
                     FontWeight="SemiBold"
                     Command="{Binding NavigateHome}">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal"
+                            Width="{Binding ElementName=NavigationPanel,Path=ActualWidth}"
+                            HorizontalAlignment="Left">
                     <svgc:SvgViewbox Width="20px"
                                      Height="20px"
+                                     Margin="20 0 0 0"
                                      VerticalAlignment="Center"
                                      Source="../icons/home-icon.svg" />
                     <TextBlock VerticalAlignment="Center"
@@ -122,21 +124,23 @@
 
             </Button>
             <Button VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    Margin="20 20 0 0"
+                    Margin="0 20 0 0"
                     FontSize="12px"
                     FontFamily="{StaticResource Raleway}"
                     FontWeight="SemiBold"
                     Command="{Binding NavigateDownloads}">
-                <DockPanel>
+                <StackPanel Orientation="Horizontal"
+                            Width="{Binding ElementName=NavigationPanel,Path=ActualWidth}"
+                            HorizontalAlignment="Left">
                     <svgc:SvgViewbox Width="20px"
                                      Height="20px"
+                                     Margin="20 0 0 0"
                                      VerticalAlignment="Center"
                                      Source="../icons/search-icon.svg" />
                     <TextBlock VerticalAlignment="Center"
                                Margin="15 0 0 0"
                                Text="Search online" />
-                </DockPanel>
+                </StackPanel>
 
                 <Button.Style>
 
