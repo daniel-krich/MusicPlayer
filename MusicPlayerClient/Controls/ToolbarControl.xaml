@@ -49,8 +49,8 @@
 
             <DropShadowEffect ShadowDepth="0"
                               x:Key="CustomShadowEffect"
+                              Opacity="0"
                               Color="White"
-                              Opacity="1"
                               BlurRadius="10"/>
         </Grid.Resources>
 
@@ -92,16 +92,36 @@
                 <Button.Style>
 
                     <Style BasedOn="{StaticResource TransparentButton}"
-                       TargetType="{x:Type Button}">
+                           TargetType="{x:Type Button}">
                         <Setter Property="Foreground" Value="#888" />
+                        <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
                         <Style.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
-                                <Setter Property="Foreground" Value="#fff" />
-                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
-                                <Setter Property="Foreground" Value="#fff" />
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
+                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#fff" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
+                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#888" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                                
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -131,11 +151,34 @@
                     <Style BasedOn="{StaticResource TransparentButton}"
                        TargetType="{x:Type Button}">
                         <Setter Property="Foreground" Value="#888" />
+                        <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
                         <Style.Triggers>
-                            
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
-                                <Setter Property="Foreground" Value="#fff" />
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
+                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#fff" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
+                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#888" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
                             </Trigger>
                         </Style.Triggers>
                     </Style>
