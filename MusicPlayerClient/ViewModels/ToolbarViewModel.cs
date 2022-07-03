@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Commands;
 using MusicPlayerClient.Core;
+using MusicPlayerClient.Enums;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Interfaces;
@@ -27,6 +28,18 @@ namespace MusicPlayerClient.ViewModels
         private readonly MediaStore _mediaStore;
         private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
         private readonly IMusicPlayerService _musicPlayerService;
+        private readonly INavigationService _navigationService;
+
+        private PageType _currentPage;
+        public PageType CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                _currentPage = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _isRemoveActive;
         public bool IsRemoveActive
@@ -44,6 +57,7 @@ namespace MusicPlayerClient.ViewModels
         public ICommand NavigateDownloads { get; }
         public ICommand NavigateHome { get; }
         public ICommand CreatePlaylist { get; }
+        public ICommand TogglePlayer { get; }
         public ObservableCollection<PlaylistModel> Playlists { get; set; }
 
         public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
@@ -51,11 +65,16 @@ namespace MusicPlayerClient.ViewModels
             _playlistStore = playlistStore;
             _mediaStore = mediaStore;
 
+            TogglePlayer = new ToggleMusicPlayerStateCommand(musicPlayerService);
+
             playlistStore.PlaylistNameChanged += OnPlaylistNameChanged;
 
             _musicPlayerService = musicPlayerService;
-
             musicPlayerService.MusicPlayerEvent += OnMusicPlayerEvent;
+
+            _navigationService = navigationService;
+            CurrentPage = navigationService.CurrentPage;
+            navigationService.PageChangedEvent += OnPageChangedEvent;
 
             Playlists = new ObservableCollection<PlaylistModel>(playlistStore.Playlists.Select(x => new PlaylistModel
             {
@@ -122,6 +141,11 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
+        private void OnPageChangedEvent(object? sender, PageChangedEventArgs args)
+        {
+            CurrentPage = args.Page;
+        }
+
         public async Task OnFilesDroppedAsync(string[] files, object? parameter)
         {
             if (parameter is int playlistId)
@@ -141,6 +165,7 @@ namespace MusicPlayerClient.ViewModels
             _playlistStore.PlaylistNameChanged -= OnPlaylistNameChanged;
             _playlistBrowserStore.PlaylistBrowserChanged -= OnPlaylistBrowserChanged;
             _musicPlayerService.MusicPlayerEvent -= OnMusicPlayerEvent;
+            _navigationService.PageChangedEvent -= OnPageChangedEvent;
         }
     }
 }

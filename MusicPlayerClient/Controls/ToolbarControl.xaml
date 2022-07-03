@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MusicPlayerClient.Controls"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:ext="clr-namespace:MusicPlayerClient.Extensions"
+             xmlns:enums="clr-namespace:MusicPlayerClient.Enums"
              mc:Ignorable="d" 
              d:DesignHeight="530" d:DesignWidth="200">
     <Grid>
@@ -46,12 +47,7 @@
                 </StackPanel>
 
             </DataTemplate>
-
-            <DropShadowEffect ShadowDepth="0"
-                              x:Key="CustomShadowEffect"
-                              Opacity="0"
-                              Color="White"
-                              BlurRadius="10"/>
+            
         </Grid.Resources>
 
         <Border Background="#111"
@@ -94,35 +90,31 @@
                     <Style BasedOn="{StaticResource TransparentButton}"
                            TargetType="{x:Type Button}">
                         <Setter Property="Foreground" Value="#888" />
-                        <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
                         <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.EnterActions>
+
+                            <DataTrigger Binding="{Binding CurrentPage}" Value="{x:Static enums:PageType.Home}">
+                                <Setter Property="Opacity" Value="1" />
+                                <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
-                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-                                            </DoubleAnimationUsingKeyFrames>
                                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
                                                 <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#fff" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
-                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                                            </DoubleAnimationUsingKeyFrames>
                                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
                                                 <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#888" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </BeginStoryboard>
-                                </Trigger.ExitActions>
-                                
-                            </Trigger>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+
                         </Style.Triggers>
                     </Style>
 
@@ -143,7 +135,7 @@
                                      Source="../icons/search-icon.svg" />
                     <TextBlock VerticalAlignment="Center"
                                Margin="15 0 0 0"
-                               Text="Search" />
+                               Text="Search online" />
                 </DockPanel>
 
                 <Button.Style>
@@ -151,35 +143,28 @@
                     <Style BasedOn="{StaticResource TransparentButton}"
                        TargetType="{x:Type Button}">
                         <Setter Property="Foreground" Value="#888" />
-                        <Setter Property="Effect" Value="{StaticResource CustomShadowEffect}" />
                         <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.EnterActions>
+                            <DataTrigger Binding="{Binding CurrentPage}" Value="{x:Static enums:PageType.Downloads}">
+                                <Setter Property="Opacity" Value="1" />
+                                <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
-                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-                                            </DoubleAnimationUsingKeyFrames>
                                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
                                                 <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#fff" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Effect).Opacity">
-                                                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
-                                            </DoubleAnimationUsingKeyFrames>
                                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
                                                 <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#888" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </BeginStoryboard>
-                                </Trigger.ExitActions>
-
-                            </Trigger>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
 
@@ -215,7 +200,24 @@
                         <Setter Property="Background" Value="#222"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=PlaylistItems, Path=DataContext.IsRemoveActive}" Value="true">
-                                <Setter Property="Background" Value="#444"/>
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#444" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#222" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -237,7 +239,25 @@
                         <Setter Property="Background" Value="#333"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#444"/>
+                                <Setter Property="Opacity" Value="1" />
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#555" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#333" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -261,11 +281,21 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel HorizontalAlignment="Stretch"
-                                   ext:DropFilesBehaviorExtension.IsEnabled="True"
-                                   ext:DropFilesBehaviorExtension.InterfaceDataContext="{Binding ElementName=PlaylistItems, Path=DataContext}"
-                                   ext:DropFilesBehaviorExtension.DropParam="{Binding Id}">
-                            <Button Command="{Binding ElementName=PlaylistItems, Path=DataContext.DeletePlaylist}"
+                        <Grid ext:DropFilesBehaviorExtension.IsEnabled="True"
+                              ext:DropFilesBehaviorExtension.InterfaceDataContext="{Binding ElementName=PlaylistItems, Path=DataContext}"
+                              ext:DropFilesBehaviorExtension.DropParam="{Binding Id}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Button Grid.Row="0"
+                                    Grid.Column="0"
+                                    Command="{Binding ElementName=PlaylistItems, Path=DataContext.DeletePlaylist}"
                                     CommandParameter="{Binding Id}"
                                     Width="30px">
 
@@ -284,32 +314,87 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                            <Button Padding="10"
+
+                            <Button Grid.Row="0"
+                                    Grid.Column="1" 
+                                    Padding="10"
                                     Command="{Binding ElementName=PlaylistItems, Path=DataContext.NavigatePlaylist}"
                                     CommandParameter="{Binding Id}"
                                     FontFamily="{StaticResource Raleway}"
-                                    Content="{Binding Name}"
+                                    Name="PlaylistButton"
                                     FontSize="14">
+                                <TextBlock Text="{Binding Name}"
+                                           Width="{Binding ElementName=PlaylistButton,Path=ActualWidth}"
+                                           HorizontalAlignment="Left"/>
                                 <Button.Style>
                                     <Style BasedOn="{StaticResource TransparentButton}" TargetType="{x:Type Button}">
-                                        <Setter Property="Foreground" Value="#aaa" />
+                                        <Setter Property="Foreground" Value="#888" />
                                         <Setter Property="FontWeight" Value="Regular" />
                                         <Style.Triggers>
 
-                                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                                                <Setter Property="Foreground" Value="#fff" />
-                                            </DataTrigger>
-
-                                            <DataTrigger Binding="{Binding IsPlaying}" Value="true">
-                                                <Setter Property="Foreground" Value="#00cc90" />
-                                                <Setter Property="FontWeight" Value="Bold" />
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Opacity" Value="1" />
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#fff" />
+                                                            </ColorAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#888" />
+                                                            </ColorAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
                                             </DataTrigger>
 
                                         </Style.Triggers>
                                     </Style>
                                 </Button.Style>
                             </Button>
-                        </DockPanel>
+
+                            <Button Grid.Row="0"
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 10 0"
+                                    Command="{Binding ElementName=PlaylistItems, Path=DataContext.TogglePlayer}">
+                                <svgc:SvgViewbox Width="15px"
+                                                 Height="15px">
+                                    <svgc:SvgViewbox.Style>
+                                        <Style TargetType="{x:Type svgc:SvgViewbox}">
+                                            <Setter Property="Source" Value="../icons/volume-green.svg" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=IsMouseOver}" Value="True">
+                                                    <Setter Property="Source" Value="../icons/pause-plain.svg"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </svgc:SvgViewbox.Style>
+                                </svgc:SvgViewbox>
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource TransparentButton}"
+                                           TargetType="{x:Type Button}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Setter Property="Padding" Value="0" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            
+
+                        </Grid>
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

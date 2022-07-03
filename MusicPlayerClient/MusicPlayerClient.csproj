@@ -39,9 +39,11 @@
 		<None Remove="icons\no-volume.svg" />
 		<None Remove="icons\open.svg" />
 		<None Remove="icons\page-document-empty.svg" />
+		<None Remove="icons\pause-plain.svg" />
 		<None Remove="icons\Pause.svg" />
 		<None Remove="icons\Play.svg" />
 		<None Remove="icons\search-icon.svg" />
+		<None Remove="icons\volume-green.svg" />
 		<None Remove="icons\volume.svg" />
 	</ItemGroup>
 
@@ -141,6 +143,9 @@
 		<Resource Include="icons\page-document-empty.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
+		<Resource Include="icons\pause-plain.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
 		<Resource Include="icons\pause.svg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
@@ -151,6 +156,9 @@
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="icons\search-icon.svg">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="icons\volume-green.svg">
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
 		<Resource Include="icons\volume.svg">

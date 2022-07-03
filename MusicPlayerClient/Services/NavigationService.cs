@@ -1,4 +1,6 @@
-﻿using MusicPlayerClient.ViewModels;
+﻿using MusicPlayerClient.Enums;
+using MusicPlayerClient.Events;
+using MusicPlayerClient.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,8 @@ namespace MusicPlayerClient.Services
 {
     public interface INavigationService
     {
+        public event EventHandler<PageChangedEventArgs> PageChangedEvent;
+        public PageType CurrentPage { get; }
         public void NavigateHome();
         public void NavigatePlaylist();
         public void NavigateDownloads();
@@ -20,6 +24,9 @@ namespace MusicPlayerClient.Services
         private readonly Func<HomeViewModel>? _homeViewModelFunc;
         private readonly Func<PlaylistViewModel>? _playlistViewModelFunc;
         private readonly Func<DownloadsViewModel>? _downloadViewModelFunc;
+
+        public event EventHandler<PageChangedEventArgs>? PageChangedEvent;
+        public PageType CurrentPage { get; private set; } = PageType.Home;
 
         public NavigationService(Func<MainViewModel> mainViewModelFunc, Func<HomeViewModel> homeViewModelFunc,
                                  Func<PlaylistViewModel> playlistViewModelFunc, Func<DownloadsViewModel> downloadViewModelFunc)
@@ -38,6 +45,8 @@ namespace MusicPlayerClient.Services
             if (mainVm != null && mainVm.CurrentView is not HomeViewModel)
             {
                 mainVm.CurrentView = homeVm;
+                CurrentPage = PageType.Home;
+                PageChangedEvent?.Invoke(this, new PageChangedEventArgs(CurrentPage));
             }
         }
 
@@ -49,6 +58,8 @@ namespace MusicPlayerClient.Services
             if (mainVm != null)
             {
                 mainVm.CurrentView = playlistVm;
+                CurrentPage = PageType.Playlist;
+                PageChangedEvent?.Invoke(this, new PageChangedEventArgs(CurrentPage));
             }
         }
 
@@ -60,6 +71,8 @@ namespace MusicPlayerClient.Services
             if (mainVm != null && mainVm.CurrentView is not DownloadsViewModel)
             {
                 mainVm.CurrentView = downloadsVm;
+                CurrentPage = PageType.Downloads;
+                PageChangedEvent?.Invoke(this, new PageChangedEventArgs(CurrentPage));
             }
         }
     }

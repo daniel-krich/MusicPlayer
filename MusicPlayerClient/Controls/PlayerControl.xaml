@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusicPlayerClient.Controls"
+             xmlns:components="clr-namespace:MusicPlayerClient.Components"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="800">
@@ -125,14 +126,15 @@
                            FontWeight="SemiBold"
                            Text="{Binding SongProgressFormatted}" />
 
-                <Slider Style="{StaticResource PrettySlider}"
-                        Minimum="0"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch"
-                        IsMoveToPointEnabled="True"
-                        Maximum="{Binding SongDuration}"
-                        Value="{Binding SongProgress, Mode=TwoWay}"/>
+                <components:DropSlider Style="{StaticResource PrettySlider}"
+                                         Minimum="0"
+                                         Grid.Row="0"
+                                         Grid.Column="1"
+                                         VerticalAlignment="Stretch"
+                                         IsMoveToPointEnabled="True"
+                                         Maximum="{Binding SongDuration}"
+                                         Value="{Binding SongProgress, Mode=TwoWay}"/>
+
 
                 <TextBlock Grid.Row="0"
                            Grid.Column="2"
