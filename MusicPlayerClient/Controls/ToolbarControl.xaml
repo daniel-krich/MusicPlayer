@@ -70,6 +70,7 @@
                     Name="NavigationPanel">
             <Button VerticalAlignment="Center"
                     FontSize="12px"
+                    Height="35"
                     Margin="0 20 0 0"
                     FontFamily="{StaticResource Raleway}"
                     FontWeight="SemiBold"
@@ -124,7 +125,7 @@
 
             </Button>
             <Button VerticalAlignment="Center"
-                    Margin="0 20 0 0"
+                    Height="35"
                     FontSize="12px"
                     FontFamily="{StaticResource Raleway}"
                     FontWeight="SemiBold"
