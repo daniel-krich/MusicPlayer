@@ -396,9 +396,6 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-
-                            
-
                         </Grid>
 
                     </DataTemplate>

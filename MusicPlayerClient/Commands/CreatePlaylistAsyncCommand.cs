@@ -39,7 +39,7 @@ namespace MusicPlayerClient.Commands
 
             await _playlistStore.Add(playlist);
 
-            _observablePlaylists?.Add(new PlaylistModel
+            _observablePlaylists?.Insert(0, new PlaylistModel
             {
                 Id = playlist.Id,
                 Name = playlist.Name,

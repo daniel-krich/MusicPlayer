@@ -81,7 +81,7 @@ namespace MusicPlayerClient.ViewModels
                 Id = x.Id,
                 Name = x.Name,
                 CreationDate = x.CreationDate
-            }).ToList());
+            }).Reverse().ToList());
 
             _playlistBrowserStore = playlistBrowserStore;
             playlistBrowserStore.PlaylistBrowserChanged += OnPlaylistBrowserChanged;
