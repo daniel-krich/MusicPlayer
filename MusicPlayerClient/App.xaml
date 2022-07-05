@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Themes/Core/CloseButton.xaml"/>
+                <ResourceDictionary Source="./Themes/Core/Loading.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/PrettyButton.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/FlatButton.xaml"/>
                 <ResourceDictionary Source="./Themes/Core/MinMaxButton.xaml"/>

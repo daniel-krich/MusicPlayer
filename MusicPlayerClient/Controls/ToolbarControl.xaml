@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MusicPlayerClient.Controls"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              xmlns:ext="clr-namespace:MusicPlayerClient.Extensions"
+             xmlns:components="clr-namespace:MusicPlayerClient.Components"
              xmlns:enums="clr-namespace:MusicPlayerClient.Enums"
              mc:Ignorable="d" 
              d:DesignHeight="530" d:DesignWidth="200">
@@ -21,14 +22,13 @@
 
         <Grid.Resources>
             <DataTemplate x:Key="LoadingTemplate">
-                <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Top"
-                           Margin="0 30 0 0"
-                           Text="Loading..."
-                           FontFamily="{StaticResource Raleway}"
-                           FontSize="25px"
-                           Foreground="#888"
-                           FontWeight="Light"/>
+                <components:LoadingSpinner HorizontalAlignment="Center"
+                                           VerticalAlignment="Top"
+                                           Margin="0 30 0 0"
+                                           IsLoading="True"
+                                           Diameter="50"
+                                           Color="#888"
+                                           Thickness="5"/>
             </DataTemplate>
 
             <DataTemplate x:Key="NoPlaylistsTemplate">

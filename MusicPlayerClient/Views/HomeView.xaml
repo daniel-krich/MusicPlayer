@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusicPlayerClient.Views"
              xmlns:ext="clr-namespace:MusicPlayerClient.Extensions"
+             xmlns:components="clr-namespace:MusicPlayerClient.Components"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -19,13 +20,12 @@
         
         <Grid.Resources>
             <DataTemplate x:Key="LoadingTemplate">
-                <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Text="Loading..."
-                           FontFamily="{StaticResource Raleway}"
-                           FontSize="30px"
-                           Foreground="#888"
-                           FontWeight="Light"/>
+                <components:LoadingSpinner HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           IsLoading="True"
+                                           Diameter="50"
+                                           Color="#888"
+                                           Thickness="5"/>
 
             </DataTemplate>
 
