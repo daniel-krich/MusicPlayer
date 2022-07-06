@@ -1,4 +1,5 @@
-﻿using MusicPlayerData.DataEntities;
+﻿using MusicPlayerClient.Enums;
+using MusicPlayerData.DataEntities;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -8,15 +9,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Events
 {
-    public enum PlayerEventType
-    {
-        Paused,
-        Playing,
-        Stopped,
-        Finished
-    }
-
-    public class MusicPlayerEventArgs
+    public class MusicPlayerEventArgs : EventArgs
     {
         public PlayerEventType Type { get; }
         public MediaEntity? Media { get; }

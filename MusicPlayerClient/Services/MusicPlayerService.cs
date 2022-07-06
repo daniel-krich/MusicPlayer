@@ -13,6 +13,7 @@ using System.Diagnostics;
 using NAudio.Wave.SampleProviders;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Stores;
+using MusicPlayerClient.Enums;
 
 namespace MusicPlayerClient.Services
 {

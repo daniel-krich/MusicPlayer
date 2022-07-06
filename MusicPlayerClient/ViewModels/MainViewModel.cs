@@ -63,7 +63,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public MainViewModel(HomeViewModel homeView, PlayerViewModel playerView, ToolbarViewModel toolbarView/*, MediaStore mediaStore, PlaylistStore playlistStore*/)
+        public MainViewModel(HomeViewModel homeView, PlayerViewModel playerView, ToolbarViewModel toolbarView)
         {
             CurrentView = homeView;
             PlayerView = playerView;

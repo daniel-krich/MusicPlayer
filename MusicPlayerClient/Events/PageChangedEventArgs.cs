@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Events
 {
-    public class PageChangedEventArgs
+    public class PageChangedEventArgs : EventArgs
     {
         public PageType Page { get; set; }
 

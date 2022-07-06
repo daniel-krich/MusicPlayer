@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Events
 {
-    public class PlaylistBrowserChangedEventArgs
+    public class PlaylistBrowserChangedEventArgs : EventArgs
     {
         public int PlaylistId { get; set; }
 

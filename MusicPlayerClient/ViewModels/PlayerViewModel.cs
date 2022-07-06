@@ -12,6 +12,7 @@ using NAudio.Wave;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Core;
 using MusicPlayerClient.Extensions;
+using MusicPlayerClient.Enums;
 
 namespace MusicPlayerClient.ViewModels
 {

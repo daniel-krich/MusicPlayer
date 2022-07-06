@@ -1,5 +1,6 @@
 ﻿using MusicPlayerClient.Commands;
 using MusicPlayerClient.Core;
+using MusicPlayerClient.Enums;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Interfaces;

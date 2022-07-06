@@ -20,6 +20,7 @@ using MusicPlayerClient.Interfaces;
 using System.Windows;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Core;
+using MusicPlayerClient.Enums;
 
 namespace MusicPlayerClient.ViewModels
 {

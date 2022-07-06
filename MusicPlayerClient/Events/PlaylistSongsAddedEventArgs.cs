@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Events
 {
-    public class PlaylistSongsAddedEventArgs
+    public class PlaylistSongsAddedEventArgs : EventArgs
     {
         public IEnumerable<MediaEntity> Songs { get; }
 
