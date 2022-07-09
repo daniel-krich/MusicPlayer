@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.IO;
 using System.Diagnostics;
 using System.Windows;
+using System.Web;
 
 namespace MusicPlayerClient.Services
 {
@@ -31,7 +32,7 @@ namespace MusicPlayerClient.Services
             {
                 using (var client = new HttpClient())
                 {
-                    string? response = await client.GetStringAsync(YouTubeSearchUrl + query);
+                    string? response = await client.GetStringAsync(YouTubeSearchUrl + HttpUtility.UrlEncode(query));
                     if (response != null)
                     {
                         string start = "var ytInitialData = ";
