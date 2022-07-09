@@ -33,7 +33,8 @@ namespace MusicPlayerClient.Services
             {
                 using (var client = new HttpClient())
                 {
-                    string? response = await client.GetStringAsync(YouTubeSearchUrl + HttpUtility.UrlEncode(query));
+                    var queryEncoded = query.Contains("//:") ? query : HttpUtility.UrlEncode(query);
+                    string ? response = await client.GetStringAsync(YouTubeSearchUrl + queryEncoded);
                     if (response != null)
                     {
                         string start = "var ytInitialData = ";
