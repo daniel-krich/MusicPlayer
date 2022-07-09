@@ -34,22 +34,33 @@ namespace MusicPlayerClient.Commands
                 var dir = Directory.CreateDirectory("downloads\\");
 
                 YoutubeVideoInfoModel? video = _observableMedia.FirstOrDefault(x => x.Url == url);
+                var fileName = dir.FullName + video?.Title + ".mp3";
                 if (video != null && !video.Downloading)
                 {
-                    video.FinishedDownload = false;
-                    video.Downloading = true;
-
-                    var download = _youtubeClient.DownloadYoutubeAudioAsync(video.Url!, dir.FullName + video.Title + ".mp3");
-                    await foreach(var progress in download)
+                    try
                     {
-                        video.DownloadProgress = progress;
-                    }
+                        video.FinishedDownload = false;
+                        video.Downloading = true;
 
-                    video.FinishedDownload = true;
+                        var download = _youtubeClient.DownloadYoutubeAudioAsync(video.Url!, fileName);
+                        await foreach (var progress in download)
+                        {
+                            video.DownloadProgress = progress;
+                        }
+
+                        video.FinishedDownload = true;
+                    }
+                    catch
+                    {
+                        video.FinishedDownload = default;
+                        video.Downloading = default;
+                        video.DownloadProgress = default;
+                        File.Delete(fileName);
+                    }
                 }
                 else if(video != null && video.FinishedDownload == true)
                 {
-                    string argument = "/select, \"" + dir.FullName + video.Title + ".mp3" + "\"";
+                    string argument = "/select, \"" + fileName + "\"";
 
                     Process.Start("explorer.exe", argument);
                 }

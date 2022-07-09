@@ -11,6 +11,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows;
 using System.Web;
+using System.Net.Http.Headers;
 
 namespace MusicPlayerClient.Services
 {
@@ -83,7 +84,8 @@ namespace MusicPlayerClient.Services
         public async IAsyncEnumerable<int> DownloadYoutubeAudioAsync(string url, string FileName)
         {
             var youTube = YouTube.Default;
-            var video = await youTube.GetVideoAsync(url);
+            var videos = await youTube.GetAllVideosAsync(url);
+            var video = videos.First(x => x.AdaptiveKind == AdaptiveKind.Audio);
 
             long contentLength = 0;
 
@@ -93,22 +95,27 @@ namespace MusicPlayerClient.Services
                 contentLength = res.Content.Headers.ContentLength ?? 0;
             }
 
-            using var videoStream = await video.StreamAsync();
-            using var file = File.Create(FileName);
-
-            byte[] buffer = new byte[8192];
-
-            long numBytesRead = 0;
-            int currentBytes = 0;
-
-            while (numBytesRead < contentLength)
+            using (var client = new HttpClient())
             {
-                currentBytes = await videoStream.ReadAsync(buffer, 0, buffer.Length);
-                numBytesRead += currentBytes;
-                await file.WriteAsync(buffer, 0, currentBytes);
+                client.DefaultRequestHeaders.Range = new RangeHeaderValue(0, null);
 
-                double percent = numBytesRead / (contentLength * 1.0);
-                yield return (int)(percent * 100);
+                using var videoStream = await client.GetStreamAsync(video.Uri);
+                using var file = File.Create(FileName);
+
+                byte[] buffer = new byte[8192];
+
+                long numBytesRead = 0;
+                int currentBytes = 0;
+
+                while (numBytesRead < contentLength)
+                {
+                    currentBytes = await videoStream.ReadAsync(buffer, 0, buffer.Length);
+                    numBytesRead += currentBytes;
+                    await file.WriteAsync(buffer, 0, currentBytes);
+
+                    double percent = numBytesRead / (contentLength * 1.0);
+                    yield return (int)(percent * 100);
+                }
             }
         }
 
