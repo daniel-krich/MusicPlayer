@@ -54,7 +54,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public double SongProgress
+        public long SongProgress
         {
             get => _musicService.Position;
             set
@@ -78,7 +78,7 @@ namespace MusicPlayerClient.ViewModels
 
         public string SongProgressFormatted => AudioUtills.DurationParse(SongProgress);
 
-        public double SongDuration => _musicService.TotalTime;
+        public long SongDuration => _musicService.TotalTime;
 
         public string SongDurationFormatted => AudioUtills.DurationParse(SongDuration);
 

@@ -25,9 +25,9 @@ namespace MusicPlayerClient.Extensions
             }
         }
 
-        public static string DurationParse(double sec)
+        public static string DurationParse(long sec)
         {
-            return $"{Math.Floor(sec / 60).ToString().PadLeft(2, '0')}:{Math.Floor(sec % 60).ToString().PadLeft(2, '0')}";
+            return $"{(sec / 60).ToString().PadLeft(2, '0')}:{(sec % 60).ToString().PadLeft(2, '0')}";
         }
     }
 }

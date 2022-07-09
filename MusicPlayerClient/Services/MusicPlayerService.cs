@@ -26,15 +26,14 @@ namespace MusicPlayerClient.Services
         public MediaEntity? CurrentMedia { get; }
         public PlaybackState PlayerState { get; }
         public float Volume { get; set; }
-        public double Position { get; set; }
-        public double TotalTime { get; }
+        public long Position { get; set; }
+        public long TotalTime { get; }
         public void Play(int mediaId);
         public void Stop();
         public void RePlay();
         public void PlayPause();
         public void PlayNext(bool callStoppedPlay = true);
         public void PlayPrevious();
-        public void Skip(TimeSpan time);
     }
 
     public class MusicPlayerService : IMusicPlayerService
@@ -60,9 +59,16 @@ namespace MusicPlayerClient.Services
             }
         }
 
-        public double Position
+        public long Position
         {
-            get => (_audioFile as AudioFileReader)?.CurrentTime.TotalSeconds ?? 0;
+            get
+            {
+                var pos = (_audioFile as AudioFileReader)?.Position / (_audioFile as AudioFileReader)?.WaveFormat.AverageBytesPerSecond ?? 0;
+                if (TotalTime < pos)
+                    return TotalTime;
+
+                return pos;
+            }
             set
             {
                 var audio = _audioFile as AudioFileReader;
@@ -73,17 +79,9 @@ namespace MusicPlayerClient.Services
             }
         }
 
-        public double TotalTime
+        public long TotalTime
         {
-            get
-            {
-                var audio = _audioFile as AudioFileReader;
-                if(audio != null)
-                {
-                    return audio.Length / audio.WaveFormat.AverageBytesPerSecond;
-                }
-                return 0;
-            }
+            get => (_audioFile as AudioFileReader)?.Length / (_audioFile as AudioFileReader)?.WaveFormat.AverageBytesPerSecond ?? 0;
         }
 
         public string PlayingSongPath => _currentMedia?.FilePath ?? "";
@@ -251,20 +249,6 @@ namespace MusicPlayerClient.Services
                     }
                 }
             }
-        }
-
-        public void Skip(TimeSpan time)
-        {
-            _waveOutDevice?.Stop();
-            _waveOutDevice?.Dispose();
-
-            var skip = _audioFile.ToSampleProvider().Skip(time);
-
-            _waveOutDevice = new WaveOut();
-            _waveOutDevice.PlaybackStopped += OnStoppedPlay;
-            _waveOutDevice.Init(skip);
-            _waveOutDevice.Play();
-            OnStartPlay();
         }
 
         private void OnStoppedPlay(object? sender, StoppedEventArgs? e)
