@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MusicPlayerClient": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
