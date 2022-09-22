@@ -89,6 +89,7 @@ namespace MusicPlayerClient.Services
             var videos = await youTube.GetAllVideosAsync(url);
             var video = videos.Where(x => x.AdaptiveKind == AdaptiveKind.Audio).MinBy(x => x.AudioBitrate) ?? videos.First(x => x.AdaptiveKind == AdaptiveKind.Audio);
 
+            var videoUrl = HttpUtility.ParseQueryString(video.Uri);
             long contentLength = 0;
 
             using (var client = new HttpClient())
@@ -97,38 +98,28 @@ namespace MusicPlayerClient.Services
                 contentLength = res.Content.Headers.ContentLength ?? 0;
             }
 
-            long bytesPerRequest = 8192;
-            var requestChunks = Convert.ToUInt32(Math.Ceiling((decimal)contentLength / bytesPerRequest));
-
             using (var file = File.Create(FileName))
             {
 
                 long globalNumBytesRead = 0;
 
-                for (int i = 0; i < requestChunks; i++)
+                using (var client = new HttpClient())
                 {
-                    if (globalNumBytesRead >= contentLength) break;
+                    client.DefaultRequestHeaders.Add("range", $"bytes=0-{contentLength}");
+                    using var videoStream = await client.GetStreamAsync(videoUrl.ToString());
 
-                    using (var client = new HttpClient())
+                    byte[] buffer = new byte[8192];
+
+                    int currentBytes = 0;
+
+                    while (globalNumBytesRead < contentLength)
                     {
-                        var expectedBytesEnd = (globalNumBytesRead + bytesPerRequest) > contentLength ? contentLength : globalNumBytesRead + bytesPerRequest;
-                        client.DefaultRequestHeaders.Range = new RangeHeaderValue(globalNumBytesRead, expectedBytesEnd);
-                        client.MaxResponseContentBufferSize = contentLength;
-                        using var videoStream = await client.GetStreamAsync(video.Uri);
+                        currentBytes = await videoStream.ReadAsync(buffer, 0, buffer.Length);
+                        globalNumBytesRead += currentBytes;
+                        await file.WriteAsync(buffer, 0, currentBytes);
 
-                        byte[] buffer = new byte[8192];
-
-                        int currentBytes = 0;
-
-                        while (globalNumBytesRead < expectedBytesEnd)
-                        {
-                            currentBytes = await videoStream.ReadAsync(buffer, 0, buffer.Length);
-                            globalNumBytesRead += currentBytes;
-                            await file.WriteAsync(buffer, 0, currentBytes);
-
-                            double percent = globalNumBytesRead / (contentLength * 1.0);
-                            yield return (int)(percent * 100);
-                        }
+                        double percent = globalNumBytesRead / (contentLength * 1.0);
+                        yield return (int)(percent * 100);
                     }
                 }
             }
