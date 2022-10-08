@@ -41,6 +41,7 @@ namespace MusicPlayerClient.ViewModels
             _mediaStore = mediaStore;
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
+            _mediaStore.PlaylistSongsAdded += OnPlaylistSongsAdded;
 
             PlaySong = new PlaySpecificSongCommand(musicService);
 
@@ -92,6 +93,26 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
+        private void OnPlaylistSongsAdded(object? sender, PlaylistSongsAddedEventArgs e)
+        {
+            foreach (MediaEntity mediaEntity in e.Songs)
+            {
+                if (mediaEntity.PlayerlistId is null)
+                {
+                    var songsIndex = AllSongs?.Count;
+                    AllSongs?.Add(new MediaModel
+                    {
+                        Playing = _musicService.PlayerState == PlaybackState.Playing && mediaEntity.Id == _musicService.CurrentMedia?.Id,
+                        Number = songsIndex + 1,
+                        Id = mediaEntity.Id,
+                        Title = Path.GetFileNameWithoutExtension(mediaEntity.FilePath),
+                        Path = mediaEntity.FilePath,
+                        Duration = AudioUtills.DurationParse(mediaEntity.FilePath)
+                    });
+                }
+            }
+        }
+
         public async Task OnFilesDroppedAsync(string[] files, object? parameter)
         {
             var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
@@ -119,6 +140,7 @@ namespace MusicPlayerClient.ViewModels
         public override void Dispose()
         {
             _musicService.MusicPlayerEvent -= OnMusicPlayerEvent;
+            _mediaStore.PlaylistSongsAdded -= OnPlaylistSongsAdded;
         }
     }
 }

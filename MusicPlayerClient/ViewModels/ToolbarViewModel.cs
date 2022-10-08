@@ -158,6 +158,15 @@ namespace MusicPlayerClient.ViewModels
 
                 await _mediaStore.AddRange(mediaEntities, true);
             }
+            else // Add to main playlist
+            {
+                var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
+                {
+                    FilePath = x
+                }).ToList();
+
+                await _mediaStore.AddRange(mediaEntities, true);
+            }
         }
 
         public override void Dispose()

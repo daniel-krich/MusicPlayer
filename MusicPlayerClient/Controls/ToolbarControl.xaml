@@ -74,7 +74,9 @@
                     Margin="0 20 0 0"
                     FontFamily="{StaticResource Raleway}"
                     FontWeight="SemiBold"
-                    Command="{Binding NavigateHome}">
+                    Command="{Binding NavigateHome}"
+                    ext:DropFilesBehaviorExtension.IsEnabled="True"
+                    ext:DropFilesBehaviorExtension.InterfaceDataContext="{Binding ElementName=PlaylistItems, Path=DataContext}">
                 <StackPanel Orientation="Horizontal"
                             Width="{Binding ElementName=NavigationPanel,Path=ActualWidth}"
                             HorizontalAlignment="Left">
