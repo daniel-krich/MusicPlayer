@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Events;
+using MusicPlayerClient.Interfaces;
 using MusicPlayerClient.Models;
 using MusicPlayerData.Data;
 using MusicPlayerData.DataEntities;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Stores
 {
-    public class MediaStore
+    public class MediaStore : IStore
     {
         public event EventHandler<PlaylistSongsAddedEventArgs>? PlaylistSongsAdded;
 
@@ -25,14 +26,13 @@ namespace MusicPlayerClient.Stores
         {
             _songs = new List<MediaEntity>();
             _dbContextFactory = dbContextFactory;
-            Load();
         }
 
-        public void Load()
+        public async Task LoadStore()
         {
             using (var dbContext = _dbContextFactory.CreateDbContext())
             {
-                _songs.AddRange(dbContext.Songs.ToList());
+                _songs.AddRange(await dbContext.Songs.ToListAsync());
             }
         }
 

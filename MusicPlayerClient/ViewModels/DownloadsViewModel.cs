@@ -21,6 +21,8 @@ using System.Windows;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Core;
 using MusicDownloader.Models;
+using System.Windows.Controls;
+using MusicPlayerClient.Dispachers;
 
 namespace MusicPlayerClient.ViewModels
 {
@@ -28,8 +30,7 @@ namespace MusicPlayerClient.ViewModels
     {
         private readonly IMusicPlayerService _musicService;
         private readonly MediaStore _mediaStore;
-        public string CurrentDateString { get; }
-        public ObservableCollection<YoutubeVideoInfoModel> ResultMedia { get; }
+        private readonly IYouTubeClientService _youtubeClient;
 
         private bool _isLoadingSearch;
         public bool IsLoadingSearch
@@ -38,6 +39,17 @@ namespace MusicPlayerClient.ViewModels
             set
             {
                 _isLoadingSearch = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string? _currentDateString;
+        public string? CurrentDateString
+        {
+            get => _currentDateString;
+            set
+            {
+                _currentDateString = value;
                 OnPropertyChanged();
             }
         }
@@ -53,8 +65,38 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public ICommand? SearchMedia { get; set; }
-        public ICommand DownloadMedia { get; }
+        private ObservableCollection<YoutubeVideoInfoModel>? _resultMedia;
+        public ObservableCollection<YoutubeVideoInfoModel>? ResultMedia
+        {
+            get => _resultMedia;
+            set
+            {
+                _resultMedia = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _searchMedia;
+        public ICommand? SearchMedia
+        {
+            get => _searchMedia;
+            set
+            {
+                _searchMedia = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _downloadMedia;
+        public ICommand? DownloadMedia
+        {
+            get => _downloadMedia;
+            set
+            {
+                _downloadMedia = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string? _searchText;
         public string? SearchText
@@ -67,19 +109,20 @@ namespace MusicPlayerClient.ViewModels
             }
         }
         
-        public DownloadsViewModel(MediaStore mediaStore, IMusicPlayerService musicService, IYouTubeClientService youtubeClient, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
+        public DownloadsViewModel(MediaStore mediaStore, IMusicPlayerService musicService, IYouTubeClientService youtubeClient)
         {
             _musicService = musicService;
-
-            ResultMedia = new ObservableCollection<YoutubeVideoInfoModel>();
-
-            SearchMedia = new SearchSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia, this);
-
-            DownloadMedia = new DownloadSongOnYoutubeAsyncCommand(youtubeClient, ResultMedia);
-
             _mediaStore = mediaStore;
+            _youtubeClient = youtubeClient;
+        }
 
+        public override Task InitViewModel()
+        {
+            ResultMedia = new ObservableCollection<YoutubeVideoInfoModel>();
+            SearchMedia = new SearchSongOnYoutubeAsyncCommand(_youtubeClient, ResultMedia, this);
+            DownloadMedia = new DownloadSongOnYoutubeAsyncCommand(_youtubeClient, ResultMedia);
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
+            return Task.CompletedTask;
         }
 
         public override void Dispose()

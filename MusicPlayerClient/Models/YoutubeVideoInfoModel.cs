@@ -14,6 +14,7 @@ namespace MusicDownloader.Models
         public string? Views { get; set; }
         public string? Url { get; set; }
         public string? Duration { get; set; }
+        public string? VideoId { get; set; }
     }
 
     public class YoutubeVideoInfoModel : ObservableObject
@@ -27,6 +28,7 @@ namespace MusicDownloader.Models
         private string? _title;
         private string? _url;
         private string? _duration;
+        private string? _videoId;
 
         public int Num
         {
@@ -140,6 +142,19 @@ namespace MusicDownloader.Models
                 if (_duration != value)
                 {
                     _duration = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string? VideoId
+        {
+            get { return _videoId; }
+            set
+            {
+                if (_videoId != value)
+                {
+                    _videoId = value;
                     OnPropertyChanged();
                 }
             }

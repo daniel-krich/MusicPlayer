@@ -1,4 +1,5 @@
-﻿using MusicPlayerClient.Stores;
+﻿using MusicPlayerClient.Interfaces;
+using MusicPlayerClient.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,14 @@ namespace MusicPlayerClient.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private readonly IStore _mediaStore;
+        private readonly IStore _playlistStore;
         public string AppTitle { get; } = "MusicPlayer";
 
         private ViewModelBase? _currentView;
-        public ViewModelBase? CurrentView
+        public ViewModelBase CurrentView
         {
-            get => _currentView;
+            get => _currentView!;
             set
             {
                 if (value == _currentView) return;
@@ -25,9 +28,9 @@ namespace MusicPlayerClient.ViewModels
         }
 
         private ViewModelBase? _playerView;
-        public ViewModelBase? PlayerView
+        public ViewModelBase PlayerView
         {
-            get => _playerView;
+            get => _playerView!;
             set
             {
                 if (value == _playerView) return;
@@ -38,9 +41,9 @@ namespace MusicPlayerClient.ViewModels
         }
 
         private ViewModelBase? _toolbarView;
-        public ViewModelBase? ToolbarView
+        public ViewModelBase ToolbarView
         {
-            get => _toolbarView;
+            get => _toolbarView!;
             set
             {
                 if (value == _toolbarView) return;
@@ -50,25 +53,27 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        private ViewModelBase? _modalView;
-        public ViewModelBase? ModalView
-        {
-            get => _modalView;
-            set
-            {
-                if (value == _modalView) return;
-                _modalView?.Dispose();
-                _modalView = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public MainViewModel(HomeViewModel homeView, PlayerViewModel playerView, ToolbarViewModel toolbarView)
+        public MainViewModel(HomeViewModel homeView, PlayerViewModel playerView, ToolbarViewModel toolbarView, MediaStore mediaStore, PlaylistStore playlistStore)
         {
             CurrentView = homeView;
             PlayerView = playerView;
             ToolbarView = toolbarView;
-           
+            _mediaStore = mediaStore;
+            _playlistStore = playlistStore;
+        }
+
+        public override async Task InitViewModel()
+        {
+            await Task.WhenAll(
+                _mediaStore.LoadStore(),
+                _playlistStore.LoadStore()
+            );
+
+            await Task.WhenAll(
+                CurrentView.InitViewModel(),
+                PlayerView.InitViewModel(),
+                ToolbarView.InitViewModel()
+            );
         }
     }
 }

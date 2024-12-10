@@ -13,6 +13,10 @@ using System.Windows;
 using System.Web;
 using System.Net.Http.Headers;
 using System;
+using System.Net.Http.Json;
+using System.Text.Json.Nodes;
+using System.Text;
+using System.Security.Policy;
 
 namespace MusicPlayerClient.Services
 {
@@ -27,6 +31,7 @@ namespace MusicPlayerClient.Services
     {
         public const string YouTubeSearchUrl = "https://www.youtube.com/results?search_query=";
         public const string YouTubeBase = "https://www.youtube.com";
+        public const string YoutubeApiVideo = "https://www.youtube.com/youtubei/v1/player";
         public async Task<List<YoutubeVideoInfo>?> SearchVideoByName(string query)
         {
             List<YoutubeVideoInfo> videos = new List<YoutubeVideoInfo>();
@@ -67,7 +72,8 @@ namespace MusicPlayerClient.Services
                                         Url = YouTubeBase + url.ToString(),
                                         Duration = length.ToString(),
                                         Channel = channel.ToString(),
-                                        Views = views.ToString()
+                                        Views = views.ToString(),
+                                        VideoId = url.ToString(),
                                     });
                                 }
                             }
@@ -87,7 +93,7 @@ namespace MusicPlayerClient.Services
         {
             var youTube = YouTube.Default;
             var videos = await youTube.GetAllVideosAsync(url);
-            var video = videos.Where(x => x.AdaptiveKind == AdaptiveKind.Audio).MinBy(x => x.AudioBitrate) ?? videos.First(x => x.AdaptiveKind == AdaptiveKind.Audio);
+            var video = videos.Where(x => x.AdaptiveKind == AdaptiveKind.Audio).MaxBy(x => x.AudioBitrate)!;
 
             var videoUrl = HttpUtility.ParseQueryString(video.Uri);
             long contentLength = 0;

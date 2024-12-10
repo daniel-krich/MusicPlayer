@@ -1,5 +1,6 @@
 ﻿using MusicPlayerClient.Commands;
 using MusicPlayerClient.Core;
+using MusicPlayerClient.Dispachers;
 using MusicPlayerClient.Enums;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Extensions;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MusicPlayerClient.ViewModels
@@ -24,12 +26,22 @@ namespace MusicPlayerClient.ViewModels
     public class PlaylistViewModel : ViewModelBase, IFilesDropAsync
     {
         private readonly IMusicPlayerService _musicService;
-        private readonly PlaylistBrowserNavigationStore _playlistBrowserNavigationStore;
+        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserNavigationDispacher;
         private readonly MediaStore _mediaStore;
         private readonly PlaylistStore _playlistStore;
-        public string CurrentDateString { get; }
 
-        public string? _currentPlaylistName;
+        private string? _currentDateString;
+        public string? CurrentDateString
+        {
+            get => _currentDateString;
+            set
+            {
+                _currentDateString = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string? _currentPlaylistName;
         public string? CurrentPlaylistName
         {
             get => _currentPlaylistName;
@@ -40,44 +52,104 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public string PlaylistCreationDate { get; }
-        public ObservableCollection<MediaModel>? AllSongsOfPlaylist { get; set; }
-        public ICommand RenamePlaylist { get; }
-        public ICommand PlaySong { get; }
-        public ICommand OpenExplorer { get; }
+        private string? _playlistCreationDate;
+        public string? PlaylistCreationDate
+        {
+            get => _playlistCreationDate;
+            set
+            {
+                _playlistCreationDate = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public ICommand? DeleteSong { get; set; }
+        private ObservableCollection<MediaModel>? _allSongsOfPlaylist;
+        public ObservableCollection<MediaModel>? AllSongsOfPlaylist
+        {
+            get => _allSongsOfPlaylist;
+            set
+            {
+                _allSongsOfPlaylist = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public PlaylistViewModel(IMusicPlayerService musicService, INavigationService navigationService, MediaStore mediaStore, PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
+        private ICommand? _deleteSong;
+        public ICommand? DeleteSong
+        {
+            get => _deleteSong;
+            set
+            {
+                _deleteSong = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _openExplorer;
+        public ICommand? OpenExplorer
+        {
+            get => _openExplorer;
+            set
+            {
+                _openExplorer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _playSong;
+        public ICommand? PlaySong
+        {
+            get => _playSong;
+            set
+            {
+                _playSong = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _renamePlaylist;
+        public ICommand? RenamePlaylist
+        {
+            get => _renamePlaylist;
+            set
+            {
+                _renamePlaylist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PlaylistViewModel(IMusicPlayerService musicService, INavigationService navigationService, MediaStore mediaStore, PlaylistStore playlistStore, PlaylistBrowserNavigationDispacher playlistBrowserNavigationDispacher)
         {
             _musicService = musicService;
-
-            _playlistBrowserNavigationStore = playlistBrowserNavigationStore;
-
+            _playlistBrowserNavigationDispacher = playlistBrowserNavigationDispacher;
             _mediaStore = mediaStore;
             _playlistStore = playlistStore;
+        }
 
-            RenamePlaylist = new RenamePlaylistAsyncCommand(_playlistStore, _playlistBrowserNavigationStore);
+        public override Task InitViewModel()
+        {
+            RenamePlaylist = new RenamePlaylistAsyncCommand(_playlistStore, _playlistBrowserNavigationDispacher);
 
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
             _mediaStore.PlaylistSongsAdded += OnPlaylistSongsAdded;
 
-            PlaySong = new PlaySpecificSongCommand(musicService);
+            PlaySong = new PlaySpecificSongCommand(_musicService);
 
             OpenExplorer = new OpenExplorerAtPathCommand();
 
-            _currentPlaylistName = playlistStore.Playlists.FirstOrDefault(x => x.Id == playlistBrowserNavigationStore.BrowserPlaylistId)?.Name ?? "Undefined";
+            CurrentPlaylistName = _playlistStore.Playlists.FirstOrDefault(x => x.Id == _playlistBrowserNavigationDispacher.BrowserPlaylistId)?.Name ?? "Undefined";
 
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
 
-            PlaylistCreationDate = playlistStore.Playlists.FirstOrDefault(x => x.Id == playlistBrowserNavigationStore.BrowserPlaylistId)?.CreationDate?.ToString("dd MMM, yyyy") ?? DateTime.Now.ToString("dd MMM, yyyy");
+            PlaylistCreationDate = _playlistStore.Playlists.FirstOrDefault(x => x.Id == _playlistBrowserNavigationDispacher.BrowserPlaylistId)?.CreationDate?.ToString("dd MMM, yyyy") ?? DateTime.Now.ToString("dd MMM, yyyy");
 
             Task.Run(LoadSongs);
+            return Task.CompletedTask;
         }
 
         private void LoadSongs()
         {
-            AllSongsOfPlaylist = new ObservableCollection<MediaModel>(_mediaStore.Songs.Where(x => x.PlayerlistId == _playlistBrowserNavigationStore.BrowserPlaylistId).Select((x, num) =>
+            AllSongsOfPlaylist = new ObservableCollection<MediaModel>(_mediaStore.Songs.Where(x => x.PlayerlistId == _playlistBrowserNavigationDispacher.BrowserPlaylistId).Select((x, num) =>
             {
                 return new MediaModel
                 {
@@ -89,8 +161,6 @@ namespace MusicPlayerClient.ViewModels
                     Duration = AudioUtills.DurationParse(x.FilePath)
                 };
             }).ToList());
-
-            OnPropertyChanged(nameof(AllSongsOfPlaylist));
 
             DeleteSong = new DeleteSpecificSongAsyncCommand(_musicService, _mediaStore, AllSongsOfPlaylist);
         }
@@ -120,7 +190,7 @@ namespace MusicPlayerClient.ViewModels
         {
             foreach (MediaEntity mediaEntity in e.Songs)
             {
-                if (mediaEntity.PlayerlistId == _playlistBrowserNavigationStore.BrowserPlaylistId)
+                if (mediaEntity.PlayerlistId == _playlistBrowserNavigationDispacher.BrowserPlaylistId)
                 {
                     var songsIndex = AllSongsOfPlaylist?.Count;
                     AllSongsOfPlaylist?.Add(new MediaModel
@@ -140,7 +210,7 @@ namespace MusicPlayerClient.ViewModels
         {
             var mediaEntities = files.Where(x => PathExtension.HasAudioVideoExtensions(x)).Select(x => new MediaEntity
             {
-                PlayerlistId = _playlistBrowserNavigationStore.BrowserPlaylistId,
+                PlayerlistId = _playlistBrowserNavigationDispacher.BrowserPlaylistId,
                 FilePath = x
             }).ToList();
 

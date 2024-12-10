@@ -51,7 +51,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="NAudio" Version="2.1.0" />
 		<PackageReference Include="SharpVectors" Version="1.7.7" />
-		<PackageReference Include="VideoLibrary" Version="3.1.9" />
+		<PackageReference Include="VideoLibrary" Version="3.2.6" />
 	</ItemGroup>
 
 	<ItemGroup>

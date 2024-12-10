@@ -1,4 +1,5 @@
-﻿using MusicPlayerClient.Extensions;
+﻿using MusicPlayerClient.Dispachers;
+using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Models;
 using MusicPlayerClient.Services;
 using MusicPlayerClient.Stores;
@@ -18,19 +19,19 @@ namespace MusicPlayerClient.Commands
         private readonly PlaylistStore _playlistStore;
         private readonly MediaStore _mediaStore;
         private readonly INavigationService _navigationService;
-        private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
+        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserDispacher;
         private readonly ObservableCollection<PlaylistModel>? _observablePlaylists;
-        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
+        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserDispacher, PlaylistStore playlistStore, MediaStore mediaStore)
         {
             _musicService = musicService;
             _playlistStore = playlistStore;
             _navigationService = navigationService;
-            _playlistBrowserStore = playlistBrowserStore;
+            _playlistBrowserDispacher = playlistBrowserDispacher;
             _mediaStore = mediaStore;
         }
 
-        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore,
-                                             PlaylistStore playlistStore, MediaStore mediaStore, ObservableCollection<PlaylistModel> observablePlaylists) : this(musicService, navigationService, playlistBrowserStore, playlistStore, mediaStore)
+        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserDispacher,
+                                             PlaylistStore playlistStore, MediaStore mediaStore, ObservableCollection<PlaylistModel> observablePlaylists) : this(musicService, navigationService, playlistBrowserDispacher, playlistStore, mediaStore)
         {
             _observablePlaylists = observablePlaylists;
         }
@@ -50,9 +51,9 @@ namespace MusicPlayerClient.Commands
 
                 await _playlistStore.Remove(playlistId);
 
-                if (_playlistBrowserStore.BrowserPlaylistId == playlistId)
+                if (_playlistBrowserDispacher.BrowserPlaylistId == playlistId)
                 {
-                    _navigationService.NavigateHome();
+                    await _navigationService.NavigateHome();
                 }
             }
         }

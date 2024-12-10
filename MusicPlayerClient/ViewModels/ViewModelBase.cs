@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.ViewModels
 {
-    public class ViewModelBase : INotifyPropertyChanged, IDisposable
+    public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -16,6 +16,8 @@ namespace MusicPlayerClient.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public abstract Task InitViewModel();
 
         public virtual void Dispose()
         {

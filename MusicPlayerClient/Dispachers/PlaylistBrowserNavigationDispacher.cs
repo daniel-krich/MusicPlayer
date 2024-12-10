@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicPlayerClient.Stores
+namespace MusicPlayerClient.Dispachers
 {
-    public class PlaylistBrowserNavigationStore
+    public class PlaylistBrowserNavigationDispacher
     {
         public event EventHandler<PlaylistBrowserChangedEventArgs>? PlaylistBrowserChanged;
         private int _browserPlaylistId;

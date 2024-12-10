@@ -13,9 +13,9 @@ namespace MusicPlayerClient.Services
     {
         public event EventHandler<PageChangedEventArgs> PageChangedEvent;
         public PageType CurrentPage { get; }
-        public void NavigateHome();
-        public void NavigatePlaylist();
-        public void NavigateDownloads();
+        public Task NavigateHome();
+        public Task NavigatePlaylist();
+        public Task NavigateDownloads();
     }
 
     public class NavigationService: INavigationService
@@ -37,10 +37,10 @@ namespace MusicPlayerClient.Services
             _downloadViewModelFunc = downloadViewModelFunc;
         }
 
-        public void NavigateHome()
+        public async Task NavigateHome()
         {
-            var mainVm = _mainViewModelFunc?.Invoke();
-            var homeVm = _homeViewModelFunc?.Invoke();
+            var mainVm = _mainViewModelFunc?.Invoke()!;
+            var homeVm = _homeViewModelFunc?.Invoke()!;
 
             if (mainVm != null && mainVm.CurrentView is not HomeViewModel)
             {
@@ -48,12 +48,14 @@ namespace MusicPlayerClient.Services
                 CurrentPage = PageType.Home;
                 PageChangedEvent?.Invoke(this, new PageChangedEventArgs(CurrentPage));
             }
+            if (homeVm is not null)
+                await homeVm.InitViewModel();
         }
 
-        public void NavigatePlaylist()
+        public async Task NavigatePlaylist()
         {
             var mainVm = _mainViewModelFunc?.Invoke();
-            var playlistVm = _playlistViewModelFunc?.Invoke();
+            var playlistVm = _playlistViewModelFunc?.Invoke()!;
 
             if (mainVm != null)
             {
@@ -61,12 +63,14 @@ namespace MusicPlayerClient.Services
                 CurrentPage = PageType.Playlist;
                 PageChangedEvent?.Invoke(this, new PageChangedEventArgs(CurrentPage));
             }
+            if (playlistVm is not null)
+                await playlistVm.InitViewModel();
         }
 
-        public void NavigateDownloads()
+        public async Task NavigateDownloads()
         {
             var mainVm = _mainViewModelFunc?.Invoke();
-            var downloadsVm = _downloadViewModelFunc?.Invoke();
+            var downloadsVm = _downloadViewModelFunc?.Invoke()!;
 
             if (mainVm != null && mainVm.CurrentView is not DownloadsViewModel)
             {
@@ -74,6 +78,8 @@ namespace MusicPlayerClient.Services
                 CurrentPage = PageType.Downloads;
                 PageChangedEvent?.Invoke(this, new PageChangedEventArgs(CurrentPage));
             }
+            if(downloadsVm is not null)
+                await downloadsVm.InitViewModel();
         }
     }
 }

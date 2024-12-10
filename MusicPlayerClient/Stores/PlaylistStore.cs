@@ -8,10 +8,11 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using MusicPlayerClient.Events;
+using MusicPlayerClient.Interfaces;
 
 namespace MusicPlayerClient.Stores
 {
-    public class PlaylistStore
+    public class PlaylistStore : IStore
     {
         public event EventHandler<PlaylistNameChangedEventArgs>? PlaylistNameChanged;
 
@@ -24,14 +25,13 @@ namespace MusicPlayerClient.Stores
         {
             _playlists = new List<PlaylistEntity>();
             _dbContextFactory = dbContextFactory;
-            Load();
         }
 
-        public void Load()
+        public async Task LoadStore()
         {
             using (var dbContext = _dbContextFactory.CreateDbContext())
             {
-                _playlists.AddRange(dbContext.Playlists.ToList());
+                _playlists.AddRange(await dbContext.Playlists.ToListAsync());
             }
         }
 

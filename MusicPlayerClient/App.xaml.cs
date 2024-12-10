@@ -22,7 +22,7 @@ namespace MusicPlayerClient
     public partial class App : Application
     {
         private IServiceProvider? _serviceProvider;
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             IServiceCollection services = new ServiceCollection();
 
@@ -42,11 +42,14 @@ namespace MusicPlayerClient
                 dbContext.Database.Migrate();
             }
 
+            ViewModelBase vw = _serviceProvider.GetRequiredService<MainViewModel>();
+
             MainWindow = new MainWindow()
             {
-                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
+                DataContext = vw
             };
             MainWindow.Show();
+            await vw.InitViewModel();
 
             base.OnStartup(e);
         }

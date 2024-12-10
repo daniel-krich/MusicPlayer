@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,9 @@ namespace MusicPlayerClient.Extensions
         {
             try
             {
-                using (var audioFile = new AudioFileReader(music_file_path))
+                SoundPlayer soundPlayer = new SoundPlayer();
+                soundPlayer.LoadAsync();
+                using (var audioFile = new MediaFoundationReader(music_file_path))
                 {
                     var durationParse = $"{Math.Floor(audioFile.TotalTime.TotalSeconds / 60).ToString().PadLeft(2, '0')}:{Math.Floor(audioFile.TotalTime.TotalSeconds % 60).ToString().PadLeft(2, '0')}";
                     return durationParse;

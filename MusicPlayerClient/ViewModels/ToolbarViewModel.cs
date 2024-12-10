@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicPlayerClient.Commands;
 using MusicPlayerClient.Core;
+using MusicPlayerClient.Dispachers;
 using MusicPlayerClient.Enums;
 using MusicPlayerClient.Events;
 using MusicPlayerClient.Extensions;
@@ -18,7 +19,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace MusicPlayerClient.ViewModels
 {
@@ -26,7 +29,7 @@ namespace MusicPlayerClient.ViewModels
     {
         private readonly PlaylistStore _playlistStore;
         private readonly MediaStore _mediaStore;
-        private readonly PlaylistBrowserNavigationStore _playlistBrowserStore;
+        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserNavigationDispacher;
         private readonly IMusicPlayerService _musicPlayerService;
         private readonly INavigationService _navigationService;
 
@@ -51,52 +54,137 @@ namespace MusicPlayerClient.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ICommand ToggleRemoveActive { get; }
-        public ICommand DeletePlaylist { get; }
-        public ICommand NavigatePlaylist { get; }
-        public ICommand NavigateDownloads { get; }
-        public ICommand NavigateHome { get; }
-        public ICommand CreatePlaylist { get; }
-        public ICommand TogglePlayer { get; }
-        public ObservableCollection<PlaylistModel> Playlists { get; set; }
 
-        public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationStore playlistBrowserStore, PlaylistStore playlistStore, MediaStore mediaStore)
+        private ObservableCollection<PlaylistModel>? _playlists;
+        public ObservableCollection<PlaylistModel>? Playlists
+        {
+            get => _playlists;
+            set
+            {
+                _playlists = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _toggleRemoveActive;
+        public ICommand? ToggleRemoveActive
+        {
+            get => _toggleRemoveActive;
+            set
+            {
+                _toggleRemoveActive = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _deletePlaylist;
+        public ICommand? DeletePlaylist
+        {
+            get => _deletePlaylist;
+            set
+            {
+                _deletePlaylist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _navigatePlaylist;
+        public ICommand? NavigatePlaylist
+        {
+            get => _navigatePlaylist;
+            set
+            {
+                _navigatePlaylist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _navigateDownloads;
+        public ICommand? NavigateDownloads
+        {
+            get => _navigateDownloads;
+            set
+            {
+                _navigateDownloads = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _navigateHome;
+        public ICommand? NavigateHome
+        {
+            get => _navigateHome;
+            set
+            {
+                _navigateHome = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _createPlaylist;
+        public ICommand? CreatePlaylist
+        {
+            get => _createPlaylist;
+            set
+            {
+                _createPlaylist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _togglePlayer;
+        public ICommand? TogglePlayer
+        {
+            get => _togglePlayer;
+            set
+            {
+                _togglePlayer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserNavigationDispacher, PlaylistStore playlistStore, MediaStore mediaStore)
         {
             _playlistStore = playlistStore;
             _mediaStore = mediaStore;
-
-            TogglePlayer = new ToggleMusicPlayerStateCommand(musicPlayerService);
-
-            playlistStore.PlaylistNameChanged += OnPlaylistNameChanged;
-
             _musicPlayerService = musicPlayerService;
-            musicPlayerService.MusicPlayerEvent += OnMusicPlayerEvent;
-
             _navigationService = navigationService;
-            CurrentPage = navigationService.CurrentPage;
-            navigationService.PageChangedEvent += OnPageChangedEvent;
+            _playlistBrowserNavigationDispacher = playlistBrowserNavigationDispacher;
+        }
 
-            Playlists = new ObservableCollection<PlaylistModel>(playlistStore.Playlists.Select(x => new PlaylistModel
+        public override Task InitViewModel()
+        {
+
+            TogglePlayer = new ToggleMusicPlayerStateCommand(_musicPlayerService);
+
+            _playlistStore.PlaylistNameChanged += OnPlaylistNameChanged;
+
+            _musicPlayerService.MusicPlayerEvent += OnMusicPlayerEvent;
+
+            CurrentPage = _navigationService.CurrentPage;
+            _navigationService.PageChangedEvent += OnPageChangedEvent;
+
+            _playlistBrowserNavigationDispacher.PlaylistBrowserChanged += OnPlaylistBrowserChanged;
+
+            Playlists = new ObservableCollection<PlaylistModel>(_playlistStore.Playlists.Select(x => new PlaylistModel
             {
                 Id = x.Id,
                 Name = x.Name,
                 CreationDate = x.CreationDate
             }).Reverse().ToList());
 
-            _playlistBrowserStore = playlistBrowserStore;
-            playlistBrowserStore.PlaylistBrowserChanged += OnPlaylistBrowserChanged;
-
             ToggleRemoveActive = new TogglePlaylistRemoveCommand(this);
-            NavigateHome = new SwitchPageToHomeCommand(navigationService, playlistBrowserStore);
-            NavigatePlaylist = new SwitchPageToPlaylistCommand(navigationService, playlistBrowserStore);
-            NavigateDownloads = new SwitchPageToDownloadsCommand(navigationService, playlistBrowserStore);
-            DeletePlaylist = new DeleteSpecificPlaylistAsyncCommand(musicPlayerService, navigationService, playlistBrowserStore, playlistStore, mediaStore, Playlists);
-            CreatePlaylist = new CreatePlaylistAsyncCommand(playlistStore, Playlists);
+            NavigateHome = new SwitchPageToHomeAsyncCommand(_navigationService, _playlistBrowserNavigationDispacher);
+            NavigatePlaylist = new SwitchPageToPlaylistAsyncCommand(_navigationService, _playlistBrowserNavigationDispacher);
+            NavigateDownloads = new SwitchPageToDownloadsAsyncCommand(_navigationService, _playlistBrowserNavigationDispacher);
+            DeletePlaylist = new DeleteSpecificPlaylistAsyncCommand(_musicPlayerService, _navigationService, _playlistBrowserNavigationDispacher, _playlistStore, _mediaStore, Playlists);
+            CreatePlaylist = new CreatePlaylistAsyncCommand(_playlistStore, Playlists);
+            return Task.CompletedTask;
         }
 
         private void OnPlaylistNameChanged(object? sender, PlaylistNameChangedEventArgs args)
         {
-            var playlist = Playlists.FirstOrDefault(x => x.Id == args.Id);
+            var playlist = Playlists?.FirstOrDefault(x => x.Id == args.Id);
             if (playlist != null)
             {
                 playlist.Name = args.Name;
@@ -105,7 +193,7 @@ namespace MusicPlayerClient.ViewModels
 
         private void OnPlaylistBrowserChanged(object? sender, PlaylistBrowserChangedEventArgs args)
         {
-            Playlists.ToList().ForEach(x =>
+            Playlists?.ToList().ForEach(x =>
             {
                 if (x.Id == args.PlaylistId)
                 {
@@ -123,7 +211,7 @@ namespace MusicPlayerClient.ViewModels
             switch (e.Type)
             {
                 case PlayerEventType.Playing:
-                    Playlists.ToList().ForEach(x =>
+                    Playlists?.ToList().ForEach(x =>
                     {
                         if (x.Id == e.Media?.PlayerlistId)
                         {
@@ -136,7 +224,7 @@ namespace MusicPlayerClient.ViewModels
                     });
                     break;
                 default:
-                    Playlists.ToList().ForEach(x => x.IsPlaying = false);
+                    Playlists?.ToList().ForEach(x => x.IsPlaying = false);
                     break;
             }
         }
@@ -172,7 +260,7 @@ namespace MusicPlayerClient.ViewModels
         public override void Dispose()
         {
             _playlistStore.PlaylistNameChanged -= OnPlaylistNameChanged;
-            _playlistBrowserStore.PlaylistBrowserChanged -= OnPlaylistBrowserChanged;
+            _playlistBrowserNavigationDispacher.PlaylistBrowserChanged -= OnPlaylistBrowserChanged;
             _musicPlayerService.MusicPlayerEvent -= OnMusicPlayerEvent;
             _navigationService.PageChangedEvent -= OnPageChangedEvent;
         }

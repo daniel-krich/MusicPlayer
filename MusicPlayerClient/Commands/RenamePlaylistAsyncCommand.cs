@@ -1,4 +1,5 @@
-﻿using MusicPlayerClient.Extensions;
+﻿using MusicPlayerClient.Dispachers;
+using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Models;
 using MusicPlayerClient.Services;
 using MusicPlayerClient.Stores;
@@ -16,12 +17,12 @@ namespace MusicPlayerClient.Commands
     public class RenamePlaylistAsyncCommand : AsyncCommandBase
     {
         private readonly PlaylistStore _playlistStore;
-        private readonly PlaylistBrowserNavigationStore _playlistBrowserNavigationStore;
+        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserNavigationDispacher;
 
-        public RenamePlaylistAsyncCommand(PlaylistStore playlistStore, PlaylistBrowserNavigationStore playlistBrowserNavigationStore)
+        public RenamePlaylistAsyncCommand(PlaylistStore playlistStore, PlaylistBrowserNavigationDispacher playlistBrowserNavigationDispacher)
         {
             _playlistStore = playlistStore;
-            _playlistBrowserNavigationStore = playlistBrowserNavigationStore;
+            _playlistBrowserNavigationDispacher = playlistBrowserNavigationDispacher;
         }
 
         protected override async Task ExecuteAsync(object? parameter)
@@ -29,7 +30,7 @@ namespace MusicPlayerClient.Commands
 
             if(parameter is string playlistName)
             {
-                await _playlistStore.Rename(_playlistBrowserNavigationStore.BrowserPlaylistId, playlistName);
+                await _playlistStore.Rename(_playlistBrowserNavigationDispacher.BrowserPlaylistId, playlistName);
             }
         }
     }

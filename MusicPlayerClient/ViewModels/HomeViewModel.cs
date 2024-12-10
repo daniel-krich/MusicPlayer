@@ -21,6 +21,7 @@ using System.Windows;
 using MusicPlayerClient.Extensions;
 using MusicPlayerClient.Core;
 using MusicPlayerClient.Enums;
+using System.Threading;
 
 namespace MusicPlayerClient.ViewModels
 {
@@ -28,28 +29,81 @@ namespace MusicPlayerClient.ViewModels
     {
         private readonly IMusicPlayerService _musicService;
         private readonly MediaStore _mediaStore;
-        public string CurrentDateString { get; }
-        public ObservableCollection<MediaModel>? AllSongs { get; set; }
-        public ICommand PlaySong { get; } 
-        public ICommand OpenExplorer { get; } 
-        public ICommand? DeleteSong { get; set; }
+
+        private string? _currentDateString;
+        public string? CurrentDateString
+        {
+            get => _currentDateString;
+            set
+            {
+                _currentDateString = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<MediaModel>? _allSongs;
+        public ObservableCollection<MediaModel>? AllSongs
+        {
+            get => _allSongs;
+            set
+            {
+                _allSongs = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _playSong;
+        public ICommand? PlaySong
+        {
+            get => _playSong;
+            set
+            {
+                _playSong = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _openExplorer;
+        public ICommand? OpenExplorer
+        {
+            get => _openExplorer;
+            set
+            {
+                _openExplorer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _deleteSong;
+        public ICommand? DeleteSong
+        {
+            get => _deleteSong;
+            set
+            {
+                _deleteSong = value;
+                OnPropertyChanged();
+            }
+        }
 
         public HomeViewModel(IDbContextFactory<DataContext> dbContextFactory, MediaStore mediaStore, IMusicPlayerService musicService)
         {
             _musicService = musicService;
-
             _mediaStore = mediaStore;
+        }
 
+        public override Task InitViewModel()
+        {
             _musicService.MusicPlayerEvent += OnMusicPlayerEvent;
             _mediaStore.PlaylistSongsAdded += OnPlaylistSongsAdded;
 
-            PlaySong = new PlaySpecificSongCommand(musicService);
+            PlaySong = new PlaySpecificSongCommand(_musicService);
 
             OpenExplorer = new OpenExplorerAtPathCommand();
 
             CurrentDateString = DateTime.Now.ToString("dd MMM, yyyy");
 
             Task.Run(LoadSongs);
+            return Task.CompletedTask;
         }
 
         private void LoadSongs()
@@ -66,8 +120,6 @@ namespace MusicPlayerClient.ViewModels
                     Duration = AudioUtills.DurationParse(x.FilePath)
                 };
             }).ToList());
-
-            OnPropertyChanged(nameof(AllSongs));
 
             DeleteSong = new DeleteSpecificSongAsyncCommand(_musicService, _mediaStore, AllSongs);
         }

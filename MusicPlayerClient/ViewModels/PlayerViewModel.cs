@@ -82,18 +82,71 @@ namespace MusicPlayerClient.ViewModels
 
         public string SongDurationFormatted => AudioUtills.DurationParse(SongDuration);
 
-        public ICommand TogglePlayer { get; }
-        public ICommand PlayBackward { get; }
-        public ICommand PlayForward { get; }
-        public ICommand OpenExplorer { get; }
-        public ICommand ToggleVolume { get; }
+        private ICommand? _togglePlayer;
+        public ICommand? TogglePlayer
+        {
+            get => _togglePlayer;
+            set
+            {
+                _togglePlayer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _playBackward;
+        public ICommand? PlayBackward
+        {
+            get => _playBackward;
+            set
+            {
+                _playBackward = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _playForward;
+        public ICommand? PlayForward
+        {
+            get => _playForward;
+            set
+            {
+                _playForward = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _openExplorer;
+        public ICommand? OpenExplorer
+        {
+            get => _openExplorer;
+            set
+            {
+                _openExplorer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ICommand? _toggleVolume;
+        public ICommand? ToggleVolume
+        {
+            get => _toggleVolume;
+            set
+            {
+                _toggleVolume = value;
+                OnPropertyChanged();
+            }
+        }
 
         public PlayerViewModel(IMusicPlayerService musicService)
         {
             _musicService = musicService;
-            PlayBackward = new BackwardSongCommand(musicService);
-            PlayForward = new ForwardSongCommand(musicService);
-            TogglePlayer = new ToggleMusicPlayerStateCommand(musicService);
+        }
+
+        public override Task InitViewModel()
+        {
+            PlayBackward = new BackwardSongCommand(_musicService);
+            PlayForward = new ForwardSongCommand(_musicService);
+            TogglePlayer = new ToggleMusicPlayerStateCommand(_musicService);
             OpenExplorer = new OpenExplorerAtPathCommand();
             ToggleVolume = new ToggleVolumeCommand(this);
 
@@ -104,6 +157,7 @@ namespace MusicPlayerClient.ViewModels
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
             dispatcherTimer.Start();
+            return Task.CompletedTask;
         }
 
         private void dispatcherTimer_Tick(object? sender, EventArgs e)
