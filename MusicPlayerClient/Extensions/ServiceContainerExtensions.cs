@@ -31,7 +31,7 @@ namespace MusicPlayerClient.Extensions
         {
             collection.AddSingleton<MediaStore>();
             collection.AddSingleton<PlaylistStore>();
-            collection.AddSingleton<PlaylistBrowserNavigationDispacher>();
+            collection.AddSingleton<PlaylistBrowserNavigationDispatcher>();
             return collection;
         }
 

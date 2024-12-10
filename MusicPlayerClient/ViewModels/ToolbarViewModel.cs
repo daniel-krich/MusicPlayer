@@ -29,7 +29,7 @@ namespace MusicPlayerClient.ViewModels
     {
         private readonly PlaylistStore _playlistStore;
         private readonly MediaStore _mediaStore;
-        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserNavigationDispacher;
+        private readonly PlaylistBrowserNavigationDispatcher _playlistBrowserNavigationDispacher;
         private readonly IMusicPlayerService _musicPlayerService;
         private readonly INavigationService _navigationService;
 
@@ -143,7 +143,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserNavigationDispacher, PlaylistStore playlistStore, MediaStore mediaStore)
+        public ToolbarViewModel(IMusicPlayerService musicPlayerService, INavigationService navigationService, PlaylistBrowserNavigationDispatcher playlistBrowserNavigationDispacher, PlaylistStore playlistStore, MediaStore mediaStore)
         {
             _playlistStore = playlistStore;
             _mediaStore = mediaStore;

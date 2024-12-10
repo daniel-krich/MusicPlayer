@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayerClient.Dispachers
 {
-    public class PlaylistBrowserNavigationDispacher
+    public class PlaylistBrowserNavigationDispatcher
     {
         public event EventHandler<PlaylistBrowserChangedEventArgs>? PlaylistBrowserChanged;
         private int _browserPlaylistId;

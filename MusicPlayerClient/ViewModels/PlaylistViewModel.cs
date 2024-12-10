@@ -26,7 +26,7 @@ namespace MusicPlayerClient.ViewModels
     public class PlaylistViewModel : ViewModelBase, IFilesDropAsync
     {
         private readonly IMusicPlayerService _musicService;
-        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserNavigationDispacher;
+        private readonly PlaylistBrowserNavigationDispatcher _playlistBrowserNavigationDispacher;
         private readonly MediaStore _mediaStore;
         private readonly PlaylistStore _playlistStore;
 
@@ -118,7 +118,7 @@ namespace MusicPlayerClient.ViewModels
             }
         }
 
-        public PlaylistViewModel(IMusicPlayerService musicService, INavigationService navigationService, MediaStore mediaStore, PlaylistStore playlistStore, PlaylistBrowserNavigationDispacher playlistBrowserNavigationDispacher)
+        public PlaylistViewModel(IMusicPlayerService musicService, INavigationService navigationService, MediaStore mediaStore, PlaylistStore playlistStore, PlaylistBrowserNavigationDispatcher playlistBrowserNavigationDispacher)
         {
             _musicService = musicService;
             _playlistBrowserNavigationDispacher = playlistBrowserNavigationDispacher;

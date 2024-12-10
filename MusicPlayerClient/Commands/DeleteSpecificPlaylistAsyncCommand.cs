@@ -19,9 +19,9 @@ namespace MusicPlayerClient.Commands
         private readonly PlaylistStore _playlistStore;
         private readonly MediaStore _mediaStore;
         private readonly INavigationService _navigationService;
-        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserDispacher;
+        private readonly PlaylistBrowserNavigationDispatcher _playlistBrowserDispacher;
         private readonly ObservableCollection<PlaylistModel>? _observablePlaylists;
-        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserDispacher, PlaylistStore playlistStore, MediaStore mediaStore)
+        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationDispatcher playlistBrowserDispacher, PlaylistStore playlistStore, MediaStore mediaStore)
         {
             _musicService = musicService;
             _playlistStore = playlistStore;
@@ -30,7 +30,7 @@ namespace MusicPlayerClient.Commands
             _mediaStore = mediaStore;
         }
 
-        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserDispacher,
+        public DeleteSpecificPlaylistAsyncCommand(IMusicPlayerService musicService, INavigationService navigationService, PlaylistBrowserNavigationDispatcher playlistBrowserDispacher,
                                              PlaylistStore playlistStore, MediaStore mediaStore, ObservableCollection<PlaylistModel> observablePlaylists) : this(musicService, navigationService, playlistBrowserDispacher, playlistStore, mediaStore)
         {
             _observablePlaylists = observablePlaylists;

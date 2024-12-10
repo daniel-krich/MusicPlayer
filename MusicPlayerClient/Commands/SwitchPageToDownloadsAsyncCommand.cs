@@ -11,8 +11,8 @@ namespace MusicPlayerClient.Commands
     public class SwitchPageToDownloadsAsyncCommand : AsyncCommandBase
     {
         private readonly INavigationService _navigationService;
-        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserDispacher;
-        public SwitchPageToDownloadsAsyncCommand(INavigationService navigationService, PlaylistBrowserNavigationDispacher playlistBrowserDispacher)
+        private readonly PlaylistBrowserNavigationDispatcher _playlistBrowserDispacher;
+        public SwitchPageToDownloadsAsyncCommand(INavigationService navigationService, PlaylistBrowserNavigationDispatcher playlistBrowserDispacher)
         {
             _navigationService = navigationService;
             _playlistBrowserDispacher = playlistBrowserDispacher;

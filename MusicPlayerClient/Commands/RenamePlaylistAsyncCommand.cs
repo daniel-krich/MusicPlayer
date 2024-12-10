@@ -17,9 +17,9 @@ namespace MusicPlayerClient.Commands
     public class RenamePlaylistAsyncCommand : AsyncCommandBase
     {
         private readonly PlaylistStore _playlistStore;
-        private readonly PlaylistBrowserNavigationDispacher _playlistBrowserNavigationDispacher;
+        private readonly PlaylistBrowserNavigationDispatcher _playlistBrowserNavigationDispacher;
 
-        public RenamePlaylistAsyncCommand(PlaylistStore playlistStore, PlaylistBrowserNavigationDispacher playlistBrowserNavigationDispacher)
+        public RenamePlaylistAsyncCommand(PlaylistStore playlistStore, PlaylistBrowserNavigationDispatcher playlistBrowserNavigationDispacher)
         {
             _playlistStore = playlistStore;
             _playlistBrowserNavigationDispacher = playlistBrowserNavigationDispacher;
