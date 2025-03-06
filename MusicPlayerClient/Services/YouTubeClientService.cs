@@ -95,7 +95,7 @@ namespace MusicPlayerClient.Services
             var videos = await youTube.GetAllVideosAsync(url);
             var video = videos.Where(x => x.AdaptiveKind == AdaptiveKind.Audio).MaxBy(x => x.AudioBitrate)!;
 
-            var videoUrl = HttpUtility.ParseQueryString(video.Uri);
+            //var videoUrl = HttpUtility.ParseQueryString(video.Uri).ToString();
             long contentLength = 0;
 
             using (var client = new HttpClient())
@@ -112,7 +112,7 @@ namespace MusicPlayerClient.Services
                 using (var client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("range", $"bytes=0-{contentLength}");
-                    using var videoStream = await client.GetStreamAsync(videoUrl.ToString());
+                    using var videoStream = await client.GetStreamAsync(video.Uri.ToString());
 
                     byte[] buffer = new byte[8192];
 
